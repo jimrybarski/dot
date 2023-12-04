@@ -203,6 +203,77 @@ require("toggleterm").setup{
   close_on_exit = true,  -- close the terminal window when the process exits
 }
 
+local function get_python_path(workspace)
+    -- Check if a virtual environment is active
+    local venv_path = os.getenv("VIRTUAL_ENV")
+    if venv_path then
+        -- If a virtual environment is active, use the Python from it
+        return venv_path .. "/bin/python"
+    else
+        -- Otherwise, fall back to system Python
+        return "/usr/bin/python3"  -- Or your system's default Python 3 path
+    end
+end
+
+local dap = require('dap')
+
+dap.adapters.python = {
+  type = 'executable',
+  command = get_python_path(),
+  args = { '-m', 'debugpy.adapter' },
+}
+
+dap.configurations.python = {
+  {
+    type = 'python';
+    request = 'launch';
+    name = "Launch file";
+    console = "integratedTerminal",
+    redirectOutput = true,
+
+    -- Adjust the program path to point to your specific main Python file
+    program = "${file}";
+    pythonPath = function()
+      return get_python_path()
+    end;
+  },
+}
+
+local dapui = require('dapui')
+dapui.setup({
+layouts = {
+    {
+      elements = {
+        "scopes",
+        "breakpoints",
+        "stacks",
+        "watches",
+      },
+      size = 40,
+      position = "left",  -- Can be "left", "right", "top", "bottom"
+    },
+    {
+      elements = {
+        "console"
+      },
+      size = 16,
+      position = "bottom",
+    },
+  },
+  }
+)
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+
 vim.cmd("colorscheme gruvbox")
 vim.cmd("set number relativenumber")
 vim.cmd("set nobackup nowritebackup noswapfile")
@@ -218,5 +289,11 @@ vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]], {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>b', '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
+vim.api.nvim_set_keymap('n', '<F1>', '<Cmd>lua require("dap").step_over()<cr>', {})
+vim.api.nvim_set_keymap('n', '<F2>', '<Cmd>lua require("dap").step_into()<cr>', {})
+vim.api.nvim_set_keymap('n', '<F3>', '<Cmd>lua require("dap").step_out()<cr>', {})
+vim.api.nvim_set_keymap('n', '<F5>', '<Cmd>lua require("dap").continue()<cr>', {})
+vim.api.nvim_set_keymap('n', '<F12>', ':DapTerminate<cr>', {})
 
 vim.cmd.highlight("default link IndentLine Comment")
