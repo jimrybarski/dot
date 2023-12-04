@@ -119,6 +119,11 @@ cmp.setup({
       { name = 'buffer' },
       { name = 'path' },
     },
+    snippet = {
+        expand = function(args)
+          require('luasnip').lsp_expand(args.body)
+        end,
+    },
   })
 
 require('lsp_signature').setup({
@@ -182,6 +187,18 @@ require("gruvbox").setup({
   transparent_mode = false,
 })
 
+require("toggleterm").setup{
+  open_mapping = [[<c-\>]], -- Change this keymap to your preferred key binding
+  hide_numbers = true,  -- hide the number column in toggleterm buffers
+  shade_filetypes = {},
+  shade_terminals = true,
+  shading_factor = 2,  -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+  start_in_insert = true,
+  insert_mappings = true,  -- whether or not the open mapping applies in insert mode
+  persist_size = true,
+  direction = 'float',  -- 'vertical', 'horizontal', 'tab', or 'float'
+  close_on_exit = true,  -- close the terminal window when the process exits
+}
 
 vim.cmd("colorscheme gruvbox")
 vim.cmd("set number relativenumber")
@@ -194,6 +211,9 @@ vim.cmd("set expandtab")
 vim.cmd("set cursorline")
 vim.g.mapleader = " "
 vim.api.nvim_set_keymap('n', '<leader>r', ':source $MYVIMRC | PackerInstall<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]], {noremap = true, silent = true})
+
 vim.cmd.highlight("default link IndentLine Comment")
