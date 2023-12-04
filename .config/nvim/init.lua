@@ -76,8 +76,11 @@ require('packer').startup({{
   { "RRethy/vim-illuminate" },
   { "lukas-reineke/indent-blankline.nvim" },
   { "lunarvim/bigfile.nvim" },
+  { "klen/nvim-test" },
 }, config = {}})
 
+
+require("nvim-test").setup{}
 
 local highlight = {
     "CursorColumn",
