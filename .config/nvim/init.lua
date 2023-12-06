@@ -47,7 +47,7 @@ require('packer').startup({{
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
+    run = ':TSUpdate | TSInstall python bash rust lua vim',
     config = function() require('nvim-treesitter.configs').setup {
         highlight = {
             enable = true,
