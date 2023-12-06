@@ -288,7 +288,7 @@ vim.g.mapleader = " "
 vim.api.nvim_set_keymap('n', '<leader>r', ':source $MYVIMRC | PackerInstall<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>t', ':!bash run-tests<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]], {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>b', '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F1>', '<Cmd>lua require("dap").step_over()<cr>', {})
