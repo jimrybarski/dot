@@ -274,6 +274,7 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 
+vim.o.background = "dark"
 vim.cmd("colorscheme gruvbox")
 vim.cmd("set number relativenumber")
 vim.cmd("set nobackup nowritebackup noswapfile")
