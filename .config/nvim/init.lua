@@ -64,10 +64,12 @@ require('packer').startup({{
   { "saadparwaiz1/cmp_luasnip" },
   { "rafamadriz/friendly-snippets" },
   { "numToStr/Comment.nvim" },
+  { 'smoka7/hop.nvim' },
   { "windwp/nvim-autopairs" },
   { "nvim-tree/nvim-tree.lua" },
   { "lewis6991/gitsigns.nvim" },
   { "folke/which-key.nvim" },
+  { "kylechui/nvim-surround" },
   { "nvim-tree/nvim-web-devicons" },
   { "nvim-lualine/lualine.nvim" },
   { "mfussenegger/nvim-dap" },
@@ -273,6 +275,12 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
+
+require("hop").setup()
+vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", { noremap = true })
+vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", { noremap = true })
+
+require("nvim-surround").setup({})
 
 vim.o.background = "dark"
 vim.cmd("colorscheme gruvbox")
