@@ -98,55 +98,72 @@ require("nvim-tree").setup()
 
 local cmp = require("cmp")
 
+local function tab_complete(fallback)
+end
+
 cmp.setup({
+    -- Specify the completion behavior
+    completion = {
+        completeopt = 'menu,menuone,noselect',
+    },
+
+    -- Disable preselecting the first completion item
+    preselect = cmp.PreselectMode.None,
+
+    -- Mapping for keyboard shortcuts
     mapping = {
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_next_item()
+                local entry = cmp.get_selected_entry()
+                if not entry then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+                else
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+                end
             else
                 fallback()
             end
-        end, { "i", "s" }),
+	end, { "i", "s" }),
 
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_prev_item()
+                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
             else
                 fallback()
             end
         end, { "i", "s" }),
 
-        ['<CR>'] = cmp.mapping.confirm({ select = false }),
+        ['<CR>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.close()
+            end
+            fallback() -- Always insert a newline
+        end, { "i", "s" }),
+
+        ['<Esc>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.abort()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
     },
-    sources = {
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-      { name = 'buffer' },
-      { name = 'path' },
-    },
+
+    -- Define the sources for completion
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+        { name = 'buffer' },
+        { name = 'path' }
+    }),
+
+    -- Configuration for snippet expansion
     snippet = {
         expand = function(args)
-          require('luasnip').lsp_expand(args.body)
+            require('luasnip').lsp_expand(args.body)
         end,
     },
-  })
-
-require('lsp_signature').setup({
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
-                   -- If you want to hook lspsaga or other signature handler, pls set to false
-      doc_lines = 2, -- Set to 0 for not showing doc
-      floating_window = true, -- Show hint in a floating window, set to false for virtual text only mode
-      fix_pos = false,  -- Set to true, the floating window will not auto-close until finish all parameters
-      hint_enable = false,
-      use_lspsaga = false,  -- set to true if you want to use lspsaga popup
-      hi_parameter = "Search", -- how your parameter will be highlight
-      max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down to view more
-      max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-      handler_opts = {
-        border = "double"   -- double, single, shadow, none
-      },
-      extra_trigger_chars = {} -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-    })
+})
 
 
 local on_attach = function(client, bufnr)
@@ -167,6 +184,11 @@ lspconfig.pylsp.setup{
     capabilities = capabilities,
     on_attach = on_attach
 }
+
+lspconfig.rust_analyzer.setup({
+    capabilities = capabilities,
+    on_attach = on_attach
+})
 
 require("nvim-autopairs").setup()
 require("which-key").setup()
