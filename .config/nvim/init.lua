@@ -92,8 +92,9 @@ require('ibl').setup({
               show_start = false,
               show_end = false }
 })
+vim.api.nvim_out_write("woo")
 require("toggleterm").setup()
-require("lualine").setup()
+-- require("lualine").setup()
 require("nvim-tree").setup()
 require("lsp_signature").setup({
   debug = false, -- set to true to enable debug logging
@@ -254,7 +255,45 @@ lspconfig.rust_analyzer.setup({
     on_attach = on_attach
 })
 
-require("nvim-autopairs").setup()
+local function create_float_win()
+    local buf = vim.api.nvim_create_buf(false, true) -- create new empty buffer
+    local width = vim.api.nvim_get_option("columns")
+    local height = vim.api.nvim_get_option("lines")
+
+    local win_height = math.ceil(height * 0.2 - 4)
+    local win_width = math.ceil(width * 0.8)
+
+    local row = math.ceil((height - win_height) / 2 - 1)
+    local col = math.ceil((width - win_width) / 2)
+
+    local opts = {
+        relative = "editor",
+        width = win_width,
+        height = win_height,
+        row = row,
+        col = col,
+        style = "minimal"
+    }
+
+    local win = vim.api.nvim_open_win(buf, true, opts)
+    return buf, win
+end
+
+local function debug_output(...)
+    local args = {...}
+    local text = ""
+    for _, arg in ipairs(args) do
+        text = text .. tostring(arg) .. " "
+    end
+
+    local buf, _ = create_float_win()
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, {text})
+end
+
+local autopairs = require('nvim-autopairs')
+autopairs.setup({
+    ignored_next_char = "[%w%.%(%[{]"
+})
 require("which-key").setup()
 require("gitsigns").setup()
 require('Comment').setup()
@@ -384,6 +423,7 @@ vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>t', ':!pytest tests -x<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>m', ':!bash run-tests<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>"', 'i""""""<Esc>hhi ', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]], {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>b', '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F1>', '<Cmd>lua require("dap").step_over()<cr>', {})
