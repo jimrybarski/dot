@@ -157,9 +157,6 @@ require("lsp_signature").setup({
 
 local cmp = require("cmp")
 
-local function tab_complete(fallback)
-end
-
 cmp.setup({
     -- Specify the completion behavior
     completion = {
@@ -206,7 +203,7 @@ cmp.setup({
                     cmp.abort()
                     fallback()
                 else
-                    cmp.abort()
+                    fallback()
                 end
             else
                 fallback()
