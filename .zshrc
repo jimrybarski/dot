@@ -3,8 +3,8 @@
 # ---------------
 #     Aliases
 # ---------------
-alias ll='exa -alh'
-alias ls='exa -a'
+alias ll='eza -alh'
+alias ls='eza -a'
 alias v='nvim'
 alias sf="ssh freeboxroot"
 alias sm="ssh marble"
@@ -20,6 +20,7 @@ alias comedians="edit_note comedians"
 
 # rust
 alias cbr='cargo test && cargo build --release && cargo clippy'
+alias crr='cargo run --release'
 
 # git
 alias gits='git status'
@@ -34,6 +35,14 @@ alias night='redshift -o -P -O 2500 -b 0.60'
 # configuration files
 alias cfv="v $HOME/.config/nvim/init.lua"
 alias cfz="v $HOME/.zshrc"
+alias cfi3="v $HOME/.config/i3/config"
+alias cfib="v $HOME/.config/i3blocks/config"
+alias cfn=v "$HOME/.config/ncmpcpp/config"
+
+alias copy="xsel --clipboard"
+
+alias m='ncmpcpp'
+
 
 export GPG_TTY=$(tty)
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -64,7 +73,7 @@ LC_MEASUREMENT="en_US.UTF-8"
 LC_IDENTIFICATION="en_US.UTF-8"
 
 # Causes the timezone to be cached, preventing unnecessary system calls
-export TZ=:/etc/localtime
+#export TZ=:/etc/localtime
 
 # only wait 0.1 sec before entering normal mode
 export KEYTIMEOUT=0.1

@@ -1,26 +1,26 @@
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer_bootstrap = ensure_packer()
-
-require('packer').startup({{
-  { 'wbthomason/packer.nvim' },
-  { "nvim-lua/plenary.nvim" },
-  { "ellisonleao/gruvbox.nvim" },
-  { "williamboman/mason.nvim" },
-  { "williamboman/mason-lspconfig.nvim" },
-  { "tamago324/nlsp-settings.nvim" },
-  { "neovim/nvim-lspconfig" },
-  {
-    "nvim-telescope/telescope.nvim",
+require("lazy").setup({
+  'wbthomason/packer.nvim',
+  "nvim-lua/plenary.nvim",
+  "ellisonleao/gruvbox.nvim",
+  "nvim-tree/nvim-web-devicons",
+  "williamboman/mason.nvim",
+  "williamboman/mason-lspconfig.nvim",
+  "tamago324/nlsp-settings.nvim",
+  "neovim/nvim-lspconfig",
+  { "nvim-telescope/telescope.nvim",
     config = function()
         require("telescope").setup({
             defaults = {
@@ -43,7 +43,7 @@ require('packer').startup({{
            }
         })
     end,
-  },
+    },
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     'nvim-treesitter/nvim-treesitter',
@@ -60,17 +60,15 @@ require('packer').startup({{
   { "hrsh7th/cmp-path" },
   { "hrsh7th/cmp-cmdline" },
   { "ray-x/lsp_signature.nvim" },
-  { "L3MON4D3/LuaSnip" },
   { "saadparwaiz1/cmp_luasnip" },
-  { "rafamadriz/friendly-snippets" },
   { "numToStr/Comment.nvim" },
   { 'smoka7/hop.nvim' },
   { "windwp/nvim-autopairs" },
+  { "L3MON4D3/LuaSnip" },
   { "nvim-tree/nvim-tree.lua" },
   { "lewis6991/gitsigns.nvim" },
   { "folke/which-key.nvim" },
   { "kylechui/nvim-surround" },
-  { "nvim-tree/nvim-web-devicons" },
   { "nvim-lualine/lualine.nvim" },
   { "mfussenegger/nvim-dap" },
   { "rcarriga/nvim-dap-ui" },
@@ -79,8 +77,7 @@ require('packer').startup({{
   { "lukas-reineke/indent-blankline.nvim" },
   { "lunarvim/bigfile.nvim" },
   { "klen/nvim-test" },
-}, config = {}})
-
+}, {})
 
 require("nvim-test").setup{}
 
@@ -92,9 +89,48 @@ require('ibl').setup({
               show_start = false,
               show_end = false }
 })
-vim.api.nvim_out_write("woo")
 require("toggleterm").setup()
--- require("lualine").setup()
+require('lualine').setup({
+  options = {
+    icons_enabled = false,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+})
+
 require("nvim-tree").setup()
 require("lsp_signature").setup({
   debug = false, -- set to true to enable debug logging
@@ -124,7 +160,7 @@ require("lsp_signature").setup({
   close_timeout = 4000, -- close floating window after ms when laster parameter is entered
   fix_pos = false,  -- set to true, the floating window will not auto-close until finish all parameters
   hint_enable = true, -- virtual hint enable
-  hint_prefix = "🐼 ",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
+  hint_prefix = "> ",  
   hint_scheme = "String",
   hint_inline = function() return false end,  -- should the hint be inline(nvim 0.10 only)?  default false
   -- return true | 'inline' to show hint inline, return 'eol' to show hint at end of line, return false to disable
@@ -156,6 +192,45 @@ require("lsp_signature").setup({
 })
 
 local cmp = require("cmp")
+local cmp_types = require('cmp.types')
+local luasnip = require("luasnip")
+
+local date = function()
+    return os.date("%Y-%m-%d")
+end
+
+-- MY CUSTOM SNIPPETS
+local s = luasnip.snippet
+local t = luasnip.text_node
+local i = luasnip.insert_node
+local f = luasnip.function_node
+
+luasnip.add_snippets("all", {
+    s("bash", { t("#!/usr/bin/env bash") }),
+    s("zsh", { t("#!/usr/bin/env zsh") }),
+    s("fish", { t("#!/usr/bin/env fish") }),
+    s("d", {
+        f(date, {})
+    }),
+})
+
+luasnip.add_snippets("python", {
+    s("mpl", { t("import matplotlib.pyplot as plt") }),
+    s("fig", { t("fig, ax = plt.subplots()") }),
+    s("figs", { t("fig, ax = plt.subplots(figsize=("), i(1, "height"), t(", "), i(2, "width"), t("))") }),
+    s("def", {
+        t("def "), i(1, "fname"), t("("), i(2, "arg"), t(") -> "), i(3, "returns"), t(":\n\t"), i(4, "pass"), i(0)
+    }),
+    s("ifmain", {
+        t("if __name__ == '__main__':"),
+        t({ "", "\t" }), -- Splitting the newline and indentation into a new text node
+        i(1, "pass"),
+        i(0)
+    }),
+    s("fim", {
+        t("from "), i(1, "package"), t(" import "), i(2, "module"), i(0)
+    }),
+})
 
 cmp.setup({
     -- Specify the completion behavior
@@ -168,32 +243,60 @@ cmp.setup({
 
     -- Mapping for keyboard shortcuts
     mapping = {
+        ['<C-n>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then
+                luasnip.jump(1)
+            end
+        end, { "i", "s" }),
+        ['<C-p>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            end
+        end, { "i", "s" }),
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                local entry = cmp.get_selected_entry()
-                if not entry then
-                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+                if luasnip.expand_or_jumpable() then
+                    cmp.select_next_item({})
                 else
                     cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
                 end
             else
                 fallback()
             end
-	end, { "i", "s" }),
+        end, { "i", "s" }),
 
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+                if luasnip.expand_or_jumpable() then
+                    cmp.select_prev_item({})
+                else
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+                end
             else
                 fallback()
             end
         end, { "i", "s" }),
 
         ['<CR>'] = cmp.mapping(function(fallback)
+            local entry = cmp.get_selected_entry()
+            if entry == nil then
+                -- for some reason, after entering a snippet and pressing enter, this mapping still
+                -- gets called, but entry will be nil, in which case we just fallback, after which
+                -- we'll have left the autocomplete context and everything returns to normal.
+                -- Is there a more elegant way to fix this? Probably!
+                fallback()
+            elseif entry:get_kind() == cmp_types.lsp.CompletionItemKind.Snippet then
+                -- Insert the snippet and escape from autocomplete mode
+                cmp.confirm({ select = true })
+                cmp.abort()
+                fallback()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            end
             if cmp.visible() then
                 cmp.close()
             end
-            fallback() -- Always insert a newline
+            fallback()
         end, { "i", "s" }),
 
         ['<Esc>'] = cmp.mapping(function(fallback)
@@ -218,26 +321,21 @@ cmp.setup({
         { name = 'buffer' },
         { name = 'path' }
     }),
-
-    -- Configuration for snippet expansion
-    snippet = {
-        expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-        end,
-    },
 })
 
 
 local on_attach = function(client, bufnr)
-  local opts = { noremap=true, silent=true }
+  client.config.flags.debounce_text_changes = 150
+  local opts = { noremap = true, silent = true }
   local buf_set_keymap = vim.api.nvim_buf_set_keymap
-  buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gw', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+  buf_set_keymap(bufnr, 'n', 'gd', ':Telescope lsp_definitions<CR>', opts)
+  buf_set_keymap(bufnr, 'n', 'gr', ':Telescope lsp_references<CR><Esc>', opts)
+  buf_set_keymap(bufnr, 'n', 'go', ':Telescope diagnostics<CR><Esc>', opts)
   buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'g]', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap(bufnr, 'n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lspconfig = require('lspconfig')
@@ -249,7 +347,28 @@ lspconfig.pylsp.setup{
 
 lspconfig.rust_analyzer.setup({
     capabilities = capabilities,
-    on_attach = on_attach
+    on_attach = on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            checkOnSave = {
+                command = "clippy"
+            },
+        },
+    }
+})
+
+vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+        local opts = {
+            focusable = false,
+            close_events = {"BufLeave", "CursorMoved", "InsertEnter", "FocusLost"},
+            border = 'rounded',
+            source = 'always',
+            prefix = ' ',
+            scope = 'cursor',
+        }
+        vim.diagnostic.open_float(nil, opts)
+    end
 })
 
 local function create_float_win()
@@ -405,6 +524,7 @@ vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", { noremap = true })
 require("nvim-surround").setup({})
 
 vim.o.background = "dark"
+vim.o.updatetime = 500
 vim.cmd("colorscheme gruvbox")
 vim.cmd("set number relativenumber")
 vim.cmd("set nobackup nowritebackup noswapfile")
@@ -415,7 +535,8 @@ vim.cmd("set softtabstop=4")
 vim.cmd("set expandtab")
 vim.cmd("set cursorline")
 vim.g.mapleader = " "
-vim.api.nvim_set_keymap('n', '<leader>r', ':source $MYVIMRC | PackerInstall<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>c', '<C-w>v<C-w>l:e $HOME/.config/nvim/init.lua<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>r', ':source $MYVIMRC<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>t', ':!pytest tests -x<cr>', { noremap = true, silent = true })
@@ -423,10 +544,13 @@ vim.api.nvim_set_keymap('n', '<leader>m', ':!bash run-tests<cr>', { noremap = tr
 vim.api.nvim_set_keymap('n', '<leader>"', 'i""""""<Esc>hhi ', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]], {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>b', '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
+vim.api.nvim_set_keymap('n', '<leader>b', '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F1>', '<Cmd>lua require("dap").step_over()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F2>', '<Cmd>lua require("dap").step_into()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F3>', '<Cmd>lua require("dap").step_out()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F5>', '<Cmd>lua require("dap").continue()<cr>', {})
 vim.api.nvim_set_keymap('n', '<F12>', ':DapTerminate<cr>', {})
+vim.api.nvim_set_keymap('n', 's', ':w<cr>', {})
+vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { noremap = true, silent = true })
 
 vim.cmd.highlight("default link IndentLine Comment")
