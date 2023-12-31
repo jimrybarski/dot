@@ -42,7 +42,7 @@ alias cfn=v "$HOME/.config/ncmpcpp/config"
 alias copy="xsel --clipboard"
 
 alias m='ncmpcpp'
-
+alias cal='cal -3'
 
 export GPG_TTY=$(tty)
 export XDG_CONFIG_HOME="$HOME/.config"

@@ -1,0 +1,30 @@
+# i3blocks configuration file
+#
+# The i3blocks man page describes the usage of the binary,
+# and its website describes the configuration:
+#
+#     https://vivien.github.io/i3blocks
+
+
+# Global properties
+separator=true
+separator_block_width=35
+
+[music]
+color=#8bb6dd
+interval=1
+command=mpc | head -n1 | grep -v "volume:"
+
+[disk]
+command=df -h | grep '/$' | awk '{print $4 "iB"}'
+interval=30
+label=DISK: 
+
+[memory]
+command=free -h | grep Mem | awk '{print $7 "B"}'
+interval=10
+label=RAM: 
+
+[time]
+command=date '+%A  %Y-%m-%d %H:%M:%S'
+interval=1
