@@ -15,6 +15,10 @@ color=#8bb6dd
 interval=1
 command=mpc | head -n1 | grep -v "volume:"
 
+[weather]
+interval=1800
+command=$HOME/code/i3block-utils/weather/target/release/weather KBOS
+
 [disk]
 command=df -h | grep '/$' | awk '{print $4 "iB"}'
 interval=30

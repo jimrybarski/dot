@@ -39,7 +39,9 @@ alias cfi3="v $HOME/.config/i3/config"
 alias cfib="v $HOME/.config/i3blocks/config"
 alias cfn=v "$HOME/.config/ncmpcpp/config"
 
+# desktop
 alias copy="xsel --clipboard"
+alias mp3="$HOME/.local/ytdlenv/bin/yt-dlp"
 
 alias m='ncmpcpp'
 alias cal='cal -3'

@@ -45,15 +45,30 @@ require("lazy").setup({
     end,
     },
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-  {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate | TSInstall python bash rust lua vim',
-    config = function() require('nvim-treesitter.configs').setup {
+  { 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('nvim-treesitter.configs').setup {
         highlight = {
-            enable = true,
+          enable = true,
         },
-    } end,
-  },
+      }
+
+      -- Function to check if a parser is installed
+      local function is_parser_installed(lang)
+        return #vim.fn.glob(vim.fn.stdpath('data') .. '/site/parser/' .. lang .. '.*') > 0
+      end
+
+      -- List of languages to ensure are installed
+      local languages = {'python', 'bash', 'rust', 'lua', 'vim'}
+
+      -- Install missing parsers
+      for _, lang in ipairs(languages) do
+        if not is_parser_installed(lang) then
+          vim.cmd('TSInstall ' .. lang)
+        end
+      end
+    end,
+    },
   { "hrsh7th/nvim-cmp" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "hrsh7th/cmp-buffer" },
