@@ -162,3 +162,4 @@ alias echon=echo_note
 # -------------------
 autoload -Uz compinit && compinit
 autoload -Uz colors && colors
+compdef _files . 
