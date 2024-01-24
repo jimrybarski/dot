@@ -8,24 +8,24 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Set leader keys to spacebar
 vim.g.mapleader = " "
-
+vim.g.maplocalleader = " "
 -- Show relative line numbers except on the current line, which shows the absolute line number
 vim.opt.number = true
 vim.opt.relativenumber = true
-
 -- Don't make annoying backup files
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
-
 -- Always show the sign column (the column on the left that shows lint warnings and git changes)
+-- Otherwise it will appear/disappear frequently, which is annoying
 vim.opt.signcolumn = "yes"
-
 -- Faintly highlight the line the cursor is on
 vim.opt.cursorline = true
 
 require("lazy").setup({
+    {"lewis6991/gitsigns.nvim"},
     -- nice color map 
     {"ellisonleao/gruvbox.nvim"}, 
     -- commands to comment/uncomment code
@@ -119,6 +119,52 @@ require("lazy").setup({
         }
     }
 })
+
+require("gitsigns").setup({
+    signs = {
+    add          = { text = '│' },
+    change       = { text = '│' },
+    delete       = { text = '_' },
+    topdelete    = { text = '‾' },
+    changedelete = { text = '~' },
+    untracked    = { text = '┆' },
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    follow_files = true
+  },
+  auto_attach = true,
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+    virt_text_priority = 100,
+  },
+  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000, -- Disable if file is longer than this (in lines)
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+  })
+-- Show the last commit (author, timestamp and commit message) that changed the current line
+vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>', {noremap = true, silent = true})
 
 require('Comment').setup({
     ---Add a space b/w comment and the line
@@ -260,7 +306,6 @@ vim.cmd("colorscheme gruvbox")
 --     {"klen/nvim-test"},
 --     {"kylechui/nvim-surround"},
 --     {"L3MON4D3/LuaSnip"},
---     {"lewis6991/gitsigns.nvim"},
 --     {"lukas-reineke/indent-blankline.nvim"},
 --     {"lunarvim/bigfile.nvim"},
 --     {"mfussenegger/nvim-dap"},
@@ -552,7 +597,6 @@ vim.cmd("colorscheme gruvbox")
 -- local autopairs = require('nvim-autopairs')
 -- autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
 -- require("which-key").setup()
--- require("gitsigns").setup()
 
 -- require("bigfile").setup()
 --
@@ -662,10 +706,9 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- transparently edit gzipped files
+-- transparently edit compressed files
 vim.g.loaded_gzip = 1
 vim.g.loaded_tar = 1
--- vim.g.loaded_zip = 1
 vim.g.loaded_zipPlugin = 1
 
 -- vim.api.nvim_set_keymap('n', '<leader>c',
