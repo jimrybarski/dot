@@ -116,7 +116,8 @@ bindsym $mod+Ctrl+i exec firefox -no-remote -P "media"
 bindsym $mod+Ctrl+f exec firefox -no-remote -P "financial"
 bindsym $mod+plus exec "mpc volume +5"
 bindsym $mod+minus exec "mpc volume -5"
-
+bindsym $mod+t exec "thunar"
+bindsym $mod+Shift+t exec "thunar $HOME/Videos"
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
@@ -194,6 +195,8 @@ assign [class="steam"] 3
 assign [class="Steam"] 3
 assign [class="firefox"] 2
 assign [class="factorio"] 3
+
+for_window [class="Qalculate-gtk"] floating enable
 
 default_border normal 0
 client.focused #233d55 #233d55 #bbbbbb
