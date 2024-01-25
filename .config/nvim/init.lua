@@ -25,6 +25,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 
 require("lazy").setup({
+    {"nvim-lualine/lualine.nvim"},
     {"lewis6991/gitsigns.nvim"},
     -- nice color map 
     {"ellisonleao/gruvbox.nvim"}, 
@@ -167,6 +168,40 @@ require("lazy").setup({
             })
         end
     }, 
+})
+
+require('lualine').setup({
+    options = {
+        icons_enabled = false,
+        theme = 'auto',
+        component_separators = {left = '', right = ''},
+        section_separators = {left = '', right = ''},
+        disabled_filetypes = {statusline = {}, winbar = {}},
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {statusline = 1000, tabline = 1000, winbar = 1000}
+    },
+    sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {'filename'},
+        lualine_x = {},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+    },
+    tabline = {},
+    winbar = {},
+    inactive_winbar = {},
+    extensions = {}
 })
 
 require("gitsigns").setup({
@@ -313,7 +348,6 @@ vim.cmd("colorscheme gruvbox")
 --     {"lunarvim/bigfile.nvim"},
 --     {"mfussenegger/nvim-dap"},
 --     
---     {"nvim-lualine/lualine.nvim"},
 --     {"ray-x/lsp_signature.nvim"},
 --     {"rcarriga/nvim-dap-ui"},
 --     {"RRethy/vim-illuminate"},
@@ -329,39 +363,6 @@ vim.cmd("colorscheme gruvbox")
 --     scope = {highlight = highlight, show_start = false, show_end = false}
 -- })
 -- require("toggleterm").setup()
--- require('lualine').setup({
---     options = {
---         icons_enabled = false,
---         theme = 'auto',
---         component_separators = {left = '', right = ''},
---         section_separators = {left = '', right = ''},
---         disabled_filetypes = {statusline = {}, winbar = {}},
---         ignore_focus = {},
---         always_divide_middle = true,
---         globalstatus = false,
---         refresh = {statusline = 1000, tabline = 1000, winbar = 1000}
---     },
---     sections = {
---         lualine_a = {'mode'},
---         lualine_b = {'branch', 'diff', 'diagnostics'},
---         lualine_c = {'filename'},
---         lualine_x = {'filetype'},
---         lualine_y = {'progress'},
---         lualine_z = {'location'}
---     },
---     inactive_sections = {
---         lualine_a = {},
---         lualine_b = {},
---         lualine_c = {'filename'},
---         lualine_x = {'location'},
---         lualine_y = {},
---         lualine_z = {}
---     },
---     tabline = {},
---     winbar = {},
---     inactive_winbar = {},
---     extensions = {}
--- })
 --
 -- require("lsp_signature").setup({
 --     debug = false, -- set to true to enable debug logging
