@@ -117,7 +117,56 @@ require("lazy").setup({
             -- Disabled by default for Telescope
             disable = {buftypes = {}, filetypes = {}}
         }
-    }
+    },
+    { "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function()
+      local configs = require("nvim-treesitter.configs")
+      configs.setup({
+          highlight = {
+              enable = true
+          },
+          ensure_installed = {
+              "awk",
+              "bash",
+              "bibtex",
+              "css",
+              "diff",
+              "dockerfile",
+              "fish",
+              "gitcommit",
+              "git_config",
+              "gitignore",
+              "git_rebase",
+              "gpg",
+              "html",
+              "javascript",
+              "json",
+              "json5",
+              "latex",
+              "lua",
+              "luadoc",
+              "make",
+              "markdown",
+              "markdown_inline",
+              "passwd",
+              "printf",
+              "python",
+              "r",
+              "regex",
+              "rust",
+              "scss",
+              "sql",
+              "ssh_config",
+              "toml",
+              "tsv",
+              "vim",
+              "vimdoc",
+              "yaml"
+              }
+            })
+        end
+    }, 
 })
 
 require("gitsigns").setup({
@@ -229,7 +278,6 @@ require("gruvbox").setup({
 vim.cmd("colorscheme gruvbox")
 
 --     "nvim-lua/plenary.nvim", 
---     "nvim-tree/nvim-web-devicons", 
 --     "tamago324/nlsp-settings.nvim",
 --     "neovim/nvim-lspconfig", {
 --         "nvim-telescope/telescope.nvim",
@@ -249,53 +297,8 @@ vim.cmd("colorscheme gruvbox")
 --                 }
 --             })
 --         end
---     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, {
---         "nvim-treesitter/nvim-treesitter",
---         build = ":TSUpdate",
---         config = function()
---             local configs = require("nvim-treesitter.configs")
---             configs.setup({
---                 ensure_installed = {
---                     "awk",
---                     "bash",
---                     "bibtex",
---                     "css",
---                     "diff",
---                     "dockerfile",
---                     "fish",
---                     "gitcommit",
---                     "git_config",
---                     "gitignore",
---                     "git_rebase",
---                     "gpg",
---                     "html",
---                     "javascript",
---                     "json",
---                     "json5",
---                     "latex",
---                     "lua",
---                     "luadoc",
---                     "make",
---                     "markdown",
---                     "markdown_inline",
---                     "passwd",
---                     "printf",
---                     "python",
---                     "r",
---                     "regex",
---                     "rust",
---                     "scss",
---                     "sql",
---                     "ssh_config",
---                     "toml",
---                     "tsv",
---                     "vim",
---                     "vimdoc",
---                     "yaml"
---                 }
---             })
---         end
---     }, 
+--     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, 
+--
 --     {"akinsho/toggleterm.nvim"},
 --     
 --     {"hrsh7th/cmp-buffer"},
