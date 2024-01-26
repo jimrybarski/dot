@@ -23,8 +23,49 @@ vim.opt.swapfile = false
 vim.opt.signcolumn = "yes"
 -- Faintly highlight the line the cursor is on
 vim.opt.cursorline = true
+-- Use larger color palette
+vim.opt.termguicolors = true
 
+-- Set the number of spaces that a tab character represents. 
+-- When you press the tab key, it will insert spaces equal to this number.
+vim.opt.tabstop = 4
+
+-- Set the number of spaces to use for each step of (auto)indent. 
+-- This affects commands like >>, <<, ==, etc.
+vim.opt.shiftwidth = 4
+
+-- When inserting a tab, it will act as if it's made up of spaces equal to this number.
+-- This helps in aligning with the tabstop when using spaces in place of tabs.
+vim.opt.softtabstop = 4
+
+-- Make the tab key insert spaces instead of a tab
+vim.opt.expandtab = true
+
+-- Use real tabs and not spaces in .tsv files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "tsv",
+    callback = function()
+        vim.opt_local.expandtab = false
+    end,
+})
+
+-- Use real tabs and not sapces in Makefiles
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "make",
+    callback = function()
+        vim.opt_local.expandtab = false
+    end,
+})
+
+-- transparently edit compressed files
+vim.g.loaded_gzip = 1
+vim.g.loaded_tar = 1
+vim.g.loaded_zipPlugin = 1
+
+-- load plugins
 require("lazy").setup({
+    {'smoka7/hop.nvim'},
+    {"akinsho/toggleterm.nvim"},
     {"nvim-lualine/lualine.nvim"},
     {"lewis6991/gitsigns.nvim"},
     -- nice color map 
@@ -33,92 +74,92 @@ require("lazy").setup({
     {"numToStr/Comment.nvim"}, 
     -- popup to explain what various keys will do
     {"folke/which-key.nvim",
-        event = "VeryLazy",
-        init = function()
-            vim.o.timeout = true
-            vim.o.timeoutlen = 300
-        end,
-        opts = {
-            plugins = {
-                marks = true, -- shows a list of your marks on ' and `
-                registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-                -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-                -- No actual key bindings are created
-                spelling = {
-                    enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-                    suggestions = 20 -- how many suggestions should be shown in the list?
-                },
-                presets = {
-                    operators = true, -- adds help for operators like d, y, ...
-                    motions = true, -- adds help for motions
-                    text_objects = true, -- help for text objects triggered after entering an operator
-                    windows = true, -- default bindings on <c-w>
-                    nav = true, -- misc bindings to work with windows
-                    z = true, -- bindings for folds, spelling and others prefixed with z
-                    g = true -- bindings for prefixed with g
-                }
-            },
-            -- add operators that will trigger motion and text object completion
-            -- to enable all native operators, set the preset / operators plugin above
-            operators = {gc = "Comments"},
-            key_labels = {
-                -- override the label used to display some keys. It doesn't effect WK in any other way.
-                -- For example:
-                -- ["<space>"] = "SPC",
-                -- ["<cr>"] = "RET",
-                -- ["<tab>"] = "TAB",
-            },
-            motions = {count = true},
-            icons = {
-                breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-                separator = "➜", -- symbol used between a key and its label
-                group = "+" -- symbol prepended to a group
-            },
-            popup_mappings = {
-                scroll_down = "<c-d>", -- binding to scroll down inside the popup
-                scroll_up = "<c-u>" -- binding to scroll up inside the popup
-            },
-            window = {
-                border = "none", -- none, single, double, shadow
-                position = "bottom", -- bottom, top
-                margin = {1, 0, 1, 0}, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
-                padding = {1, 2, 1, 2}, -- extra window padding [top, right, bottom, left]
-                winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-                zindex = 1000 -- positive value to position WhichKey above other floating windows.
-            },
-            layout = {
-                height = {min = 4, max = 25}, -- min and max height of the columns
-                width = {min = 20, max = 50}, -- min and max width of the columns
-                spacing = 3, -- spacing between columns
-                align = "left" -- align columns left, center or right
-            },
-            ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-            hidden = {
-                "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ",
-                "^lua "
-            }, -- hide mapping boilerplate
-            show_help = true, -- show a help message in the command line for using WhichKey
-            show_keys = true, -- show the currently pressed key and its label as a message in the command line
-            triggers = "auto", -- automatically setup triggers
-            -- triggers = {"<leader>"} -- or specifiy a list manually
-            -- list of triggers, where WhichKey should not wait for timeoutlen and show immediately
-            triggers_nowait = {
-                -- marks
-                "`", "'", "g`", "g'", -- registers
-                '"', "<c-r>", -- spelling
-                "z="
-            },
-            triggers_blacklist = {
-                -- list of mode / prefixes that should never be hooked by WhichKey
-                -- this is mostly relevant for keymaps that start with a native binding
-                i = {"j", "k"},
-                v = {"j", "k"}
-            },
-            -- disable the WhichKey popup for certain buf types and file types.
-            -- Disabled by default for Telescope
-            disable = {buftypes = {}, filetypes = {}}
-        }
-    },
+         event = "VeryLazy",
+         init = function()
+             vim.o.timeout = true
+             vim.o.timeoutlen = 300
+         end,
+         opts = {
+             plugins = {
+                 marks = true, -- shows a list of your marks on ' and `
+                 registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+                 -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+                 -- No actual key bindings are created
+                 spelling = {
+                     enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+                     suggestions = 20 -- how many suggestions should be shown in the list?
+                 },
+                 presets = {
+                     operators = true, -- adds help for operators like d, y, ...
+                     motions = true, -- adds help for motions
+                     text_objects = true, -- help for text objects triggered after entering an operator
+                     windows = true, -- default bindings on <c-w>
+                     nav = true, -- misc bindings to work with windows
+                     z = true, -- bindings for folds, spelling and others prefixed with z
+                     g = true -- bindings for prefixed with g
+                 }
+             },
+             -- add operators that will trigger motion and text object completion
+             -- to enable all native operators, set the preset / operators plugin above
+             operators = {gc = "Comments"},
+             key_labels = {
+                 -- override the label used to display some keys. It doesn't effect WK in any other way.
+                 -- For example:
+                 -- ["<space>"] = "SPC",
+                 -- ["<cr>"] = "RET",
+                 -- ["<tab>"] = "TAB",
+             },
+             motions = {count = true},
+             icons = {
+                 breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+                 separator = "➜", -- symbol used between a key and its label
+                 group = "+" -- symbol prepended to a group
+             },
+             popup_mappings = {
+                 scroll_down = "<c-d>", -- binding to scroll down inside the popup
+                 scroll_up = "<c-u>" -- binding to scroll up inside the popup
+             },
+             window = {
+                 border = "none", -- none, single, double, shadow
+                 position = "bottom", -- bottom, top
+                 margin = {1, 0, 1, 0}, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
+                 padding = {1, 2, 1, 2}, -- extra window padding [top, right, bottom, left]
+                 winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+                 zindex = 1000 -- positive value to position WhichKey above other floating windows.
+             },
+             layout = {
+                 height = {min = 4, max = 25}, -- min and max height of the columns
+                 width = {min = 20, max = 50}, -- min and max width of the columns
+                 spacing = 3, -- spacing between columns
+                 align = "left" -- align columns left, center or right
+             },
+             ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+             hidden = {
+                 "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ",
+                 "^lua "
+             }, -- hide mapping boilerplate
+             show_help = true, -- show a help message in the command line for using WhichKey
+             show_keys = true, -- show the currently pressed key and its label as a message in the command line
+             triggers = "auto", -- automatically setup triggers
+             -- triggers = {"<leader>"} -- or specifiy a list manually
+             -- list of triggers, where WhichKey should not wait for timeoutlen and show immediately
+             triggers_nowait = {
+                 -- marks
+                 "`", "'", "g`", "g'", -- registers
+                 '"', "<c-r>", -- spelling
+                 "z="
+             },
+             triggers_blacklist = {
+                 -- list of mode / prefixes that should never be hooked by WhichKey
+                 -- this is mostly relevant for keymaps that start with a native binding
+                 i = {"j", "k"},
+                 v = {"j", "k"}
+             },
+             -- disable the WhichKey popup for certain buf types and file types.
+             -- Disabled by default for Telescope
+             disable = {buftypes = {}, filetypes = {}}
+         }
+     },
     { "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",
       config = function()
@@ -168,6 +209,15 @@ require("lazy").setup({
             })
         end
     }, 
+    {"RRethy/vim-illuminate"},
+})
+
+require("illuminate").configure({
+    providers = {
+        'lsp',
+        'treesitter',
+        'regex'
+    }
 })
 
 require('lualine').setup({
@@ -246,7 +296,7 @@ require("gitsigns").setup({
   yadm = {
     enable = false
   },
-  })
+})
 -- Show the last commit (author, timestamp and commit message) that changed the current line
 vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>', {noremap = true, silent = true})
 
@@ -312,6 +362,29 @@ require("gruvbox").setup({
 -- Set the colorscheme to a nice color palette
 vim.cmd("colorscheme gruvbox")
 
+require("toggleterm").setup({
+    size = function(term)
+    if term.direction == "horizontal" then
+        local window_height = vim.api.nvim_win_get_height(0) * 4
+      return window_height
+    elseif term.direction == "vertical" then
+        local window_width = vim.api.nvim_win_get_width(0) * 2
+      return window_width
+    end
+  end,
+    open_mapping = [[<c-\>]],
+    hide_numbers = true, -- hide the number column in toggleterm buffers
+    shade_filetypes = {},
+    shade_terminals = false,
+    shading_factor = 2, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    start_in_insert = true,
+    insert_mappings = true, -- whether or not the open mapping applies in insert mode
+    persist_size = true,
+    direction = 'vertical', -- 'vertical', 'horizontal', 'tab', or 'float'
+    close_on_exit = true -- close the terminal window when the process exits
+})
+require("hop").setup()
+
 --     "nvim-lua/plenary.nvim", 
 --     "tamago324/nlsp-settings.nvim",
 --     "neovim/nvim-lspconfig", {
@@ -334,7 +407,6 @@ vim.cmd("colorscheme gruvbox")
 --         end
 --     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, 
 --
---     {"akinsho/toggleterm.nvim"},
 --     
 --     {"hrsh7th/cmp-buffer"},
 --     {"hrsh7th/cmp-cmdline"},
@@ -350,9 +422,7 @@ vim.cmd("colorscheme gruvbox")
 --     
 --     {"ray-x/lsp_signature.nvim"},
 --     {"rcarriga/nvim-dap-ui"},
---     {"RRethy/vim-illuminate"},
 --     {"saadparwaiz1/cmp_luasnip"},
---     {'smoka7/hop.nvim'},
 --     {"windwp/nvim-autopairs"},
 -- }, {})
 --
@@ -362,7 +432,6 @@ vim.cmd("colorscheme gruvbox")
 -- require('ibl').setup({
 --     scope = {highlight = highlight, show_start = false, show_end = false}
 -- })
--- require("toggleterm").setup()
 --
 -- require("lsp_signature").setup({
 --     debug = false, -- set to true to enable debug logging
@@ -668,9 +737,6 @@ vim.cmd("colorscheme gruvbox")
 --     function() dapui.close() end
 -- dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
 --
--- require("hop").setup()
--- vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
--- vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
 --
 -- require("nvim-surround").setup({})
 --
@@ -679,41 +745,6 @@ vim.cmd("colorscheme gruvbox")
 -- 
 
 -- 
--- Set the number of spaces that a tab character represents. 
--- When you press the tab key, it will insert spaces equal to this number.
-vim.opt.tabstop = 4
-
--- Set the number of spaces to use for each step of (auto)indent. 
--- This affects commands like >>, <<, ==, etc.
-vim.opt.shiftwidth = 4
-
--- When inserting a tab, it will act as if it's made up of spaces equal to this number.
--- This helps in aligning with the tabstop when using spaces in place of tabs.
-vim.opt.softtabstop = 4
-
--- Make the tab key insert spaces instead of a tab
-vim.opt.expandtab = true
-
--- Use real tabs and not spaces in .tsv files
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "tsv",
-    callback = function()
-        vim.opt_local.expandtab = false
-    end,
-})
-
--- Use real tabs and not sapces in Makefiles
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "make",
-    callback = function()
-        vim.opt_local.expandtab = false
-    end,
-})
-
--- transparently edit compressed files
-vim.g.loaded_gzip = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_zipPlugin = 1
 
 -- vim.api.nvim_set_keymap('n', '<leader>c',
 --                         '<C-w>v<C-w>l:e $HOME/.config/nvim/init.lua<cr>',
@@ -746,7 +777,9 @@ vim.g.loaded_zipPlugin = 1
 --                         {})
 -- vim.api.nvim_set_keymap('n', '<F12>', ':DapTerminate<cr>', {})
 -- vim.api.nvim_set_keymap('n', 's', ':w<cr>', {})
-vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
---
 -- vim.cmd.highlight("default link IndentLine Comment")
---
+
+
+vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
+vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
