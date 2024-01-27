@@ -63,7 +63,8 @@ vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
 
 -- load plugins
-require("lazy").setup({
+require("lazy").setup{
+    {"kylechui/nvim-surround"},
     {'smoka7/hop.nvim'},
     {"akinsho/toggleterm.nvim"},
     {"nvim-lualine/lualine.nvim"},
@@ -210,7 +211,7 @@ require("lazy").setup({
         end
     }, 
     {"RRethy/vim-illuminate"},
-})
+}
 
 require("illuminate").configure({
     providers = {
@@ -384,6 +385,10 @@ require("toggleterm").setup({
     close_on_exit = true -- close the terminal window when the process exits
 })
 require("hop").setup()
+vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
+vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
+
+require("nvim-surround").setup()
 
 --     "nvim-lua/plenary.nvim", 
 --     "tamago324/nlsp-settings.nvim",
@@ -408,13 +413,13 @@ require("hop").setup()
 --     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, 
 --
 --     
+--     {"kevinhwang91/nvim-ufo"}
 --     {"hrsh7th/cmp-buffer"},
 --     {"hrsh7th/cmp-cmdline"},
 --     {"hrsh7th/cmp-nvim-lsp"},
 --     {"hrsh7th/cmp-path"},
 --     {"hrsh7th/nvim-cmp"},
 --     {"klen/nvim-test"},
---     {"kylechui/nvim-surround"},
 --     {"L3MON4D3/LuaSnip"},
 --     {"lukas-reineke/indent-blankline.nvim"},
 --     {"lunarvim/bigfile.nvim"},
@@ -669,34 +674,8 @@ require("hop").setup()
 --
 -- local autopairs = require('nvim-autopairs')
 -- autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
--- require("which-key").setup()
 
 -- require("bigfile").setup()
---
--- require("toggleterm").setup {
---     open_mapping = [[<c-\>]], -- Change this keymap to your preferred key binding
---     hide_numbers = true, -- hide the number column in toggleterm buffers
---     shade_filetypes = {},
---     shade_terminals = true,
---     shading_factor = 2, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
---     start_in_insert = true,
---     insert_mappings = true, -- whether or not the open mapping applies in insert mode
---     persist_size = true,
---     direction = 'float', -- 'vertical', 'horizontal', 'tab', or 'float'
---     close_on_exit = true -- close the terminal window when the process exits
--- }
---
--- local function get_python_path(workspace)
---     -- Check if a virtual environment is active
---     local venv_path = os.getenv("VIRTUAL_ENV")
---     if venv_path then
---         -- If a virtual environment is active, use the Python from it
---         return venv_path .. "/bin/python"
---     else
---         -- Otherwise, fall back to system Python
---         return "/usr/bin/python3" -- Or your system's default Python 3 path
---     end
--- end
 --
 -- local dap = require('dap')
 --
@@ -738,7 +717,6 @@ require("hop").setup()
 -- dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
 --
 --
--- require("nvim-surround").setup({})
 --
 -- vim.o.background = "dark"
 -- vim.o.updatetime = 500
@@ -764,7 +742,7 @@ require("hop").setup()
 -- vim.api.nvim_set_keymap('t', '<C-n>', [[<C-\><C-n>]],
 --                         {noremap = true, silent = true})
 -- vim.api.nvim_set_keymap('n', '<leader>b',
---                         '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
+--                         '<Cmd>lua require("dap").toggle_breakpoint()$cr$', {})
 -- vim.api.nvim_set_keymap('n', '<leader>b',
 --                         '<Cmd>lua require("dap").toggle_breakpoint()<cr>', {})
 -- vim.api.nvim_set_keymap('n', '<F1>', '<Cmd>lua require("dap").step_over()<cr>',
@@ -781,5 +759,3 @@ require("hop").setup()
 
 
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
-vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
