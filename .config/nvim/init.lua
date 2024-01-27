@@ -64,6 +64,7 @@ vim.g.loaded_zipPlugin = 1
 
 -- load plugins
 require("lazy").setup{
+    {"lukas-reineke/indent-blankline.nvim"},
     {"kylechui/nvim-surround"},
     {'smoka7/hop.nvim'},
     {"akinsho/toggleterm.nvim"},
@@ -162,56 +163,71 @@ require("lazy").setup{
          }
      },
     { "nvim-treesitter/nvim-treesitter",
-      build = ":TSUpdate",
-      config = function()
-      local configs = require("nvim-treesitter.configs")
-      configs.setup({
-          highlight = {
-              enable = true
-          },
-          ensure_installed = {
-              "awk",
-              "bash",
-              "bibtex",
-              "css",
-              "diff",
-              "dockerfile",
-              "fish",
-              "gitcommit",
-              "git_config",
-              "gitignore",
-              "git_rebase",
-              "gpg",
-              "html",
-              "javascript",
-              "json",
-              "json5",
-              "latex",
-              "lua",
-              "luadoc",
-              "make",
-              "markdown",
-              "markdown_inline",
-              "passwd",
-              "printf",
-              "python",
-              "r",
-              "regex",
-              "rust",
-              "scss",
-              "sql",
-              "ssh_config",
-              "toml",
-              "tsv",
-              "vim",
-              "vimdoc",
-              "yaml"
-              }
-            })
-        end
+        build = ":TSUpdate",
+        config = function()
+        local configs = require("nvim-treesitter.configs")
+        configs.setup({
+            highlight = {
+                enable = true
+            },
+            ensure_installed = {
+                "awk",
+                "bash",
+                "bibtex",
+                "css",
+                "diff",
+                "dockerfile",
+                "fish",
+                "gitcommit",
+                "git_config",
+                "gitignore",
+                "git_rebase",
+                "gpg",
+                "html",
+                "javascript",
+                "json",
+                "json5",
+                "latex",
+                "lua",
+                "luadoc",
+                "make",
+                "markdown",
+                "markdown_inline",
+                "passwd",
+                "printf",
+                "python",
+                "r",
+                "regex",
+                "rust",
+                "scss",
+                "sql",
+                "ssh_config",
+                "toml",
+                "tsv",
+                "vim",
+                "vimdoc",
+                "yaml"
+                }
+              })
+          end
     }, 
     {"RRethy/vim-illuminate"},
 }
+
+-- puts vertical guide lines for each scope
+local highlight = {"CursorColumn"}
+require("ibl").setup({
+    indent = {
+        -- pick one of the symbols below or use anything else you want
+        -- but the char must have a display width of 1
+        char = "⸽"  -- ╎▏ ▏▎▍▌▋▊▉█│┃▕▐╎╏┆┇┊┋║
+    },
+    scope = { 
+            enabled = false, 
+            }
+})
+
+
 
 require("illuminate").configure({
     providers = {
@@ -421,7 +437,6 @@ require("nvim-surround").setup()
 --     {"hrsh7th/nvim-cmp"},
 --     {"klen/nvim-test"},
 --     {"L3MON4D3/LuaSnip"},
---     {"lukas-reineke/indent-blankline.nvim"},
 --     {"lunarvim/bigfile.nvim"},
 --     {"mfussenegger/nvim-dap"},
 --     
@@ -433,10 +448,6 @@ require("nvim-surround").setup()
 --
 -- require("nvim-test").setup {}
 --
--- local highlight = {"CursorColumn"}
--- require('ibl').setup({
---     scope = {highlight = highlight, show_start = false, show_end = false}
--- })
 --
 -- require("lsp_signature").setup({
 --     debug = false, -- set to true to enable debug logging
