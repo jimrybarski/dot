@@ -92,10 +92,10 @@ require("lazy").setup{
     {"hrsh7th/cmp-path"},
     {"hrsh7th/nvim-cmp"},
     {"windwp/nvim-autopairs"},
-    { "chrisgrieser/nvim-origami",
-        event = "BufReadPost", -- later or on keypress would prevent saving folds
-        opts = true, -- needed even when using default config
-    },
+    -- { "chrisgrieser/nvim-origami",
+    --        event = "BufReadPost", -- later or on keypress would prevent saving folds
+    --    opts = true, -- needed even when using default config
+    -- },
     {"lukas-reineke/indent-blankline.nvim"},
     {"kylechui/nvim-surround"},
     {'smoka7/hop.nvim'},
@@ -264,7 +264,7 @@ vim.o.foldcolumn = '0' -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
-vim.o.foldmethod = 'syntax'
+-- vim.o.foldmethod = 'syntax'
 
 local autopairs = require('nvim-autopairs')
 autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
@@ -273,24 +273,18 @@ require('ufo').setup({
     provider_selector = function(bufnr, filetype, buftype)
         return {'treesitter'}
     end,
-    mappings = {
-        switch = '',
-        trace = '',
-    },
     -- disable highlighting the unfolded text right after its unfolded
     open_fold_hl_timeout = 0
 })
+
 vim.keymap.set('n', 'zO', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zC', require('ufo').closeAllFolds)
-vim.keymap.set('n', 'zo', require('ufo').openFoldsExceptKinds)
-vim.keymap.set('n', 'zc', require('ufo').closeFoldsWith)
-
-require("origami").setup {
-	keepFoldsAcrossSessions = true,
-    -- pause folds is something I want, but its behavior is finnicky and broken
-	pauseFoldsOnSearch = false,
-	setupFoldKeymaps = false,
-}
+-- require("origami").setup {
+-- 	keepFoldsAcrossSessions = true,
+--     -- pause folds is something I want, but its behavior is finnicky and broken
+-- 	pauseFoldsOnSearch = false,
+-- 	setupFoldKeymaps = false,
+-- }
 
 -- puts vertical guide lines for each scope
 local highlight = {"CursorColumn"}
