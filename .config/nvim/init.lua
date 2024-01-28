@@ -92,10 +92,10 @@ require("lazy").setup{
     {"hrsh7th/cmp-path"},
     {"hrsh7th/nvim-cmp"},
     {"windwp/nvim-autopairs"},
-    -- { "chrisgrieser/nvim-origami",
-    --        event = "BufReadPost", -- later or on keypress would prevent saving folds
-    --    opts = true, -- needed even when using default config
-    -- },
+    { "chrisgrieser/nvim-origami",
+        event = "BufReadPost", -- later or on keypress would prevent saving folds
+        opts = true, -- needed even when using default config
+    },
     {"lukas-reineke/indent-blankline.nvim"},
     {"kylechui/nvim-surround"},
     {'smoka7/hop.nvim'},
@@ -162,6 +162,36 @@ require("lazy").setup{
     {"hrsh7th/cmp-emoji"},
 }
 
+local luasnip = require("luasnip")
+
+-- MY CUSTOM SNIPPETS
+local date = function() return os.date("%Y-%m-%d") end
+local s = luasnip.snippet
+local t = luasnip.text_node
+local i = luasnip.insert_node
+local f = luasnip.function_node
+
+luasnip.add_snippets("all", {
+    s("bash", {t("#!/usr/bin/env bash")}),
+    s("zsh", {t("#!/usr/bin/env zsh")}),
+    s("fish", {t("#!/usr/bin/env fish")}),
+    s("d", {f(date, {})})
+})
+
+luasnip.add_snippets("python", {
+    s("mpl", {t("import matplotlib.pyplot as plt")}),
+    s("fig", {t("fig, ax = plt.subplots()")}), s("figs", {
+        t("fig, ax = plt.subplots(figsize=("), i(1, "height"), t(", "),
+        i(2, "width"), t("))")
+    }), s("def", {
+        t("def "), i(1, "fname"), t("("), i(2, "arg"), t(") -> "),
+        i(3, "returns"), t(":\n\t"), i(4, "pass"), i(0)
+    }), s("ifmain", {
+        t("if __name__ == '__main__':"), t({"", "\t"}), -- Splitting the newline and indentation into a new text node
+        i(1, "pass"), i(0)
+    }),
+    s("fim", {t("from "), i(1, "package"), t(" import "), i(2, "module"), i(0)})
+})
 vim.notify = require("notify")
 local cmp = require("cmp")
 local window_config = {
@@ -172,8 +202,7 @@ local window_config = {
 cmp.setup({
     snippet = {
         expand = function(args)
-          vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-          -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+            require('luasnip').lsp_expand(args.body)
         end,
     },
     window = {
@@ -183,13 +212,23 @@ cmp.setup({
     mapping = { 
         -- When autocomplete is available, no selection is made automatically. The user
         -- must press tab or shift+tab to cycle through the options. function_node
+        ['<C-n>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then luasnip.jump(1) end
+        end, {"i", "s"}),
+        ['<C-p>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then luasnip.jump(-1) end
+        end, {"i", "s"}),
         ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    res = cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
-                else
-                    fallback()
+                    if luasnip.expand_or_jumpable() then
+                        cmp.select_next_item({})
+                    else
+                        cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
+                    end
+		else
+		    fallback()
                 end
-            end, {"i", "s"}),
+	    end, {"i", "s"}),
         ['<S-Tab>'] = cmp.mapping(function(fallback) 
                 if cmp.visible() then
                     cmp.select_prev_item({behavior = cmp.SelectBehavior.Insert})
@@ -223,13 +262,13 @@ cmp.setup({
         ['<C-j>'] = cmp.mapping.scroll_docs(4),
         },
         sources = cmp.config.sources({
+            { name = 'luasnip' },
             { name = 'calc' },
             { name = 'greek',
             option = { insert = true } },
             { name = 'nerdfont', 
               option = { insert = true } },
             { name = 'emoji' , 
-            -- required to insert emojis instead of their code
               option = { insert = true } },
             { name = 'treesitter' },
             { name = 'buffer' },
@@ -264,7 +303,7 @@ vim.o.foldcolumn = '0' -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
--- vim.o.foldmethod = 'syntax'
+
 
 local autopairs = require('nvim-autopairs')
 autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
@@ -279,12 +318,13 @@ require('ufo').setup({
 
 vim.keymap.set('n', 'zO', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zC', require('ufo').closeAllFolds)
--- require("origami").setup {
--- 	keepFoldsAcrossSessions = true,
---     -- pause folds is something I want, but its behavior is finnicky and broken
--- 	pauseFoldsOnSearch = false,
--- 	setupFoldKeymaps = false,
--- }
+require("origami").setup({
+	keepFoldsAcrossSessions = true,
+    -- pause folds is something I want, but its behavior is finnicky and broken
+	pauseFoldsOnSearch = false,
+	setupFoldKeymaps = false,
+  
+})
 
 -- puts vertical guide lines for each scope
 local highlight = {"CursorColumn"}
@@ -631,38 +671,7 @@ require("nvim-surround").setup()
 --
 -- local cmp = require("cmp")
 -- local cmp_types = require('cmp.types')
--- local luasnip = require("luasnip")
---
--- local date = function() return os.date("%Y-%m-%d") end
---
--- -- MY CUSTOM SNIPPETS
--- local s = luasnip.snippet
--- local t = luasnip.text_node
--- local i = luasnip.insert_node
--- local f = luasnip.function_node
---
--- luasnip.add_snippets("all", {
---     s("bash", {t("#!/usr/bin/env bash")}),
---     s("zsh", {t("#!/usr/bin/env zsh")}),
---     s("fish", {t("#!/usr/bin/env fish")}),
---     s("d", {f(date, {})})
--- })
---
--- luasnip.add_snippets("python", {
---     s("mpl", {t("import matplotlib.pyplot as plt")}),
---     s("fig", {t("fig, ax = plt.subplots()")}), s("figs", {
---         t("fig, ax = plt.subplots(figsize=("), i(1, "height"), t(", "),
---         i(2, "width"), t("))")
---     }), s("def", {
---         t("def "), i(1, "fname"), t("("), i(2, "arg"), t(") -> "),
---         i(3, "returns"), t(":\n\t"), i(4, "pass"), i(0)
---     }), s("ifmain", {
---         t("if __name__ == '__main__':"), t({"", "\t"}), -- Splitting the newline and indentation into a new text node
---         i(1, "pass"), i(0)
---     }),
---     s("fim", {t("from "), i(1, "package"), t(" import "), i(2, "module"), i(0)})
--- })
---
+
 -- cmp.setup({
 --     -- Specify the completion behavior
 --     completion = {completeopt = 'menu,menuone,noselect'},
