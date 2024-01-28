@@ -25,7 +25,8 @@ vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 -- Use larger color palette
 vim.opt.termguicolors = true
-
+-- Milliseconds to wait to trigger CursorHold
+vim.o.updatetime = 500
 -- Set the number of spaces that a tab character represents. 
 -- When you press the tab key, it will insert spaces equal to this number.
 vim.opt.tabstop = 4
@@ -67,6 +68,7 @@ autocmd("FileType", {
 
 -- load plugins
 require("lazy").setup{
+    {"windwp/nvim-autopairs"},
     { "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
         opts = true, -- needed even when using default config
@@ -230,6 +232,9 @@ vim.o.foldlevelstart = 50
 vim.o.foldenable = true
 vim.o.foldmethod = 'syntax'
 
+local autopairs = require('nvim-autopairs')
+autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
+
 require('ufo').setup({
     provider_selector = function(bufnr, filetype, buftype)
         return {'treesitter', 'indent'}
@@ -237,10 +242,10 @@ require('ufo').setup({
     -- disable highlighting the unfolded text right after its unfolded
     open_fold_hl_timeout = 0
 })
-vim.keymap.set('n', 'zM', require('ufo').openAllFolds)
-vim.keymap.set('n', 'zR', require('ufo').closeAllFolds)
-vim.keymap.set('n', 'zm', require('ufo').openFoldsExceptKinds)
-vim.keymap.set('n', 'zr', require('ufo').closeFoldsWith)
+vim.keymap.set('n', 'zO', require('ufo').openAllFolds)
+vim.keymap.set('n', 'zC', require('ufo').closeAllFolds)
+vim.keymap.set('n', 'zo', require('ufo').openFoldsExceptKinds)
+vim.keymap.set('n', 'zc', require('ufo').closeFoldsWith)
 
 require("origami").setup {
 	keepFoldsAcrossSessions = true,
@@ -535,7 +540,6 @@ require("nvim-surround").setup()
 --     {"ray-x/lsp_signature.nvim"},
 --     {"rcarriga/nvim-dap-ui"},
 --     {"saadparwaiz1/cmp_luasnip"},
---     {"windwp/nvim-autopairs"},
 -- }, {})
 --
 -- require("nvim-test").setup {}
@@ -775,11 +779,7 @@ require("nvim-surround").setup()
 --     end
 -- })
 --
--- local autopairs = require('nvim-autopairs')
--- autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
 
--- require("bigfile").setup()
---
 -- local dap = require('dap')
 --
 -- dap.adapters.python = {
@@ -822,7 +822,6 @@ require("nvim-surround").setup()
 --
 --
 -- vim.o.background = "dark"
--- vim.o.updatetime = 500
 -- 
 
 -- 
