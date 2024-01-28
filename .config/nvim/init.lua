@@ -41,29 +41,36 @@ vim.opt.softtabstop = 4
 -- Make the tab key insert spaces instead of a tab
 vim.opt.expandtab = true
 
+-- transparently edit compressed files
+vim.g.loaded_gzip = 1
+vim.g.loaded_tar = 1
+vim.g.loaded_zipPlugin = 1
+
+-- Make a shorter alias for some commands
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+
 -- Use real tabs and not spaces in .tsv files
-vim.api.nvim_create_autocmd("FileType", {
+autocmd("FileType", {
     pattern = "tsv",
     callback = function()
         vim.opt_local.expandtab = false
     end,
 })
-
 -- Use real tabs and not sapces in Makefiles
-vim.api.nvim_create_autocmd("FileType", {
+autocmd("FileType", {
     pattern = "make",
     callback = function()
         vim.opt_local.expandtab = false
     end,
 })
 
--- transparently edit compressed files
-vim.g.loaded_gzip = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_zipPlugin = 1
-
 -- load plugins
 require("lazy").setup{
+    { "chrisgrieser/nvim-origami",
+        event = "BufReadPost", -- later or on keypress would prevent saving folds
+        opts = true, -- needed even when using default config
+    },
     {"lukas-reineke/indent-blankline.nvim"},
     {"kylechui/nvim-surround"},
     {'smoka7/hop.nvim'},
@@ -212,6 +219,34 @@ require("lazy").setup{
           end
     }, 
     {"RRethy/vim-illuminate"},
+    { "kevinhwang91/promise-async" },
+    { "kevinhwang91/nvim-ufo" },
+    {"lunarvim/bigfile.nvim"},
+}
+
+vim.o.foldcolumn = '0' -- '0' is not bad
+vim.o.foldlevel = 50 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 50
+vim.o.foldenable = true
+vim.o.foldmethod = 'syntax'
+
+require('ufo').setup({
+    provider_selector = function(bufnr, filetype, buftype)
+        return {'treesitter', 'indent'}
+    end,
+    -- disable highlighting the unfolded text right after its unfolded
+    open_fold_hl_timeout = 0
+})
+vim.keymap.set('n', 'zM', require('ufo').openAllFolds)
+vim.keymap.set('n', 'zR', require('ufo').closeAllFolds)
+vim.keymap.set('n', 'zm', require('ufo').openFoldsExceptKinds)
+vim.keymap.set('n', 'zr', require('ufo').closeFoldsWith)
+
+require("origami").setup {
+	keepFoldsAcrossSessions = true,
+    -- pause folds on search seems to be broken. it will open folds to show search results but not close them again
+	pauseFoldsOnSearch = true,
+	setupFoldKeymaps = false,
 }
 
 -- puts vertical guide lines for each scope
@@ -220,23 +255,68 @@ require("ibl").setup({
     indent = {
         -- pick one of the symbols below or use anything else you want
         -- but the char must have a display width of 1
-        char = "⸽"  -- ╎▏ ▏▎▍▌▋▊▉█│┃▕▐╎╏┆┇┊┋║
+        char = "▏"  -- ╎▏ ▏▎▍▌▋▊▉█│┃▕▐╎╏┆┇┊┋║
     },
     scope = { 
+        -- don't highlight the current scope's vertical line, or the text at either end of the line
+        -- this seems to be flaky, and I'm not really sure how it helps
             enabled = false, 
             }
 })
-
-
-
 require("illuminate").configure({
+-- providers: provider used to get references in the buffer, ordered by priority
     providers = {
         'lsp',
         'treesitter',
-        'regex'
-    }
+        'regex',
+    },
+    -- delay: delay in milliseconds
+    delay = 0,
+    -- filetype_overrides: filetype specific overrides.
+    -- The keys are strings to represent the filetype while the values are tables that
+    -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+    filetype_overrides = {},
+    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+    filetypes_denylist = {
+        'dirbuf',
+        'dirvish',
+        'fugitive',
+    },
+    -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
+    -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
+    filetypes_allowlist = {},
+    -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+    -- See `:help mode()` for possible values
+    modes_denylist = {},
+    -- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
+    -- See `:help mode()` for possible values
+    modes_allowlist = {},
+    -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+    -- Only applies to the 'regex' provider
+    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+    providers_regex_syntax_denylist = {},
+    -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
+    -- Only applies to the 'regex' provider
+    -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+    providers_regex_syntax_allowlist = {},
+    -- under_cursor: whether or not to illuminate under the cursor
+    under_cursor = false,
+    -- large_file_cutoff: number of lines at which to use large_file_config
+    -- The `under_cursor` option is disabled when this cutoff is hit
+    large_file_cutoff = nil,
+    -- large_file_config: config to use for large files (based on large_file_cutoff).
+    -- Supports the same keys passed to .configure
+    -- If nil, vim-illuminate will be disabled for large files.
+    large_file_overrides = nil,
+    -- min_count_to_highlight: minimum number of matches required to perform highlighting
+    min_count_to_highlight = 1,
+    -- should_enable: a callback that overrides all other settings to
+    -- enable/disable illumination. This will be called a lot so don't do
+    -- anything expensive in it.
+    should_enable = function(bufnr) return true end,
+    -- case_insensitive_regex: sets regex case sensitivity
+    case_insensitive_regex = false,
 })
-
 require('lualine').setup({
     options = {
         icons_enabled = false,
@@ -270,7 +350,6 @@ require('lualine').setup({
     inactive_winbar = {},
     extensions = {}
 })
-
 require("gitsigns").setup({
     signs = {
     add          = { text = '│' },
@@ -376,6 +455,21 @@ require("gruvbox").setup({
     transparent_mode = false
 })
 
+require("bigfile").setup {
+  filesize = 2, -- size of the file in MiB, the plugin round file sizes to the closest MiB
+  pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
+  features = { -- features to disable
+    "indent_blankline",
+    "illuminate",
+    "lsp",
+    "treesitter",
+    "syntax",
+    "matchparen",
+    "vimopts",
+    "filetype",
+  },
+}
+
 -- Set the colorscheme to a nice color palette
 vim.cmd("colorscheme gruvbox")
 
@@ -429,7 +523,6 @@ require("nvim-surround").setup()
 --     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, 
 --
 --     
---     {"kevinhwang91/nvim-ufo"}
 --     {"hrsh7th/cmp-buffer"},
 --     {"hrsh7th/cmp-cmdline"},
 --     {"hrsh7th/cmp-nvim-lsp"},
@@ -437,7 +530,6 @@ require("nvim-surround").setup()
 --     {"hrsh7th/nvim-cmp"},
 --     {"klen/nvim-test"},
 --     {"L3MON4D3/LuaSnip"},
---     {"lunarvim/bigfile.nvim"},
 --     {"mfussenegger/nvim-dap"},
 --     
 --     {"ray-x/lsp_signature.nvim"},
