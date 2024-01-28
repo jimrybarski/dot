@@ -42,10 +42,20 @@ vim.opt.softtabstop = 4
 -- Make the tab key insert spaces instead of a tab
 vim.opt.expandtab = true
 
+-- menu, menuone: show the completion menu if there are one or more matches
+-- preview: show extra information about a selection
+-- noinsert: don't insert text until a selection is made
+-- noselect: don't select a match automatically
+vim.g.completopt = "menu,menuone,preview,noinsert,noselect"
+
+-- keep the cursor in the center of the screen (if there is space)
+vim.o.scrolloff = 10
+
 -- transparently edit compressed files
 vim.g.loaded_gzip = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
+
 
 -- Make a shorter alias for some commands
 local autocmd = vim.api.nvim_create_autocmd
@@ -68,6 +78,19 @@ autocmd("FileType", {
 
 -- load plugins
 require("lazy").setup{
+    {"L3MON4D3/LuaSnip"},
+    {"saadparwaiz1/cmp_luasnip"},
+    { "hrsh7th/cmp-calc" },
+    { "max397574/cmp-greek" },
+    { "chrisgrieser/cmp-nerdfont" },
+    { "ray-x/cmp-treesitter" },
+    {"hrsh7th/cmp-nvim-lua"},
+    {"rcarriga/nvim-notify"},
+    {"hrsh7th/cmp-buffer"},
+    {"hrsh7th/cmp-cmdline"},
+    -- {"hrsh7th/cmp-nvim-lsp"},
+    {"hrsh7th/cmp-path"},
+    {"hrsh7th/nvim-cmp"},
     {"windwp/nvim-autopairs"},
     { "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
@@ -83,94 +106,6 @@ require("lazy").setup{
     {"ellisonleao/gruvbox.nvim"}, 
     -- commands to comment/uncomment code
     {"numToStr/Comment.nvim"}, 
-    -- popup to explain what various keys will do
-    {"folke/which-key.nvim",
-         event = "VeryLazy",
-         init = function()
-             vim.o.timeout = true
-             vim.o.timeoutlen = 300
-         end,
-         opts = {
-             plugins = {
-                 marks = true, -- shows a list of your marks on ' and `
-                 registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-                 -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-                 -- No actual key bindings are created
-                 spelling = {
-                     enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-                     suggestions = 20 -- how many suggestions should be shown in the list?
-                 },
-                 presets = {
-                     operators = true, -- adds help for operators like d, y, ...
-                     motions = true, -- adds help for motions
-                     text_objects = true, -- help for text objects triggered after entering an operator
-                     windows = true, -- default bindings on <c-w>
-                     nav = true, -- misc bindings to work with windows
-                     z = true, -- bindings for folds, spelling and others prefixed with z
-                     g = true -- bindings for prefixed with g
-                 }
-             },
-             -- add operators that will trigger motion and text object completion
-             -- to enable all native operators, set the preset / operators plugin above
-             operators = {gc = "Comments"},
-             key_labels = {
-                 -- override the label used to display some keys. It doesn't effect WK in any other way.
-                 -- For example:
-                 -- ["<space>"] = "SPC",
-                 -- ["<cr>"] = "RET",
-                 -- ["<tab>"] = "TAB",
-             },
-             motions = {count = true},
-             icons = {
-                 breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-                 separator = "➜", -- symbol used between a key and its label
-                 group = "+" -- symbol prepended to a group
-             },
-             popup_mappings = {
-                 scroll_down = "<c-d>", -- binding to scroll down inside the popup
-                 scroll_up = "<c-u>" -- binding to scroll up inside the popup
-             },
-             window = {
-                 border = "none", -- none, single, double, shadow
-                 position = "bottom", -- bottom, top
-                 margin = {1, 0, 1, 0}, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
-                 padding = {1, 2, 1, 2}, -- extra window padding [top, right, bottom, left]
-                 winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-                 zindex = 1000 -- positive value to position WhichKey above other floating windows.
-             },
-             layout = {
-                 height = {min = 4, max = 25}, -- min and max height of the columns
-                 width = {min = 20, max = 50}, -- min and max width of the columns
-                 spacing = 3, -- spacing between columns
-                 align = "left" -- align columns left, center or right
-             },
-             ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-             hidden = {
-                 "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ",
-                 "^lua "
-             }, -- hide mapping boilerplate
-             show_help = true, -- show a help message in the command line for using WhichKey
-             show_keys = true, -- show the currently pressed key and its label as a message in the command line
-             triggers = "auto", -- automatically setup triggers
-             -- triggers = {"<leader>"} -- or specifiy a list manually
-             -- list of triggers, where WhichKey should not wait for timeoutlen and show immediately
-             triggers_nowait = {
-                 -- marks
-                 "`", "'", "g`", "g'", -- registers
-                 '"', "<c-r>", -- spelling
-                 "z="
-             },
-             triggers_blacklist = {
-                 -- list of mode / prefixes that should never be hooked by WhichKey
-                 -- this is mostly relevant for keymaps that start with a native binding
-                 i = {"j", "k"},
-                 v = {"j", "k"}
-             },
-             -- disable the WhichKey popup for certain buf types and file types.
-             -- Disabled by default for Telescope
-             disable = {buftypes = {}, filetypes = {}}
-         }
-     },
     { "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
@@ -224,11 +159,110 @@ require("lazy").setup{
     { "kevinhwang91/promise-async" },
     { "kevinhwang91/nvim-ufo" },
     {"lunarvim/bigfile.nvim"},
+    {"hrsh7th/cmp-emoji"},
 }
 
+vim.notify = require("notify")
+local cmp = require("cmp")
+local window_config = {
+            scrollbar = true,
+            side_padding = 1,
+            col_offset = 0,
+        }
+cmp.setup({
+    snippet = {
+        expand = function(args)
+          vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+          -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        end,
+    },
+    window = {
+        completion = cmp.config.window.bordered(window_config),
+        documentation = cmp.config.window.bordered(window_config),
+    },
+    mapping = { 
+        -- When autocomplete is available, no selection is made automatically. The user
+        -- must press tab or shift+tab to cycle through the options. function_node
+        ['<Tab>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    res = cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
+                else
+                    fallback()
+                end
+            end, {"i", "s"}),
+        ['<S-Tab>'] = cmp.mapping(function(fallback) 
+                if cmp.visible() then
+                    cmp.select_prev_item({behavior = cmp.SelectBehavior.Insert})
+                else
+                    fallback()
+                end
+            end, {"i", "s"}),
+        ['<Esc>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                local entry = cmp.get_selected_entry({behavior = cmp.SelectBehavior.Select})
+                if not entry then
+                    -- autocomplete was open but nothing was selected. the user wants to go into
+                    -- normal mode directly
+                    -- so close the autocomplete window first
+                    cmp.abort()
+                    -- then escape
+                    fallback()
+                else
+                    -- the user had highlighted an autocomplete item, but then pressed escape
+                    -- we just escape here, which closes the window and escapes to normal mode.
+                    -- the inserted text remains. calling cmp.abort() here causes a bug in autocomplete
+                    -- where entries aren't inserted anymore. So I'm not sure why the window closes.
+                    fallback()
+                end
+            else
+                -- I don't know how this would be possible
+                fallback()
+            end
+        end, {"i", "s"}),
+        ['<C-k>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-j>'] = cmp.mapping.scroll_docs(4),
+        },
+        sources = cmp.config.sources({
+            { name = 'calc' },
+            { name = 'greek',
+            option = { insert = true } },
+            { name = 'nerdfont', 
+              option = { insert = true } },
+            { name = 'emoji' , 
+            -- required to insert emojis instead of their code
+              option = { insert = true } },
+            { name = 'treesitter' },
+            { name = 'buffer' },
+            { name = 'cmdline' },
+            { name = 'path'},
+        }),
+        preselect = cmp.PreselectMode.None,
+})
+
+cmp.setup.cmdline({'/', '?'}, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    {
+      name = 'cmdline',
+      option = {
+        ignore_cmds = { '!' }
+      }
+    }
+  })
+})
+
 vim.o.foldcolumn = '0' -- '0' is not bad
-vim.o.foldlevel = 50 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 50
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 vim.o.foldmethod = 'syntax'
 
@@ -237,8 +271,12 @@ autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
 
 require('ufo').setup({
     provider_selector = function(bufnr, filetype, buftype)
-        return {'treesitter', 'indent'}
+        return {'treesitter'}
     end,
+    mappings = {
+        switch = '',
+        trace = '',
+    },
     -- disable highlighting the unfolded text right after its unfolded
     open_fold_hl_timeout = 0
 })
@@ -249,8 +287,8 @@ vim.keymap.set('n', 'zc', require('ufo').closeFoldsWith)
 
 require("origami").setup {
 	keepFoldsAcrossSessions = true,
-    -- pause folds on search seems to be broken. it will open folds to show search results but not close them again
-	pauseFoldsOnSearch = true,
+    -- pause folds is something I want, but its behavior is finnicky and broken
+	pauseFoldsOnSearch = false,
 	setupFoldKeymaps = false,
 }
 
@@ -528,18 +566,11 @@ require("nvim-surround").setup()
 --     }, {"nvim-telescope/telescope-fzf-native.nvim", build = "make"}, 
 --
 --     
---     {"hrsh7th/cmp-buffer"},
---     {"hrsh7th/cmp-cmdline"},
---     {"hrsh7th/cmp-nvim-lsp"},
---     {"hrsh7th/cmp-path"},
---     {"hrsh7th/nvim-cmp"},
 --     {"klen/nvim-test"},
---     {"L3MON4D3/LuaSnip"},
 --     {"mfussenegger/nvim-dap"},
 --     
 --     {"ray-x/lsp_signature.nvim"},
 --     {"rcarriga/nvim-dap-ui"},
---     {"saadparwaiz1/cmp_luasnip"},
 -- }, {})
 --
 -- require("nvim-test").setup {}
