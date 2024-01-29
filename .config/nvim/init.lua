@@ -87,7 +87,6 @@ require("lazy").setup{
     {"hrsh7th/cmp-nvim-lua"},
     {"rcarriga/nvim-notify"},
     {"hrsh7th/cmp-buffer"},
-    {"hrsh7th/cmp-cmdline"},
     -- {"hrsh7th/cmp-nvim-lsp"},
     {"hrsh7th/cmp-path"},
     {"hrsh7th/nvim-cmp"},
@@ -192,7 +191,11 @@ luasnip.add_snippets("python", {
     }),
     s("fim", {t("from "), i(1, "package"), t(" import "), i(2, "module"), i(0)})
 })
+
+-- message notifications in popups at the top right of the window
 vim.notify = require("notify")
+
+-- autocompletion framework
 local cmp = require("cmp")
 local window_config = {
             scrollbar = true,
@@ -213,21 +216,25 @@ cmp.setup({
         -- When autocomplete is available, no selection is made automatically. The user
         -- must press tab or shift+tab to cycle through the options. function_node
         ['<C-n>'] = cmp.mapping(function(fallback)
-            if luasnip.jumpable(1) then luasnip.jump(1) end
+            if luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump() 
+            elseif luasnip.jumpable(1) then 
+                luasnip.jump(1)
+            end
         end, {"i", "s"}),
         ['<C-p>'] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then luasnip.jump(-1) end
         end, {"i", "s"}),
         ['<Tab>'] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    if luasnip.expand_or_jumpable() then
-                        cmp.select_next_item({})
-                    else
-                        cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
-                    end
-		else
-		    fallback()
+            if cmp.visible() then
+                if luasnip.expand_or_jumpable() then
+                    cmp.select_next_item()
+                else
+                    cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
                 end
+            else
+                fallback()
+            end
 	    end, {"i", "s"}),
         ['<S-Tab>'] = cmp.mapping(function(fallback) 
                 if cmp.visible() then
@@ -236,6 +243,13 @@ cmp.setup({
                     fallback()
                 end
             end, {"i", "s"}),
+        ['<CR>'] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end, {"i", "s"}),
         ['<Esc>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 local entry = cmp.get_selected_entry({behavior = cmp.SelectBehavior.Select})
@@ -263,41 +277,23 @@ cmp.setup({
         },
         sources = cmp.config.sources({
             { name = 'luasnip' },
-            { name = 'calc' },
+            { name = 'treesitter' },
+            { name = 'buffer' },
+            { name = 'path'},
             { name = 'greek',
             option = { insert = true } },
             { name = 'nerdfont', 
               option = { insert = true } },
             { name = 'emoji' , 
               option = { insert = true } },
-            { name = 'treesitter' },
-            { name = 'buffer' },
-            { name = 'cmdline' },
-            { name = 'path'},
+            { name = 'calc' },
         }),
         preselect = cmp.PreselectMode.None,
+        completion = {
+            keyword_length = 1,
+        },
 })
 
-cmp.setup.cmdline({'/', '?'}, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-        { name = 'buffer' }
-    }
-})
-
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    {
-      name = 'cmdline',
-      option = {
-        ignore_cmds = { '!' }
-      }
-    }
-  })
-})
 
 vim.o.foldcolumn = '0' -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -322,9 +318,15 @@ require("origami").setup({
 	keepFoldsAcrossSessions = true,
     -- pause folds is something I want, but its behavior is finnicky and broken
 	pauseFoldsOnSearch = false,
+    -- I think this is broken too
 	setupFoldKeymaps = false,
   
 })
+-- re-remap h and l to their default meaning. nvim-origami installs some stupid 
+-- keymap even though I set it not to
+vim.api.nvim_set_keymap('n', 'h', 'h', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'l', 'l', {noremap = true, silent = true})
+
 
 -- puts vertical guide lines for each scope
 local highlight = {"CursorColumn"}
