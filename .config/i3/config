@@ -135,7 +135,7 @@ set $ws10 "10"
 # the browser is automatically dimmed slightly since there's a lot of white on web pages and it's too bright
 bindsym $mod+1 exec --no-startup-id redshift -o -P -O 5000 -b 1.0; workspace number $ws1
 bindsym $mod+2 exec --no-startup-id redshift -o -P -O 3800 -b 0.75; workspace number $ws2
-bindsym $mod+3 exec --no-startup-id redshift -o -P -O 5000 -b 1.0; workspace number $ws3
+bindsym $mod+3 exec --no-startup-id redshift -o -P -O 3800 -b 0.80; workspace number $ws3
 bindsym $mod+4 workspace number $ws4
 bindsym $mod+5 workspace number $ws5
 bindsym $mod+6 workspace number $ws6
