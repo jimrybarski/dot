@@ -41,7 +41,34 @@ alias cfn=v "$HOME/.config/ncmpcpp/config"
 
 # desktop
 alias copy="xsel --clipboard"
-alias mp3="$HOME/.local/ytdlenv/bin/yt-dlp"
+
+function vid() {
+    # Download a video from online
+    "$HOME"/.local/ytdlenv/bin/yt-dlp -o '$HOME/Videos/%(title)s.%(ext)s' "$1"
+}
+
+function mp3() {
+    # Download an mp3 of an online video
+    "$HOME"/.local/ytdlenv/bin/yt-dlp -x --audio-format mp3 -o '$HOME/Music/%(title)s.%(ext)s' "$1"
+}
+
+function vid2mp3() {
+    "$HOME"/.local/ytdlenv/bin/yt-dlp -x --audio-format mp3 --enable-file-urls -o '$HOME/Music/%(title)s.%(ext)s' -- 'file:$HOME/Videos/%(title)s.%(ext)s'
+
+
+}
+
+function archive() {
+    URL="$1"
+    VIDEO_PATH="$HOME/Videos"
+    MUSIC_PATH="$HOME/Music"
+    # Download the video and get the filename with extension
+    FILENAME=$("$HOME"/.local/ytdlenv/bin/yt-dlp --get-filename -o "$VIDEO_PATH/%(title)s.%(ext)s" "$URL")
+    # Download the video
+    "$HOME"/.local/ytdlenv/bin/yt-dlp -o "$FILENAME" "$URL"
+    # Extract audio from the downloaded video
+    "$HOME"/.local/ytdlenv/bin/yt-dlp -x --enable-file-urls --audio-format mp3 -o "$MUSIC_PATH/%(title)s.%(ext)s" -- "file:$FILENAME"
+}
 
 alias m='ncmpcpp'
 alias cal='cal -3'
