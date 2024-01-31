@@ -83,7 +83,7 @@ autocmd("FileType", {
         vim.opt_local.expandtab = false
     end,
 })
--- Use real tabs and not sapces in Makefiles
+-- Use real tabs and not spaces in Makefiles
 autocmd("FileType", {
     pattern = "make",
     callback = function()
@@ -93,7 +93,7 @@ autocmd("FileType", {
 
 -- load plugins
 require("lazy").setup{
-    -- none-ls and others depend on plenary
+    -- none-ls, telescope and others depend on plenary
     { "nvim-lua/plenary.nvim" },
     { "nvimtools/none-ls.nvim" },
     -- { "folke/trouble.nvim",
@@ -181,7 +181,43 @@ require("lazy").setup{
     },
     {"lunarvim/bigfile.nvim"},
     {"hrsh7th/cmp-emoji"},
+    { "nvim-telescope/telescope.nvim",
+		branch = "0.1.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+				cond = vim.fn.executable("cmake") == 1,
+			},
+		},
+    },
 }
+		
+local actions = require("telescope.actions")
+
+require("telescope").setup({
+    defaults = {
+        layout_config = {
+            vertical = { width = 0.9, height = 0.9 }
+        },
+        -- mappings = {
+        --     i = {
+        --         ["<C-k>"] = actions.move_selection_previous,
+        --         ["<C-j>"] = actions.move_selection_next,
+        --         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --         ["<C-x>"] = actions.delete_buffer,
+        --     },
+        -- },
+        file_ignore_patterns = {
+            ".git",
+        },
+        hidden = true,
+    },
+})
+
+-- Enable telescope fzf native, if installed
+pcall(require("telescope").load_extension, "fzf")
 
 -- configure linters and formatters
 null_ls = require("null-ls")
@@ -197,6 +233,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.fish,
   },
 })
+
 
 local luasnip = require("luasnip")
 
