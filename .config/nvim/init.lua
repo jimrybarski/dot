@@ -201,14 +201,6 @@ require("telescope").setup({
         layout_config = {
             vertical = { width = 0.9, height = 0.9 }
         },
-        -- mappings = {
-        --     i = {
-        --         ["<C-k>"] = actions.move_selection_previous,
-        --         ["<C-j>"] = actions.move_selection_next,
-        --         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        --         ["<C-x>"] = actions.delete_buffer,
-        --     },
-        -- },
         file_ignore_patterns = {
             ".git",
         },
@@ -695,3 +687,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- copy selection to system clipboard
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope grep_string<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>ft', ':Telescope<cr><Esc>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope fd<cr>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>fs', ':Telescope git_status<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>fk', ':Telescope keymaps<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>fm', ':Telescope man_pages<cr>', {noremap = true, silent = true})
