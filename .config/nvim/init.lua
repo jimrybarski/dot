@@ -262,7 +262,7 @@ null_ls.setup({
         null_ls.builtins.diagnostics.pylint, 
         null_ls.builtins.diagnostics.ruff,
         null_ls.builtins.diagnostics.shellcheck,
-        null_ls.builtins.diagnostics.fish
+        null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.ruff_format,
         null_ls.builtins.formatting.rustfmt,
