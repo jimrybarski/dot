@@ -135,7 +135,7 @@ require("lazy").setup {
                     "fish", "gitcommit", "git_config", "gitignore",
                     "git_rebase", "gpg", "html", "javascript", "json", "json5",
                     "latex", "lua", "luadoc", "make", "markdown",
-                    "markdown_inline", "passwd", "printf", "python", "r",
+                    "markdown_inline", "passwd", "python", "r",
                     "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
                     "vim", "vimdoc", "yaml"
                 }
@@ -259,12 +259,13 @@ pcall(require("telescope").load_extension, "emoji")
 null_ls = require("null-ls")
 null_ls.setup({
     sources = {
-        null_ls.builtins.diagnostics.pylint, null_ls.builtins.formatting.isort,
+        null_ls.builtins.diagnostics.pylint, 
         null_ls.builtins.diagnostics.ruff,
-        null_ls.builtins.formatting.ruff_format,
-        null_ls.builtins.formatting.rustfmt,
         null_ls.builtins.diagnostics.shellcheck,
         null_ls.builtins.diagnostics.fish
+        null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.ruff_format,
+        null_ls.builtins.formatting.rustfmt,
     }
 })
 
