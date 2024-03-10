@@ -133,9 +133,9 @@ set $ws10 "10"
 # switch to workspace
 # we automatically set brightness to bright for the terminal and games since those tend to be very dark
 # the browser is automatically dimmed slightly since there's a lot of white on web pages and it's too bright
-bindsym $mod+1 exec --no-startup-id redshift -o -P -O 5000 -b 0.75; workspace number $ws1
-bindsym $mod+2 exec --no-startup-id redshift -o -P -O 3800 -b 0.75; workspace number $ws2
-bindsym $mod+3 exec --no-startup-id redshift -o -P -O 3800 -b 0.80; workspace number $ws3
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
 bindsym $mod+4 workspace number $ws4
 bindsym $mod+5 workspace number $ws5
 bindsym $mod+6 workspace number $ws6
@@ -161,7 +161,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Ctrl+o exec shutdown now
+# bindsym $mod+Ctrl+o exec shutdown now
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
