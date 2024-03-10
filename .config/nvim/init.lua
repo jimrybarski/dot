@@ -260,12 +260,8 @@ null_ls = require("null-ls")
 null_ls.setup({
     sources = {
         null_ls.builtins.diagnostics.pylint, 
-        null_ls.builtins.diagnostics.ruff,
-        null_ls.builtins.diagnostics.shellcheck,
         null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.ruff_format,
-        null_ls.builtins.formatting.rustfmt,
     }
 })
 
@@ -769,3 +765,40 @@ function _G.check_line()
         return 'dd'
     end
 end
+
+-- needed for setting up PAO system only
+-- Function to swap names based on ID
+function swap_names_with_id(target_id)
+    local bufnr = vim.api.nvim_get_current_buf() -- Get current buffer number
+    local current_line_nr = vim.api.nvim_win_get_cursor(0)[1] -- Get current line number
+    local current_line = vim.api.nvim_buf_get_lines(bufnr, current_line_nr-1, current_line_nr, false)[1] -- Get current line content
+    
+    -- Parse current line to extract ID and name
+    local current_id, current_name = current_line:match("(%d+)%s(.+)")
+    if not current_id then
+        print("Current line does not contain a valid ID and name format.")
+        return
+    end
+    
+    -- Find target line by ID and extract name
+    local target_line_nr, target_name
+    for i, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+        if line:match("^" .. target_id .. "%s") then
+            target_line_nr = i
+            target_name = line:match("%d+%s(.+)")
+            break
+        end
+    end
+    
+    if not target_line_nr then
+        print("Target ID not found.")
+        return
+    end
+    
+    -- Swap names
+    vim.api.nvim_buf_set_lines(bufnr, current_line_nr-1, current_line_nr, false, {current_id .. " " .. target_name})
+    vim.api.nvim_buf_set_lines(bufnr, target_line_nr-1, target_line_nr, false, {target_id .. " " .. current_name})
+end
+
+-- Mapping function to key combination
+vim.api.nvim_set_keymap('n', '<leader>s', ':lua swap_names_with_id(vim.fn.input("Enter target ID: "))<CR>', {noremap = true, silent = true})
