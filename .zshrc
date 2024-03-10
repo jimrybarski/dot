@@ -6,11 +6,7 @@
 alias ll='eza -alh'
 alias ls='eza -a'
 alias v='nvim'
-alias sf="ssh freeboxroot"
-alias sm="ssh marble"
-alias ss="ssh stampede"
-alias sw="ssh wilke"
-alias sw2="ssh wilke2"
+alias sf="ssh freebox"
 alias eba=". env/bin/activate"
 
 # notes
@@ -166,7 +162,7 @@ function edit_note () {
     directory=$(dirname $filename)
     osname=$(uname)
     if [[ "$osname" != "Darwin" ]]; then
-        ssh notes -t "/usr/local/bin/zsh -ic 'mkdir -p ~/notes/$directory && v ~/notes/$filename'"
+        ssh notes -t "/usr/local/bin/zsh -ic 'mkdir -p ~/$directory && v ~/$filename'"
     else
         mkdir -p "$HOME/notes/$directory" && v "$HOME/notes/$filename"
     fi
@@ -177,12 +173,20 @@ alias en=edit_note
 function echo_note () {
     filename=$(derive_note_filename $1 $2)
     if [[ "$osname" != "Darwin" ]]; then
-        ssh notes cat "/root/notes/$filename"
+        ssh notes cat "/root/$filename"
     else
         cat $HOME/notes/$filename
     fi
 }
 alias echon=echo_note
+
+function otp() {
+    code=$(pass otp/$1)
+    while true; do
+        sleep 1;
+        oathtool --totp -b $code | xclip -i -selection clipboard
+    done
+}
 
 # -------------------
 # Enable autocomplete
