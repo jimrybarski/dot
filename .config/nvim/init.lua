@@ -134,7 +134,7 @@ require("lazy").setup {
                     "awk", "bash", "bibtex", "css", "diff", "dockerfile",
                     "fish", "gitcommit", "git_config", "gitignore",
                     "git_rebase", "gpg", "html", "javascript", "json", "json5",
-                    "latex", "lua", "luadoc", "make", "markdown",
+                    "lua", "luadoc", "make", "markdown",
                     "markdown_inline", "passwd", "python", "r",
                     "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
                     "vim", "vimdoc", "yaml"
