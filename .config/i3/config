@@ -57,7 +57,7 @@ floating_modifier $mod
 #tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec /usr/bin/alacritty
+bindsym $mod+Return exec $(which alacritty)
 
 # kill focused window
 bindsym $mod+q kill
@@ -188,8 +188,7 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-gaps inner 8px
-gaps outer 0px
+exec_always --no-startup-id $HOME/dot/scripts/detect-i3gaps-support.sh
 
 assign [class="steamwebhelper"] 3
 assign [class="steam"] 3
