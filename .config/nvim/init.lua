@@ -277,8 +277,8 @@ local i = luasnip.insert_node
 local f = luasnip.function_node
 
 luasnip.add_snippets("all", {
-    s("bash", {t("#!/usr/bin/env bash")}), s("zsh", {t("#!/usr/bin/env zsh")}),
-    s("fish", {t("#!/usr/bin/env fish")}), s("d", {f(date, {})})
+    s("#b", {t("#!/usr/bin/env bash")}), s("#z", {t("#!/usr/bin/env zsh")}),
+    s("#f", {t("#!/usr/bin/env fish")}), s("d", {f(date, {})})
 })
 
 luasnip.add_snippets("python", {
