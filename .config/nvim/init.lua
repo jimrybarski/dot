@@ -146,7 +146,6 @@ require("lazy").setup {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = {"nvim-treesitter/nvim-treesitter"}
     }, {"RRethy/vim-illuminate"},
-    {"kevinhwang91/nvim-ufo", dependencies = {"kevinhwang91/promise-async"}},
     {"lunarvim/bigfile.nvim"}, {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
@@ -163,7 +162,7 @@ require("lazy").setup {
 require('colorizer').setup()
 
 require('highlight-undo').setup({
-  duration = 3000,
+  duration = 300,
   undo = {
     hlgroup = 'HighlightUndo',
     mode = 'n',
@@ -393,29 +392,6 @@ vim.o.foldenable = true
 
 local autopairs = require('nvim-autopairs')
 autopairs.setup({ignored_next_char = "[%w%.%(%[{]"})
-
-require('ufo').setup({
-    provider_selector = function(bufnr, filetype, buftype)
-        return {'treesitter'}
-    end,
-    -- disable highlighting the unfolded text right after its unfolded
-    open_fold_hl_timeout = 0
-})
-
-vim.keymap.set('n', 'zO', require('ufo').openAllFolds)
-vim.keymap.set('n', 'zC', require('ufo').closeAllFolds)
-require("origami").setup({
-    keepFoldsAcrossSessions = true,
-    -- pause folds is something I want, but its behavior is finnicky and broken
-    pauseFoldsOnSearch = false,
-    -- I think this is broken too
-    setupFoldKeymaps = false
-
-})
--- re-remap h and l to their default meaning. nvim-origami installs some stupid 
--- keymap even though I set it not to
-vim.api.nvim_set_keymap('n', 'h', 'h', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'l', 'l', {noremap = true, silent = true})
 
 -- puts vertical guide lines for each scope
 local highlight = {"CursorColumn"}
@@ -659,6 +635,16 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(
 lspconfig.jedi_language_server.setup({
     cmd = {vim.fn.expand("$HOME/.local/pylspenv/bin/jedi-language-server")},
     capabilities = capabilities
+})
+
+lspconfig.ruff_lsp.setup({
+  capabilities = capabilities,
+  cmd = { vim.fn.expand("$HOME/.local/pylspenv/bin/ruff-lsp") },
+  init_options = {
+    settings = {
+      args = {},
+    }
+  }
 })
 
 lspconfig.rust_analyzer.setup({
