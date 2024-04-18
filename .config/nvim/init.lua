@@ -634,7 +634,17 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(
 
 lspconfig.jedi_language_server.setup({
     cmd = {vim.fn.expand("$HOME/.local/pylspenv/bin/jedi-language-server")},
-    capabilities = capabilities
+    capabilities = capabilities,
+    root_dir = function(fname)
+        -- Custom root directory logic
+        local util = require('lspconfig.util')
+        local root_files = {
+          'pyproject.toml',
+          'setup.py',
+          '.git',
+        }
+        return util.root_pattern(unpack(root_files))(fname) or util.path.dirname(fname)
+    end
 })
 
 lspconfig.ruff_lsp.setup({
@@ -644,7 +654,19 @@ lspconfig.ruff_lsp.setup({
     settings = {
       args = {},
     }
-  }
+  },
+  root_dir = function(fname)
+    -- Custom logic to determine the root directory
+    local util = require('lspconfig.util')
+    local root_files = {
+      'pyproject.toml',
+      'setup.py',
+      'setup.cfg',
+      '.git', -- Treat directories containing .git as root directories of the project
+    }
+    -- Return the project root if found, otherwise default to the directory of the file
+    return util.root_pattern(unpack(root_files))(fname) or util.path.dirname(fname)
+  end
 })
 
 lspconfig.rust_analyzer.setup({
