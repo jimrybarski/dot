@@ -100,6 +100,7 @@ require("lazy").setup {
         opts = {},
     },
     { "xiyaowong/telescope-emoji.nvim" },
+    { "norcalli/nvim-colorizer.lua" },
     {
       "nvim-zh/colorful-winsep.nvim",
       config = true,
@@ -158,6 +159,8 @@ require("lazy").setup {
         }
     }
 }
+
+require('colorizer').setup()
 
 require('highlight-undo').setup({
   duration = 3000,

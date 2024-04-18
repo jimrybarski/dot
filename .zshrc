@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Load custom environment variables that need to stay out of version control
+[[ -e "$HOME"/.custom-env ]] && source "$HOME"/.custom-env
+
 # ---------------
 #     Aliases
 # ---------------
@@ -194,3 +197,6 @@ function otp() {
 autoload -Uz compinit && compinit
 autoload -Uz colors && colors
 compdef _files . 
+
+# cache SSH key password
+eval "$(ssh-agent -s)" > /dev/null
