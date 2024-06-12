@@ -81,7 +81,10 @@ local augroup = vim.api.nvim_create_augroup
 -- Use real tabs and not spaces in .tsv files
 autocmd("FileType", {
     pattern = "tsv",
-    callback = function() vim.opt_local.expandtab = false end
+    callback = function() 
+        vim.opt_local.expandtab = false
+        vim.opt_local.list = true
+    end
 })
 -- Use real tabs and not spaces in Makefiles
 autocmd("FileType", {
@@ -101,11 +104,6 @@ require("lazy").setup {
     },
     { "xiyaowong/telescope-emoji.nvim" },
     { "norcalli/nvim-colorizer.lua" },
-    {
-      "nvim-zh/colorful-winsep.nvim",
-      config = true,
-      event = { "WinNew" },
-    },
     -- none-ls, telescope and others depend on plenary
     {"nvim-lua/plenary.nvim"}, {"nvimtools/none-ls.nvim"},
     -- { "folke/trouble.nvim",
@@ -159,7 +157,7 @@ require("lazy").setup {
     }
 }
 
-require('colorizer').setup()
+-- require('colorizer').setup()
 
 require('highlight-undo').setup({
   duration = 300,
@@ -535,7 +533,7 @@ require('Comment').setup({
     ---Whether the cursor should stay at its position
     sticky = true,
     ---Lines to be ignored while (un)comment
-    ignore = nil,
+    ignore = '^#!',
     ---LHS of toggle mappings in NORMAL mode
     toggler = {
         ---Line-comment toggle keymap
@@ -568,7 +566,18 @@ require('Comment').setup({
         extra = true
     },
     ---Function to call before (un)comment
-    pre_hook = nil,
+    pre_hook = function(ctx)
+        -- Check if the current line is a shebang line
+        local line = vim.api.nvim_get_current_line()
+        if line:match("^#!") then
+            -- Return nil to signify no commentstring adjustment needed
+            return nil
+        end
+
+        -- For other lines, you could adjust `commentstring` if needed, or leave as default
+        -- This is an example if you want to customize further, you might not need this part
+        -- return vim.bo.commentstring
+    end,
     ---Function to call after (un)comment
     post_hook = nil
 })
@@ -777,39 +786,18 @@ function _G.check_line()
     end
 end
 
--- needed for setting up PAO system only
--- Function to swap names based on ID
-function swap_names_with_id(target_id)
-    local bufnr = vim.api.nvim_get_current_buf() -- Get current buffer number
-    local current_line_nr = vim.api.nvim_win_get_cursor(0)[1] -- Get current line number
-    local current_line = vim.api.nvim_buf_get_lines(bufnr, current_line_nr-1, current_line_nr, false)[1] -- Get current line content
-    
-    -- Parse current line to extract ID and name
-    local current_id, current_name = current_line:match("(%d+)%s(.+)")
-    if not current_id then
-        print("Current line does not contain a valid ID and name format.")
-        return
-    end
-    
-    -- Find target line by ID and extract name
-    local target_line_nr, target_name
-    for i, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
-        if line:match("^" .. target_id .. "%s") then
-            target_line_nr = i
-            target_name = line:match("%d+%s(.+)")
-            break
-        end
-    end
-    
-    if not target_line_nr then
-        print("Target ID not found.")
-        return
-    end
-    
-    -- Swap names
-    vim.api.nvim_buf_set_lines(bufnr, current_line_nr-1, current_line_nr, false, {current_id .. " " .. target_name})
-    vim.api.nvim_buf_set_lines(bufnr, target_line_nr-1, target_line_nr, false, {target_id .. " " .. current_name})
-end
-
 -- Mapping function to key combination
 vim.api.nvim_set_keymap('n', '<leader>s', ':lua swap_names_with_id(vim.fn.input("Enter target ID: "))<CR>', {noremap = true, silent = true})
+
+-- Define the function to open Wiktionary in Firefox
+function OpenWiktionary()
+    -- Get the word under the cursor
+    local word = vim.fn.expand("<cword>")
+    -- Create the URL
+    local url = "https://en.wiktionary.org/wiki/" .. word .. "#Glyph_origin"
+    -- Command to open Firefox with the URL
+    vim.fn.system({"firefox", url})
+end
+
+vim.api.nvim_set_keymap('n', '<leader>z', '0:lua OpenWiktionary()<CR>', { noremap = true, silent = true })
+

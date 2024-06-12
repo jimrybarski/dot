@@ -70,7 +70,9 @@ function archive() {
 }
 
 alias m='ncmpcpp'
-alias cal='cal -3'
+alias cl='cal -3'
+alias cly='cal -y'
+alias llm='/home/jim/.local/llmenv/bin/llm'
 
 export GPG_TTY=$(tty)
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -83,7 +85,7 @@ bindkey -v
 bindkey '^R' history-incremental-search-backward
 
 PROMPT="%B%F{10}%n@%m%f%b [%*] [%(?.%F{10}√%f.%F{9}%?%f)] %d %F{12}$%f "
-PATH="$HOME/.cargo/bin:$PATH"
+PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
 
 # Locale
 LANG=en_US.UTF-8

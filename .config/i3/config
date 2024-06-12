@@ -58,7 +58,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec $(which alacritty)
-
+bindsym $mod+Shift+Return exec $(which alacritty) -e $HOME/.local/bin/fish
 # kill focused window
 bindsym $mod+q kill
 
@@ -188,7 +188,8 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-exec_always --no-startup-id $HOME/dot/scripts/detect-i3gaps-support.sh
+gaps inner 4px
+gaps outer 0px
 
 assign [class="steamwebhelper"] 3
 assign [class="steam"] 3
