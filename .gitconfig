@@ -1,0 +1,6 @@
+[user]
+	email = jim@rybarski.com
+	name = Jim Rybarski
+
+[core]
+	excludesFile = /home/jim/.config/global-gitignore
