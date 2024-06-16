@@ -249,8 +249,14 @@ require("telescope").setup({
     defaults = {
         layout_config = {vertical = {width = 0.9, height = 0.9}},
         file_ignore_patterns = {".git"},
-        hidden = true
+        hidden = true,
+        vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--follow' },
     },
+    pickers = {
+		find_files = {
+			find_command = {'fd', '--type', 'f', '--follow', '--hidden', '--exclude', '.git'}
+		},
+	},
     extensions = {
         emoji = {
             action = function(emoji)
@@ -768,9 +774,9 @@ end
 
 -- copy selection to system clipboard
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope grep_string<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>ft', ':Telescope<cr><Esc>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>ff', ':Telescope fd<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>ff', ":Telescope find_files<cr>", {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>fs', ':Telescope git_status<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>fk', ':Telescope keymaps<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>fm', ':Telescope man_pages<cr>', {noremap = true, silent = true})
