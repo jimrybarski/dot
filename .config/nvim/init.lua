@@ -144,6 +144,13 @@ require("lazy").setup {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = {"nvim-treesitter/nvim-treesitter"}
     }, {"RRethy/vim-illuminate"},
+    {
+  "NeogitOrg/neogit",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "sindrets/diffview.nvim",
+    "nvim-telescope/telescope.nvim",
+  }, config = true },
     {"lunarvim/bigfile.nvim"}, {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
@@ -157,7 +164,9 @@ require("lazy").setup {
     }
 }
 
--- require('colorizer').setup()
+require('colorizer').setup()
+local neogit = require('neogit')
+neogit.setup {}
 
 require('highlight-undo').setup({
   duration = 300,
