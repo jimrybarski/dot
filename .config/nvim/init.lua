@@ -538,6 +538,8 @@ require("gitsigns").setup({
 -- Show the last commit (author, timestamp and commit message) that changed the current line
 vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>',
                         {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>vv', ':Neogit<CR>',
+                        {noremap = true, silent = true})
 
 require('Comment').setup({
     ---Add a space b/w comment and the line
