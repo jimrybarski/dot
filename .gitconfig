@@ -3,8 +3,12 @@
 	name = Jim Rybarski
 
 [core]
+<<<<<<< HEAD
 	excludesFile = $HOME/.config/global-gitignore
 	editor = nvim
 
 [push]
 	autoSetupRemote = true
+=======
+	excludesFile = /home/jim/.config/global-gitignore
+>>>>>>> 5984e3f66d88c3429bffb255e119dc51353ede4c
