@@ -22,6 +22,7 @@ alias echon='echo_note'
 alias en='edit_note'
 alias todo='edit_note todo'
 alias tv='edit_note tv'
+alias ug='edit_note ug'
 
 # programming
 alias cbr='cargo test && cargo build --release && cargo clippy'
