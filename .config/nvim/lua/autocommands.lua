@@ -17,7 +17,7 @@ autocmd("FileType", {
 })
 
 autocmd("User", {
-  pattern = "LazyDone",
+  pattern = "VeryLazy",
   callback = function()
     vim.cmd("bwipeout!") -- Close the Lazy plugin manager window
   end,
