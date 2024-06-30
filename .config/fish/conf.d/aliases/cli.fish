@@ -3,7 +3,7 @@ alias cff='v $HOME/.config/fish/config.fish --cmd "cd $HOME/.config/fish"'
 alias cfi3='v $HOME/.config/i3/config'
 alias cfib='v $HOME/.config/i3blocks/config'
 alias cfn='v $HOME/.config/ncmpcpp/config'
-alias cfv='v $HOME/.config/nvim/init.lua'
+alias cfv='v $HOME/.config/nvim/init.lua --cmd "cd $HOME/.config/nvim"'
 
 # shortened
 alias cl='cal -3'

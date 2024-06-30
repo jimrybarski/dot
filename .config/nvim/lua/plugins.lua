@@ -15,7 +15,7 @@ require("lazy").setup {
     -- { "folke/trouble.nvim",
     --     dependencies = { "nvim-tree/nvim-web-devicons" },
     -- },
-    {'nvim-tree/nvim-web-devicons'},
+    -- {'nvim-tree/nvim-web-devicons'},
     {"neovim/nvim-lspconfig"}, {"L3MON4D3/LuaSnip"},
     {"saadparwaiz1/cmp_luasnip"}, {"hrsh7th/cmp-calc"}, {"max397574/cmp-greek"},
     {"chrisgrieser/cmp-nerdfont"}, {"ray-x/cmp-treesitter"},

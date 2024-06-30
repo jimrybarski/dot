@@ -29,3 +29,5 @@ require('keymaps')
 require('lsp')
 -- Sets options based on the current buffer's filetype.
 require('autocommands')
+
+require('pinyin')
