@@ -3,8 +3,8 @@
 
 env -i
 
-if [ $(pushd ~/dot > /dev/null && git status --porcelain | wc -l && popd >/dev/null) ]
-    echo ""
-else
+if [ $(pushd $HOME/dot > /dev/null && git status --porcelain | wc -l && popd >/dev/null) ]
     echo "Sync dotfiles!"
+else
+    echo ""
 end 
