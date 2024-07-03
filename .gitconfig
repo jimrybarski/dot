@@ -7,4 +7,8 @@
 	editor = nvim
 
 [push]
-	autoSetupRemote = true
+    autoSetupRemote = true
+
+[color "diff"]
+    old = yellow
+    new = cyan
