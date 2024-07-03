@@ -15,10 +15,3 @@ autocmd("FileType", {
     pattern = "make",
     callback = function() vim.opt_local.expandtab = false end
 })
-
-autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    vim.cmd("bwipeout!") -- Close the Lazy plugin manager window
-  end,
-})
