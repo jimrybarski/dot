@@ -1,10 +1,10 @@
 [user]
-	email = jim@rybarski.com
-	name = Jim Rybarski
+    email = jim@rybarski.com
+    name = Jim Rybarski
 
 [core]
-	excludesFile = $HOME/.config/global-gitignore
-	editor = nvim
+    excludesFile = $HOME/.config/global-gitignore
+    editor = nvim
 
 [push]
     autoSetupRemote = true
