@@ -53,11 +53,13 @@ cmp.setup({
         ['<C-l>'] = cmp.mapping.scroll_docs(2)
     },
     sources = cmp.config.sources({
+        -- Autocompletes from snippets (defined in lua/snippets.lua)
         {name = 'luasnip', max_item_count = 5},
+        -- Autocompletes from LSP servers
         {name = 'nvim_lsp'}, 
-        {name = 'treesitter'}, 
+        -- Autocompletes text from the current buffer
         {name = 'buffer'},
-        -- Autocompeltes file paths
+        -- Autocompletes file paths
         {name = 'path'},
         -- To use greek characters, type ":" and the name of the letter
         -- e.g. :sigma: makes σ, :Sigma: makes Σ 
