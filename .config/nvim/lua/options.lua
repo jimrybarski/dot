@@ -36,7 +36,7 @@ vim.opt.expandtab = true
 -- preview: show extra information about a selection
 -- noinsert: don't insert text until a selection is made
 -- noselect: don't select a match automatically
-vim.g.completopt = "menu,menuone,preview,noinsert,noselect"
+vim.g.completeopt = "menu,menuone,preview,noselect"
 
 -- keep the cursor in the center of the screen (if there is space)
 vim.o.scrolloff = 10

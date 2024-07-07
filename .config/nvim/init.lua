@@ -14,10 +14,10 @@ require('options')
 -- Installs plugins.
 require('plugins')
 -- Configures autocomplete.
-require('completion')
--- Defines snippets.
 require('snippets')
 -- Configures plugins.
+require('completion')
+-- Defines snippets.
 require('config')
 -- Defines functions.
 require('functions')
