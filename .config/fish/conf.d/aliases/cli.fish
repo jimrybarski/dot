@@ -1,3 +1,6 @@
+# system management
+alias upgrade='sudo pacman -Syu; /usr/bin/setxkbmap -option caps:escape'
+
 # config files
 alias cff='v $HOME/.config/fish/config.fish --cmd "cd $HOME/.config/fish"'
 alias cfi3='v $HOME/.config/i3/config'
