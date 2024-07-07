@@ -18,20 +18,22 @@ vim.api.nvim_set_keymap('n', '<leader>tt', ':lua RunUntilFirstFailingTest()<cr>'
 vim.api.nvim_set_keymap('n', '<leader>ta', ':lua RunAllTests()<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>tv', ':lua RunUntilFirstFailingVerboseTest<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>tm', ':lua RunMutationTests()<cr>', {noremap = true, silent = true})
+
 -- remove search highlight with escape
 vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>:echo<cr>', { noremap = true, silent = true })
+
 -- prevent register from being filled with empty strings or other things we never want to paste later
 vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "c", '"_c', { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "dd", "v:lua.check_line()", {expr = true, noremap = true})
+
 -- Chinese
 vim.api.nvim_set_keymap('n', '<leader>z', '0:lua OpenWiktionary()<CR>', { noremap = true, silent = true })
 
--- Show the last commit (author, timestamp and commit message) that changed the current line
+-- Version control
 vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>',
                         {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>vh', ':Gitsigns toggle_linehl<CR>',
                         {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>vv', ':Neogit<CR>',
                         {noremap = true, silent = true})
-
