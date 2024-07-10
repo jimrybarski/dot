@@ -20,3 +20,13 @@ set -U fish_user_paths $HOME/.cargo/bin $HOME/.local/bin $fish_user_paths
 # needed for tmux to work
 set -x TERM xterm-256color 
 set -x SHELL /home/jim/.local/bin/fish
+
+# set my editor with fallback options in case I'm in a new environment
+set -l editors nvim vim vi nano
+
+for editor in $editors
+    if which $editor > /dev/null
+        set -x EDITOR $editor
+        break
+    end
+end
