@@ -24,7 +24,16 @@ require("lazy").setup {
         "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
         opts = true -- needed even when using default config
-    }, {"lukas-reineke/indent-blankline.nvim"}, {"kylechui/nvim-surround"},
+    }, {"lukas-reineke/indent-blankline.nvim"}, 
+    {
+        "kylechui/nvim-surround",
+        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({
+            })
+        end
+    },
     {'smoka7/hop.nvim'}, {"akinsho/toggleterm.nvim"},
     {"nvim-lualine/lualine.nvim"}, {"lewis6991/gitsigns.nvim"},
     -- nice color map 
