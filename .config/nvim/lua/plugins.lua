@@ -11,33 +11,42 @@ require("lazy").setup {
     { "xiyaowong/telescope-emoji.nvim" },
     { "norcalli/nvim-colorizer.lua" },
     -- none-ls, telescope and others depend on plenary
-    {"nvim-lua/plenary.nvim"}, {"nvimtools/none-ls.nvim"},
+    {"nvim-lua/plenary.nvim"},
+    {"nvimtools/none-ls.nvim"},
     -- { "folke/trouble.nvim",
     --     dependencies = { "nvim-tree/nvim-web-devicons" },
     -- },
     {'nvim-tree/nvim-web-devicons'},
-    {"neovim/nvim-lspconfig"}, {"L3MON4D3/LuaSnip"},
-    {"saadparwaiz1/cmp_luasnip"}, {"hrsh7th/cmp-calc"}, {"max397574/cmp-greek"},
-    {"chrisgrieser/cmp-nerdfont"}, {"ray-x/cmp-treesitter"},
-    {"rcarriga/nvim-notify"}, {"hrsh7th/cmp-nvim-lsp"}, {"hrsh7th/cmp-buffer"},
-    {"hrsh7th/cmp-path"}, {"hrsh7th/nvim-cmp"}, {"windwp/nvim-autopairs"}, {
+    {"neovim/nvim-lspconfig"},
+    {"L3MON4D3/LuaSnip"},
+    {"saadparwaiz1/cmp_luasnip"},
+    {"hrsh7th/cmp-calc"},
+    {"max397574/cmp-greek"},
+    {"chrisgrieser/cmp-nerdfont"},
+    {"ray-x/cmp-treesitter"},
+    {"rcarriga/nvim-notify"},
+    {"hrsh7th/cmp-nvim-lsp"},
+    {"hrsh7th/cmp-buffer"},
+    {"hrsh7th/cmp-path"},
+    {"hrsh7th/nvim-cmp"},
+    {"windwp/nvim-autopairs"}, 
+    {
         "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
         opts = true -- needed even when using default config
-    }, {"lukas-reineke/indent-blankline.nvim"}, 
+    },
+    {"lukas-reineke/indent-blankline.nvim"}, 
     {
         "kylechui/nvim-surround",
         version = "*", -- Use for stability; omit to use `main` branch for the latest features
-        event = "VeryLazy",
-        config = function()
-            require("nvim-surround").setup({
-            })
-        end
     },
-    {'smoka7/hop.nvim'}, {"akinsho/toggleterm.nvim"},
-    {"nvim-lualine/lualine.nvim"}, {"lewis6991/gitsigns.nvim"},
+    {'smoka7/hop.nvim'},
+    {"akinsho/toggleterm.nvim"},
+    {"nvim-lualine/lualine.nvim"},
+    {"lewis6991/gitsigns.nvim"},
     -- nice color map 
-    {"ellisonleao/gruvbox.nvim"}, -- commands to comment/uncomment code
+    {"ellisonleao/gruvbox.nvim"},
+    -- commands to comment/uncomment code
     {"numToStr/Comment.nvim"}, {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -82,5 +91,10 @@ require("lazy").setup {
                 cond = vim.fn.executable("cmake") == 1
             }
         }
+    },
+    {
+        "nvim-neorg/neorg",
+        lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+        version = "*", -- Pin Neorg to the latest stable release
     }
 }

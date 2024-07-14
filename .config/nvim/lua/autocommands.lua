@@ -15,3 +15,9 @@ autocmd("FileType", {
     pattern = "make",
     callback = function() vim.opt_local.expandtab = false end
 })
+
+-- Use fancy styling for Neorg files
+autocmd("FileType", {
+    pattern = "norg",
+    callback = function() vim.opt_local.conceallevel = 3 end
+})
