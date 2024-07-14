@@ -378,5 +378,12 @@ require("neorg").setup({
                 icon_preset = "varied", -- And we set our option here.
             },
         },
+        ["core.dirman"] = {
+            config = {
+                workspaces = {
+                    notes = "~/notes",
+                },
+            },
+        },
     },
 })
