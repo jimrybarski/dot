@@ -1,3 +1,6 @@
+vim.api.nvim_set_keymap("n", "H", "^", {noremap = true})
+vim.api.nvim_set_keymap("n", "U", "<C-r>", {noremap = true})
+
 vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
 vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
 
