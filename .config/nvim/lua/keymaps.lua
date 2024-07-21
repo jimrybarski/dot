@@ -5,8 +5,8 @@ vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
 vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
 
 -- copy selection to system clipboard
-vim.api.nvim_set_keymap('n', '<leader>y', ':HopYankChar1', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>p', ':HopPasteChar1', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>y', ':HopYankChar1<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>p', ':HopPasteChar1<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>ff', ":Telescope find_files<cr>", {noremap = true, silent = true})
