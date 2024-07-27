@@ -4,8 +4,9 @@ vim.api.nvim_set_keymap("n", "U", "<C-r>", {noremap = true})
 vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", {noremap = true})
 vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", {noremap = true})
 
--- copy selection to system clipboard
+-- copy between any two points in the current window
 vim.api.nvim_set_keymap('n', '<leader>y', ':HopYankChar1<cr>', {noremap = true, silent = true})
+-- paste text anywhere in the current window
 vim.api.nvim_set_keymap('n', '<leader>p', ':HopPasteChar1<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', {noremap = true, silent = true})
@@ -30,15 +31,53 @@ vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>:echo<cr>', { noremap = true, si
 -- prevent register from being filled with empty strings or other things we never want to paste later
 vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "c", '"_c', { noremap = true, silent = true })
+-- only puts the line into the clipboard if it's non-empty
 vim.api.nvim_set_keymap("n", "dd", "v:lua.check_line()", {expr = true, noremap = true})
 
 -- Chinese
 vim.api.nvim_set_keymap('n', '<leader>z', '0:lua OpenWiktionary()<CR>', { noremap = true, silent = true })
 
 -- Version control
+-- Show who committed the current line
 vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>',
                         {noremap = true, silent = true})
+-- Color the background green for lines that have changed
 vim.api.nvim_set_keymap('n', '<leader>vh', ':Gitsigns toggle_linehl<CR>',
                         {noremap = true, silent = true})
+-- Start the main Git interface
 vim.api.nvim_set_keymap('n', '<leader>vv', ':Neogit<CR>',
                         {noremap = true, silent = true})
+
+
+-- In insert mode, Ctrl+<letter> will insert the "closest" Greek letter
+-- I'm leaving some Greek letters unassigned because I don't ever see them
+-- in my work, and I'd like to leave open the possibility of other insert 
+-- mode commands bound to Ctrl+<something>
+local greek_letters = {
+    a = "α",
+    b = "β",
+    c = "δ", -- mnemonic: c is less than d, δ is less than Δ
+    d = "Δ",
+    e = "Σ", -- mnemonic: Σ looks like E
+    f = "φ",
+    g = "γ",
+    h = "θ", -- mnemonic: tHeta
+    l = "λ",
+    m = "μ",
+    o = "Ω",
+    p = "π",
+    r = "ρ",
+    s = "σ",
+    w = "ε", -- mnemonic: w turned sideways
+    x = "χ",
+    y = "ψ", -- mnemonic: y looks like ψ
+}
+
+-- Assign the Greek letter keymaps
+for k, v in pairs(greek_letters) do
+    vim.api.nvim_set_keymap('i', '<C-'..k..'>', v, { noremap = true, silent = true })
+end
+
+-- paste the default register's contents while in insert mode
+-- Mnemonic: Ctrl+' is Ctrl+" without the shift
+vim.api.nvim_set_keymap('i', '<C-\'>', '<C-r>"', { noremap = true, silent = true })
