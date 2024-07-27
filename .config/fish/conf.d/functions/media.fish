@@ -3,7 +3,7 @@ function vid
 end
 
 function mp3
-    "$HOME/.local/ytdlenv/bin/yt-dlp" -x --audio-format mp3 -o '$HOME/%(title)s.%(ext)s' "$argv"
+    "$HOME/.local/ytdlenv/bin/yt-dlp" -x --audio-format mp3 -o '%(title)s.%(ext)s' "$argv"
 end
 
 function vid2mp3
