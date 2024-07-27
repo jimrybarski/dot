@@ -3,7 +3,11 @@ require('diffview').setup()
 -- message notifications in popups at the top right of the window
 vim.notify = require("notify")
 
-require('colorizer').setup()
+require('colorizer').setup({
+  'css';
+  'javascript';
+  'html';
+})
 
 require('neogit').setup()
 
