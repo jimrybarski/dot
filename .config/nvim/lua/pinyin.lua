@@ -70,4 +70,4 @@ end
 vim.api.nvim_create_user_command('CyclePinyinTones', cycle_pinyin_tones, {})
 
 -- Optionally, you can create a keymap for easier access
-vim.api.nvim_set_keymap('n', '<leader>p', ':CyclePinyinTones<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>o', ':CyclePinyinTones<CR>', { noremap = true, silent = true })
