@@ -14,6 +14,7 @@ alias cly='cal -y'
 alias copy='xsel --clipboard'
 alias ll="eza -alh"
 alias llm='/home/jim/.local/llmenv/bin/llm'
+alias dalle='/home/jim/.local/llmenv/bin/python /home/jim/scripts/dalle.py'
 alias ls="eza -a"
 alias m='ncmpcpp'
 alias v="nvim"
