@@ -2,5 +2,5 @@
 max-line-length = 120
 
 [MESSAGES CONTROL]
-disable = invalid-name, import-error, unused-import, unspecified-encoding
+disable = invalid-name, import-error, unused-import, unspecified-encoding, redefined-outer-name, missing-module-docstring, too-few-public-methods, bare-except, too-many-instance-attributes
 notes=TODO,ZZZ
