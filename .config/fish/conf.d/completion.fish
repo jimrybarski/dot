@@ -4,5 +4,5 @@ function fish_user_key_bindings
 end
 
 set -g fish_complete_cycle false
-set -U fish_complete_path 0
+set -U fish_complete_path ~/.config/fish/completions/
 set -U fish_complete_scope 2
