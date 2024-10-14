@@ -96,6 +96,12 @@ require("telescope").setup({
 		find_files = {
 			find_command = {'fd', '--type', 'f', '--follow', '--hidden', '--exclude', '.git'}
 		},
+        lsp_references = {
+          -- by default, telescope lets you type to filter the list of results further.
+          -- however, for the list of references, I only ever want to scroll up and down with j and k
+          -- here, we force it to start in normal mode
+          initial_mode = "normal",
+        },
 	},
     extensions = {
         emoji = {
