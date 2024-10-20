@@ -1,0 +1,20 @@
+name: srs
+
+root: <%= ENV['HOME'] %>/hojidi-srs
+
+windows:
+  - code:
+      layout: main-vertical
+      panes:
+        - html:
+            - nvim index.html
+        - server:
+            - nvim src/main.rs
+
+  - servers:
+      layout: main-vertical
+      panes:
+        - frontend:
+            - python -m http.server 8080
+        - backend:
+            - cargo run --release
