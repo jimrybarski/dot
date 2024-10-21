@@ -7,6 +7,8 @@ alias cfi3='v $HOME/.config/i3/config'
 alias cfib='v $HOME/.config/i3blocks/config'
 alias cfn='v $HOME/.config/ncmpcpp/config'
 alias cfv='v $HOME/.config/nvim/init.lua --cmd "cd $HOME/.config/nvim"'
+alias cft='v $HOME/.config/tmux/tmux.conf'
+alias cftr='v $HOME/.config/tmuxinator/'
 
 # shortened
 alias cl='cal -3'
@@ -19,6 +21,7 @@ alias ls="eza -a"
 alias m='ncmpcpp'
 alias v="nvim"
 alias sf="ssh freebox"
+alias diceware="shuf $HOME/code/diceware/wordlists/en_US/wordlist.txt | head -n 6"
 
 # notes
 alias comedians='edit_note comedians'

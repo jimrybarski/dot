@@ -29,20 +29,6 @@ require("lazy").setup {
     {"hrsh7th/cmp-buffer"},
     {"hrsh7th/cmp-path"},
     {"hrsh7th/nvim-cmp"},
-    { 'alexghergh/nvim-tmux-navigation', config = function()
-            require'nvim-tmux-navigation'.setup {
-                disable_when_zoomed = true, -- defaults to false
-                keybindings = {
-                    left = "<C-h>",
-                    down = "<C-j>",
-                    up = "<C-k>",
-                    right = "<C-l>",
-                    last_active = "<C-\\>",
-                    next = "<C-Space>",
-                }
-            }
-        end
-    },
     {"windwp/nvim-autopairs"}, 
     {
         "chrisgrieser/nvim-origami",

@@ -4,15 +4,13 @@ root: <%= ENV['HOME'] %>/hojidi-srs
 
 windows:
   - code:
-      layout: main-vertical
+      layout: even-horizontal
       panes:
-        - html:
-            - nvim index.html
-        - server:
-            - nvim src/main.rs
+        - source:
+            - nvim -c 'vsplit edit.html' src/main.rs
 
   - servers:
-      layout: main-vertical
+      layout: even-horizontal
       panes:
         - frontend:
             - python -m http.server 8080
