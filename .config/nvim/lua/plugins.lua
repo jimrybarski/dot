@@ -30,6 +30,7 @@ require("lazy").setup {
     {"hrsh7th/cmp-path"},
     {"hrsh7th/nvim-cmp"},
     {"windwp/nvim-autopairs"}, 
+    {'mfussenegger/nvim-dap'},
     {
         "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
