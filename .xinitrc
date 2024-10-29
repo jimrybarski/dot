@@ -5,5 +5,6 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 /usr/bin/fcitx &
 /usr/bin/flameshot &
+/usr/bin/dunst &
 xmodmap ~/.config/xmodmap
 exec i3
