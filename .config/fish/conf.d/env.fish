@@ -15,7 +15,7 @@ set -x LC_TIME "en_US.UTF-8"
 set -x XDG_CONFIG_HOME "$HOME/.config"
 
 # set $PATH
-set -U fish_user_paths $HOME/.cargo/bin $HOME/.local/bin $fish_user_paths
+set -U fish_user_paths $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin $fish_user_paths
 
 # needed for tmux to work
 set -x TERM xterm-256color 
