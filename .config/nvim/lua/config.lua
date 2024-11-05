@@ -11,24 +11,28 @@ require('colorizer').setup({
 
 require('neogit').setup()
 
--- require('highlight-undo').setup({
---   duration = 300,
---   undo = {
---     hlgroup = 'HighlightUndo',
---     mode = 'n',
---     lhs = 'u',
---     map = 'undo',
---     opts = {}
---   },
---   redo = {
---     hlgroup = 'HighlightUndo',
---     mode = 'n',
---     lhs = '<C-r>',
---     map = 'redo',
---     opts = {}
---   },
---   highlight_for_count = true,
--- })
+require('highlight-undo').setup({
+  duration = 300,
+  undo = {
+    hlgroup = 'HighlightUndo',
+    mode = 'n',
+    lhs = 'u',
+    map = 'undo',
+    opts = {}
+  },
+  redo = {
+    hlgroup = 'HighlightUndo',
+    mode = 'n',
+    lhs = '<C-r>',
+    map = 'redo',
+    opts = {}
+  },
+  keymaps = {
+      paste = { disabled = true},
+      Paste = { disabled = true},
+  },
+  highlight_for_count = true,
+})
 
 require('scrollEOF').setup({
   -- The pattern used for the internal autocmd to determine

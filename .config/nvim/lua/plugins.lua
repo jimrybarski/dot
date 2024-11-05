@@ -1,7 +1,7 @@
 -- load plugins
 require("lazy").setup {
     -- highlight undo/redo text
-    -- { 'tzachar/highlight-undo.nvim' },
+    { 'tzachar/highlight-undo.nvim' },
     -- keep some space below the cursor even at the end of the buffer
     {
         'Aasim-A/scrollEOF.nvim',
