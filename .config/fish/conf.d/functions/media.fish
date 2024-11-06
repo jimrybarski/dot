@@ -18,3 +18,17 @@ function archive
     "$HOME/.local/ytdlenv/bin/yt-dlp" -x --enable-file-urls --audio-format mp3 -o "$MUSIC_PATH/%(title)s.%(ext)s" -- "file:$FILENAME"
     "$HOME/.local/ytdlenv/bin/yt-dlp" -o "$FILENAME" "$URL"
 end
+
+function pastevid
+    set url (xclip -o -sel clip)
+    notify-send "Downloading video: $url"
+    vid $url
+    notify-send "Done downloading video: $url"
+end
+
+function pastemp3
+    set url (xclip -o -sel clip)
+    notify-send "Downloading mp3: $url"
+    mp3 $url
+    notify-send "Done downloading mp3: $url"
+end
