@@ -19,3 +19,7 @@ function echo_note
     set filename (derive_note_filename $argv[1] $argv[2])
     cat "$HOME/notes/$filename"
 end
+
+function tldr
+    /home/jim/.cargo/bin/tldr $argv[1] --color=always | bat
+end
