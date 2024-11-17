@@ -117,6 +117,7 @@ bindsym $mod+i exec firefox
 bindsym $mod+Ctrl+i exec firefox -no-remote -P "media"
 bindsym $mod+Ctrl+m exec firefox -no-remote -P "safe"
 bindsym $mod+Ctrl+f exec firefox -no-remote -P "financial"
+bindsym $mod+g exec google-chrome-stable
 bindsym $mod+t exec "thunar"
 bindsym $mod+Shift+t exec "thunar $HOME/Videos"
 bindsym $mod+Ctrl+l exec i3lock --color=000000
@@ -201,6 +202,7 @@ assign [class="steam"] 3
 assign [class="Steam"] 3
 assign [class="firefox"] 2
 assign [class="factorio"] 3
+assign [class="google-chrome"] 9
 
 for_window [class="Qalculate-gtk"] floating enable
 
