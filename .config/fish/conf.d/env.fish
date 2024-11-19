@@ -13,9 +13,9 @@ set -x LC_PAPER "en_US.UTF-8"
 set -x LC_TELEPHONE "en_US.UTF-8"
 set -x LC_TIME "en_US.UTF-8"
 set -x XDG_CONFIG_HOME "$HOME/.config"
+set -x LIBCLANG_PATH "/home/jim/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-18.1.2_20240912/esp-clang/lib"
 
-# set $PATH
-set -U fish_user_paths $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin $fish_user_paths
+set -U fish_user_paths $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin /home/jim/.rustup/toolchains/esp/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin $fish_user_paths
 
 set -x SHELL $HOME/.local/bin/fish
 
