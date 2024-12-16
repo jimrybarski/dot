@@ -45,3 +45,11 @@ alias push="git push"
 alias bright='redshift -o -P -O 5000 -b 1.0'
 alias day='redshift -o -P -O 3800 -b 0.75'
 alias night='redshift -o -P -O 2500 -b 0.60'
+
+# science
+alias rc='biotools reverse-complement'
+alias len='biotools length'
+alias gc='biotools gc-content'
+alias pw='biotools pairwise-semiglobal --try-rc'
+alias pwl='biotools pairwise-local --try-rc'
+alias pwg='biotools pairwise-global --try-rc'
