@@ -63,3 +63,5 @@ vim.g.loaded_zipPlugin = 1
 vim.g.python3_host_prog = vim.fn.expand("$HOME/.local/pylspenv/bin/python3")
 
 vim.o.modeline = false -- prevent warning with files containing the text "vim:"
+
+vim.opt.clipboard = "unnamedplus"

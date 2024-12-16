@@ -1,5 +1,6 @@
 -- load plugins
 require("lazy").setup {
+    -- { 'bio', dir = '/home/jim/bio.nvim' },
     -- highlight undo/redo text
     { 'tzachar/highlight-undo.nvim' },
     -- keep some space below the cursor even at the end of the buffer

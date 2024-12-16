@@ -31,3 +31,4 @@ require('lsp')
 require('autocommands')
 
 require('pinyin')
+require('uppercase_visual')
