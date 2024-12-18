@@ -1,5 +1,5 @@
 # Displays the 16 (or 8) colors available to us, as text colors and background colors
-function print_colors
+function print_colors ()
     printf "|039| \033[39mWhite \033[m    |049| \033[49mClear \033[m    |037| \033[37mLight gray \033[m     |047| \033[30m\033[47mLight gray \033[m\n"
     printf "|030| \033[30mBlack \033[m    |040| \033[40mBlack \033[m    |090| \033[90mDark gray \033[m      |100| \033[100mDark gray \033[m\n"
     printf "|031| \033[31mRed \033[m      |041| \033[30m\033[41mRed \033[m      |091| \033[91mLight red \033[m      |101| \033[30m\033[101mLight red \033[m\n"
