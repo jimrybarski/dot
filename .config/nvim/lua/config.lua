@@ -11,6 +11,8 @@ require('colorizer').setup({
 
 require('neogit').setup()
 
+require('bioinformatics')
+
 require('highlight-undo').setup({
   duration = 300,
   undo = {
