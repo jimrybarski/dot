@@ -29,6 +29,7 @@ require('keymaps')
 require('lsp')
 -- Sets options based on the current buffer's filetype.
 require('autocommands')
-
+-- Functions to manipulate tone marks
 require('pinyin')
-require('uppercase_visual')
+-- Bioinformatics-related functionality
+require('science')
