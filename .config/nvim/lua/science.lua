@@ -35,10 +35,9 @@ end
 function popup_stats()
     local seq = bio.get_visual_selection()
     local gc_content = bio.gc_content_biotools(seq)
-    local gc_content_text = string.format("GC: %.6f", gc_content)
     local length = bio.length_biotools(seq)
-    local length_text = string.format("Len: %d bp", length)
-    bio.display_text({gc_content_text, length_text})
+    local text = string.format("GC: %.6f\nLen: %d bp", gc_content, length)
+    vim.notify(text)
 end
 
 vim.keymap.set('v', '<leader>bva', set_query_visual, { noremap = true, silent = true })

@@ -15,7 +15,6 @@ vim.api.nvim_set_keymap('n', '<leader>fk', ':Telescope keymaps<cr>', {noremap = 
 vim.api.nvim_set_keymap('n', '<leader>fm', ':Telescope man_pages<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>fe', ':Telescope emoji<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>c', ':split $HOME/.config/nvim/init.lua<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>ns', ':split /tmp/scratch-notes.txt<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-S-j>', '1<C-w>+', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-S-k>', '1<C-w>-', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-S-h>', '1<C-w><', {noremap = true, silent = true})
@@ -81,3 +80,9 @@ end
 -- paste the default register's contents while in insert mode
 -- Mnemonic: Ctrl+' is Ctrl+" without the shift
 vim.api.nvim_set_keymap('i', '<C-\'>', '<C-r>"', { noremap = true, silent = true })
+
+-- close all notifications
+vim.keymap.set({'n', 'v'}, '<leader>n', function() 
+        local notify = require("notify") 
+        notify.dismiss()
+    end, { noremap = true, silent = true })
