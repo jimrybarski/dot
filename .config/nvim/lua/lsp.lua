@@ -18,6 +18,10 @@ lspconfig.jedi_language_server.setup({
     end
 })
 
+lspconfig.lua_ls.setup({
+    capabilities = capabilities,
+})
+
 lspconfig.ruff.setup({
   capabilities = capabilities,
   cmd = { vim.fn.expand("$HOME/.local/pylspenv/bin/ruff"), "server" },

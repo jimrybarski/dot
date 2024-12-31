@@ -27,6 +27,7 @@ require("lazy").setup {
     {"chrisgrieser/cmp-nerdfont"},
     {"ray-x/cmp-treesitter"},
     {"rcarriga/nvim-notify"},
+    {"notomo/vusted"},
     {"hrsh7th/cmp-nvim-lsp"},
     {"hrsh7th/cmp-buffer"},
     {"hrsh7th/cmp-path"},
