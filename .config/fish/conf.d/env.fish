@@ -33,3 +33,6 @@ end
 if test -e $HOME/.custom-env
     source $HOME/.custom-env
 end
+
+# needed when using vusted that was installed with "--local"
+set -gx VUSTED_USE_LOCAL 1
