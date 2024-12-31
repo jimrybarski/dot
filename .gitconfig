@@ -12,3 +12,5 @@
 [color "diff"]
     old = yellow
     new = cyan
+[init]
+	defaultBranch = main
