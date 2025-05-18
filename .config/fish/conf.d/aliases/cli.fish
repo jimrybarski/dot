@@ -23,6 +23,7 @@ alias v="nvim"
 alias sf="ssh freebox"
 alias diceware="shuf $HOME/code/diceware/wordlists/en_US/wordlist.txt | head -n 6"
 alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
+alias e="emacsclient -nw"
 
 # notes
 alias comedians='edit_note comedians'

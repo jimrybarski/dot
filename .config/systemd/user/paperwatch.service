@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch directory for new PDFs and process them
+
+[Service]
+ExecStart=/home/jim/scripts/watch-papers.sh
+Restart=always
+
+[Install]
+WantedBy=default.target
