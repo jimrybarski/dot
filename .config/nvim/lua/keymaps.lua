@@ -86,3 +86,5 @@ vim.keymap.set({'n', 'v'}, '<leader>n', function()
         local notify = require("notify") 
         notify.dismiss()
     end, { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>r', '<cmd>Lazy reload<CR>', { desc = 'Reload config' })

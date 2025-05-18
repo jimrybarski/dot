@@ -1,6 +1,6 @@
 -- Set leader keys to spacebar
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = ","
 -- Show relative line numbers except on the current line, which shows the absolute line number
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -45,7 +45,7 @@ vim.o.scrolloff = 10
 vim.opt.colorcolumn = "120"
 
 -- autoindent in codebases
-vim.opt.smartindent = true
+vim.opt.smartindent = false  -- leave autoindentation up to treesitter
 vim.opt.shiftwidth = 4
 
 -- wrapped text starts at the same level of indentation as the first line
