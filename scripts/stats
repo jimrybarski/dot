@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Ran stats script at $(date)" >> /tmp/stats.log
+export DISPLAY=:0
+notify-send $HOME
+cd $HOME/stats || exit
+nohup $HOME/.local/statsenv/bin/jupyter lab > /dev/null 2>&1 &
