@@ -113,7 +113,6 @@ require("lazy").setup {
             require('orgmode').setup({
                 -- See: https://github.com/nvim-orgmode/orgmode/blob/master/docs/configuration.org
                 org_agenda_files = '~/notes/**/*',
-                org_default_notes_file = '~/notes/refile.org',
                 org_todo_keywords = { 'TODO(t)', 'NOW(n)', '|', 'DONE(d)' },
                 org_todo_keyword_faces = {
                     TODO = ':foreground yellow',
@@ -127,6 +126,7 @@ require("lazy").setup {
                 org_agenda_skip_deadline_if_done = true,
                 mappings = {
                     prefix = '<localleader>',
+                    disable_all = true
                 },
                 win_border = "double",
                 org_capture_templates = {
@@ -141,32 +141,38 @@ require("lazy").setup {
                     w = {
                         description = 'Work',
                         template = '* TODO %?',
-                        target = '~/notes/todo/work.org',
+                        target = '~/notes/work.org',
                     },
                     l = {
                         description = 'Life',
                         template = '* TODO %?',
-                        target = '~/notes/todo/life.org',
+                        target = '~/notes/life.org',
                     },
                     p = {
                         description = 'Project',
                         template = '* TODO %?',
-                        target = '~/notes/todo/projects.org',
-                    },
-                    t = {
-                        description = 'General',
-                        template = '* TODO %?',
-                        target = '~/notes/todo/todo.org',
+                        target = '~/notes/projects.org',
                     },
                 },
                 org_agenda_custom_commands = {
+                    w = {
+                        description = "Work TODOs",
+                        types = {
+                            {
+                                type = 'tags_todo',
+                                org_agenda_overriding_header = 'Work TODOs',
+                                org_agenda_files = { '~/notes/work.org' },
+                                org_agenda_sorting_strategy = { 'todo-state-up', 'priority-down' }
+                            },
+                        }
+                    },
                     l = {
                         description = "Life TODOs",
                         types = {
                             {
                                 type = 'tags_todo',
                                 org_agenda_overriding_header = 'Life TODOs',
-                                org_agenda_files = { '~/notes/todo/life.org' },
+                                org_agenda_files = { '~/notes/life.org' },
                                 org_agenda_sorting_strategy = { 'todo-state-up', 'priority-down' }
                             },
                         }
@@ -177,7 +183,7 @@ require("lazy").setup {
                             {
                                 type = 'tags_todo',
                                 org_agenda_overriding_header = 'Project TODOs',
-                                org_agenda_files = { '~/notes/todo/project.org' },
+                                org_agenda_files = { '~/notes/project.org' },
                                 org_agenda_sorting_strategy = { 'todo-state-up', 'priority-down' }
                             },
                         }
@@ -187,21 +193,21 @@ require("lazy").setup {
             })
         end,
     },
-    -- {
-    --   "chipsenkbeil/org-roam.nvim",
-    --   tag = "0.1.1",
-    --   dependencies = {
-    --     {
-    --       "nvim-orgmode/orgmode",
-    --       tag = "0.3.7",
-    --     },
-    --   },
-    --   config = function()
-    --     require("org-roam").setup({
-    --       directory = "~/notes",
-    --     })
-    --   end
-    -- },
+    {
+        "chipsenkbeil/org-roam.nvim",
+        tag = "0.1.1",
+        dependencies = {
+            {
+                "nvim-orgmode/orgmode",
+                --       tag = "0.3.7",
+            },
+        },
+        config = function()
+            require("org-roam").setup({
+                directory = "~/notes",
+            })
+        end
+    },
     --   {
     --     "nvim-orgmode/telescope-orgmode.nvim",
     --     event = "VeryLazy",
