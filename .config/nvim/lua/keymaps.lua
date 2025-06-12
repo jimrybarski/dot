@@ -82,13 +82,14 @@ end
 vim.api.nvim_set_keymap('i', '<C-\'>', '<C-r>"', { noremap = true, silent = true })
 
 -- close all notifications
-vim.keymap.set({ 'n', 'v' }, '<leader>n', function()
+vim.keymap.set({ 'n', 'v' }, '<leader>k', function()
     local notify = require("notify")
     notify.dismiss()
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>r', '<cmd>Lazy reload<CR>', { desc = 'Reload config' })
 
+-- <leader> or, of and oi are taken by telescope-orgmode
 vim.keymap.set('n', '<leader>ocw', '<cmd>Org capture w<CR>', { desc = 'Capture work note' })
 vim.keymap.set('n', '<leader>ow', '<cmd>e ~/notes/work.org<CR>', { desc = 'Open work notes' })
 
@@ -117,3 +118,26 @@ vim.api.nvim_create_autocmd('FileType', {
     })
   end,
 })
+
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = 'orgagenda',
+--   callback = function(args)
+--     local bufnr = args.buf
+--
+--     vim.keymap.set('n', '<CR>', function()
+--       local api = require('orgmode.api.agenda')
+--       local headline = api.get_headline_at_cursor()
+--       if headline then
+--         -- Open the file at the correct line
+--         vim.cmd('edit ' .. vim.fn.fnameescape(headline.file.filename))
+--         vim.api.nvim_win_set_cursor(0, { headline:get_range().start_line, 0 })
+--       else
+--         vim.notify('No headline under cursor', vim.log.levels.WARN)
+--       end
+--     end, {
+--       buffer = bufnr,
+--       silent = true,
+--       desc = 'Jump to org headline from agenda',
+--     })
+--   end,
+-- })

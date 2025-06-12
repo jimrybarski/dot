@@ -199,28 +199,59 @@ require("lazy").setup {
         dependencies = {
             {
                 "nvim-orgmode/orgmode",
-                --       tag = "0.3.7",
             },
         },
         config = function()
             require("org-roam").setup({
                 directory = "~/notes",
+                bindings = {
+                    prefix = "<localleader>n",
+                    add_alias = "<prefix>aa",
+                    ---Adds an origin to the node under cursor.
+                    add_origin = "<prefix>oa",
+                    ---Opens org-roam capture window.
+                    capture = "<prefix>c",
+                    ---Completes the node under cursor.
+                    complete_at_point = "<prefix>.",
+                    ---Finds node and moves to it.
+                    find_node = "<prefix>f",
+                    ---Goes to the next node sequentially based on origin of the node under cursor.
+                    ---If more than one node has the node under cursor as its origin, a selection
+                    ---dialog is displayed to choose the node.
+                    goto_next_node = "<prefix>n",
+                    ---Goes to the previous node sequentially based on origin of the node under cursor.
+                    goto_prev_node = "<prefix>p",
+                    ---Inserts node at cursor position.
+                    insert_node = "<prefix>i",
+                    ---Inserts node at cursor position without opening capture buffer.
+                    insert_node_immediate = "<prefix>m",
+                    ---Opens the quickfix menu for backlinks to the current node under cursor.
+                    quickfix_backlinks = "<prefix>q",
+                    ---Removes an alias from the node under cursor.
+                    remove_alias = "<prefix>ar",
+                    ---Removes the origin from the node under cursor.
+                    remove_origin = "<prefix>or",
+                    ---Toggles the org-roam node-view buffer for the node under cursor.
+                    toggle_roam_buffer = "<prefix>l",
+                    ---Toggles a fixed org-roam node-view buffer for a selected node.
+                    toggle_roam_buffer_fixed = "<prefix>b",
+                },
             })
         end
     },
-    --   {
-    --     "nvim-orgmode/telescope-orgmode.nvim",
-    --     event = "VeryLazy",
-    --     dependencies = {
-    --       "nvim-orgmode/orgmode",
-    --       "nvim-telescope/telescope.nvim",
-    --     },
-    --     config = function()
-    --       require("telescope").load_extension("orgmode")
-    --
-    --       vim.keymap.set("n", "<leader>r", require("telescope").extensions.orgmode.refile_heading)
-    --       vim.keymap.set("n", "<leader>fh", require("telescope").extensions.orgmode.search_headings)
-    --       vim.keymap.set("n", "<leader>li", require("telescope").extensions.orgmode.insert_link)
-    --     end,
-    --   }
+    {
+        "nvim-orgmode/telescope-orgmode.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "nvim-orgmode/orgmode",
+            "nvim-telescope/telescope.nvim",
+        },
+        config = function()
+            require("telescope").load_extension("orgmode")
+
+            vim.keymap.set("n", "<leader>or", require("telescope").extensions.orgmode.refile_heading)
+            vim.keymap.set("n", "<leader>of", require("telescope").extensions.orgmode.search_headings)
+            vim.keymap.set("n", "<leader>oi", require("telescope").extensions.orgmode.insert_link)
+        end,
+    }
 }
