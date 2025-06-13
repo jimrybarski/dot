@@ -4,9 +4,9 @@ require('diffview').setup()
 vim.notify = require("notify")
 
 require('colorizer').setup({
-  'css';
-  'javascript';
-  'html';
+    'css',
+    'javascript',
+    'html',
 })
 
 require('neogit').setup()
@@ -14,38 +14,38 @@ require('neogit').setup()
 require('bioinformatics')
 
 require('highlight-undo').setup({
-  duration = 300,
-  undo = {
-    hlgroup = 'HighlightUndo',
-    mode = 'n',
-    lhs = 'u',
-    map = 'undo',
-    opts = {}
-  },
-  redo = {
-    hlgroup = 'HighlightUndo',
-    mode = 'n',
-    lhs = '<C-r>',
-    map = 'redo',
-    opts = {}
-  },
-  keymaps = {
-      paste = { disabled = true},
-      Paste = { disabled = true},
-  },
-  highlight_for_count = true,
+    duration = 300,
+    undo = {
+        hlgroup = 'HighlightUndo',
+        mode = 'n',
+        lhs = 'u',
+        map = 'undo',
+        opts = {}
+    },
+    redo = {
+        hlgroup = 'HighlightUndo',
+        mode = 'n',
+        lhs = '<C-r>',
+        map = 'redo',
+        opts = {}
+    },
+    keymaps = {
+        paste = { disabled = true },
+        Paste = { disabled = true },
+    },
+    highlight_for_count = true,
 })
 
 require('scrollEOF').setup({
-  -- The pattern used for the internal autocmd to determine
-  -- where to run scrollEOF. See https://neovim.io/doc/user/autocmd.html#autocmd-pattern
-  pattern = '*',
-  -- Whether or not scrollEOF should be enabled in insert mode
-  insert_mode = true,
-  -- List of filetypes to disable scrollEOF for.
-  disabled_filetypes = {},
-  -- List of modes to disable scrollEOF for. see https://neovim.io/doc/user/builtin.html#mode()
-  disabled_modes = {},
+    -- The pattern used for the internal autocmd to determine
+    -- where to run scrollEOF. See https://neovim.io/doc/user/autocmd.html#autocmd-pattern
+    pattern = '*',
+    -- Whether or not scrollEOF should be enabled in insert mode
+    insert_mode = true,
+    -- List of filetypes to disable scrollEOF for.
+    disabled_filetypes = {},
+    -- List of modes to disable scrollEOF for. see https://neovim.io/doc/user/builtin.html#mode()
+    disabled_modes = {},
 })
 
 function ends_with(str, suffix)
@@ -62,8 +62,8 @@ require('nvim-treesitter.configs').setup({
             move = {
                 enable = true,
                 set_jumps = true,
-                goto_previous_start = {["]]"] = "@function.outer"},
-                goto_next_start = {["[["] = "@function.outer"},
+                goto_previous_start = { ["]]"] = "@function.outer" },
+                goto_next_start = { ["[["] = "@function.outer" },
             },
             keymaps = {
                 ["af"] = "@function.outer",
@@ -74,8 +74,8 @@ require('nvim-treesitter.configs').setup({
             },
             selection_modes = {
                 ['@parameter.outer'] = 'v', -- charwise
-                ['@function.outer'] = 'V', -- linewise
-                ['@class.outer'] = '<c-v>' -- blockwise
+                ['@function.outer'] = 'V',  -- linewise
+                ['@class.outer'] = '<c-v>'  -- blockwise
             },
             include_surrounding_whitespace = function(opts)
                 local mode = vim.api.nvim_get_mode()
@@ -93,22 +93,22 @@ local actions = require("telescope.actions")
 
 require("telescope").setup({
     defaults = {
-        layout_config = {vertical = {width = 0.9, height = 0.9}},
-        file_ignore_patterns = {".git"},
+        layout_config = { vertical = { width = 0.9, height = 0.9 } },
+        file_ignore_patterns = { ".git" },
         hidden = true,
         vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--follow' },
     },
     pickers = {
-		find_files = {
-			find_command = {'fd', '--type', 'f', '--follow', '--hidden', '--exclude', '.git'}
-		},
-        lsp_references = {
-          -- by default, telescope lets you type to filter the list of results further.
-          -- however, for the list of references, I only ever want to scroll up and down with j and k
-          -- here, we force it to start in normal mode
-          initial_mode = "normal",
+        find_files = {
+            find_command = { 'fd', '--type', 'f', '--follow', '--hidden', '--exclude', '.git' }
         },
-	},
+        lsp_references = {
+            -- by default, telescope lets you type to filter the list of results further.
+            -- however, for the list of references, I only ever want to scroll up and down with j and k
+            -- here, we force it to start in normal mode
+            initial_mode = "normal",
+        },
+    },
     extensions = {
         emoji = {
             action = function(emoji)
@@ -129,7 +129,7 @@ pcall(require("telescope").load_extension, "emoji")
 null_ls = require("null-ls")
 null_ls.setup({
     sources = {
-        null_ls.builtins.diagnostics.pylint, 
+        null_ls.builtins.diagnostics.pylint,
         null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.isort,
     }
@@ -150,22 +150,41 @@ require("toggleterm").setup({
     hide_numbers = true, -- hide the number column in toggleterm buffers
     shade_filetypes = {},
     shade_terminals = false,
-    shading_factor = 2, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    shading_factor = 2,     -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
     start_in_insert = true,
     insert_mappings = true, -- whether or not the open mapping applies in insert mode
     persist_size = true,
-    direction = 'float', -- 'vertical', 'horizontal', 'tab', or 'float'
-    close_on_exit = true -- close the terminal window when the process exits
+    direction = 'float',    -- 'vertical', 'horizontal', 'tab', or 'float'
+    close_on_exit = true    -- close the terminal window when the process exits
 })
 require("hop").setup()
 
 require("nvim-surround").setup()
 
-require('nvim-autopairs').setup({ignored_next_char = "[%w%.%(%[{]"})
+require("nvim-autopairs").setup({
+    check_ts = true, -- use treesitter
+    fast_wrap = {},
+    disable_filetype = { "TelescopePrompt", "vim" },
+})
 
--- puts vertical guide lines for each scope
--- is this "local highlight" line necessary?
-local highlight = {"CursorColumn"}
+
+-- Handle Python's triple quotes correctly
+local rule = require('nvim-autopairs.rule')
+local npairs = require('nvim-autopairs')
+npairs.add_rules {
+    rule('"""', '"""', 'python')
+        :with_move(function(opts)
+            return opts.char == '"'
+        end)
+        :with_pair(function(opts)
+            local prev_char = opts.line:sub(opts.col - 1, opts.col - 1)
+            return prev_char ~= '"'
+        end)
+        :with_del(function(opts)
+            return opts.col >= 3 and opts.line:sub(opts.col - 2, opts.col) == '"""'
+        end)
+}
+
 require("ibl").setup({
     indent = {
         -- pick one of the symbols below or use anything else you want
@@ -180,7 +199,7 @@ require("ibl").setup({
 })
 require("illuminate").configure({
     -- providers: provider used to get references in the buffer, ordered by priority
-    providers = {'lsp', 'treesitter', 'regex'},
+    providers = { 'lsp', 'treesitter', 'regex' },
     -- delay: delay in milliseconds
     delay = 0,
     -- filetype_overrides: filetype specific overrides.
@@ -188,7 +207,7 @@ require("illuminate").configure({
     -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
     filetype_overrides = {},
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-    filetypes_denylist = {'dirbuf', 'dirvish', 'fugitive'},
+    filetypes_denylist = { 'dirbuf', 'dirvish', 'fugitive' },
     -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
     -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
     filetypes_allowlist = {},
@@ -261,18 +280,18 @@ require("illuminate").configure({
 -- })
 require("gitsigns").setup({
     signs = {
-        add = {text = '█'}, -- │
-        change = {text = '~'}, -- │
-        delete = {text = '█'},
-        topdelete = {text = '█'},
-        changedelete = {text = '█'},
-        untracked = {text = '┆'}
+        add = { text = '█' }, -- │
+        change = { text = '~' }, -- │
+        delete = { text = '█' },
+        topdelete = { text = '█' },
+        changedelete = { text = '█' },
+        untracked = { text = '┆' }
     },
     signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+    numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
     word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
     linehl = false,
-    watch_gitdir = {follow_files = true},
+    watch_gitdir = { follow_files = true },
     auto_attach = true,
     attach_to_untracked = true,
     current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
@@ -286,7 +305,7 @@ require("gitsigns").setup({
     current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
     sign_priority = 6,
     update_debounce = 100,
-    status_formatter = nil, -- Use default
+    status_formatter = nil,  -- Use default
     max_file_length = 40000, -- Disable if file is longer than this (in lines)
     preview_config = {
         -- Options passed to nvim_open_win
@@ -365,13 +384,13 @@ require("gruvbox").setup({
     undercurl = true,
     underline = true,
     bold = true,
-    italic = {strings = true, comments = true},
+    italic = { strings = true, comments = true },
     strikethrough = true,
     invert_selection = false,
     invert_signs = false,
     invert_tabline = false,
     invert_intend_guides = false,
-    inverse = true, -- invert background for search, diffs, statuslines and errors
+    inverse = true,    -- invert background for search, diffs, statuslines and errors
     contrast = "soft", -- can be "hard", "soft" or empty string
     dim_inactive = false,
     transparent_mode = false
@@ -380,11 +399,10 @@ require("gruvbox").setup({
 vim.cmd("colorscheme gruvbox")
 
 require("bigfile").setup {
-    filesize = 2, -- size of the file in MiB, the plugin round file sizes to the closest MiB
-    pattern = {"*"}, -- autocmd pattern or function see <### Overriding the detection of big files>
-    features = { -- features to disable
+    filesize = 2,    -- size of the file in MiB, the plugin round file sizes to the closest MiB
+    pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
+    features = {     -- features to disable
         "indent_blankline", "illuminate", "lsp", "treesitter", "syntax",
         "matchparen", "vimopts", "filetype"
     }
 }
-
