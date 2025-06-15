@@ -21,6 +21,6 @@ function syncpao ()
 end
 
 
-function tldr()
+function tldr ()
     /home/jim/.cargo/bin/tldr $argv[1] --color=always | bat
 end
