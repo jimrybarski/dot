@@ -1,51 +1,38 @@
-vim.api.nvim_set_keymap("n", "H", "^", { noremap = true })
-vim.api.nvim_set_keymap("n", "U", "<C-r>", { noremap = true })
+vim.keymap.set("n", "H", "^", { desc = "Go to first non-blank character" })
+vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 
-vim.api.nvim_set_keymap("n", "\\", ":HopChar1<CR>", { noremap = true })
-vim.api.nvim_set_keymap("o", "\\", ":HopChar1<CR>", { noremap = true })
+vim.keymap.set("n", "\\", ":HopChar1<CR>", { desc = "Hop to character" })
+vim.keymap.set("o", "\\", ":HopChar1<CR>", { desc = "Hop to character (operator)" })
 
--- copy between any two points in the current window
-vim.api.nvim_set_keymap('n', '<leader>y', ':HopYankChar1<cr>', { noremap = true, silent = true })
--- paste text anywhere in the current window
-vim.api.nvim_set_keymap('n', '<leader>p', ':HopPasteChar1<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>g', ':Telescope live_grep<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ff', ":Telescope find_files<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fk', ':Telescope keymaps<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fm', ':Telescope man_pages<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fe', ':Telescope emoji<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>c', ':split $HOME/.config/nvim/init.lua<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-j>', '1<C-w>+', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-k>', '1<C-w>-', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-h>', '1<C-w><', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-l>', '1<C-w>>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tt', ':lua RunUntilFirstFailingTest()<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ta', ':lua RunAllTests()<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tv', ':lua RunUntilFirstFailingVerboseTest<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>tm', ':lua RunMutationTests()<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>y', ':HopYankChar1<cr>', { desc = "Hop yank to character", silent = true })
+vim.keymap.set('n', '<leader>p', ':HopPasteChar1<cr>', { desc = "Hop paste to character", silent = true })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = "Yank to system clipboard", silent = true })
+vim.keymap.set('n', '<leader>g', ':Telescope live_grep<cr>', { desc = "Live grep search", silent = true })
+vim.keymap.set('n', '<leader>ff', ":Telescope find_files<cr>", { desc = "Find files", silent = true })
+vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<cr>', { desc = "Find keymaps", silent = true })
+vim.keymap.set('n', '<leader>fm', ':Telescope man_pages<cr>', { desc = "Find man pages", silent = true })
+vim.keymap.set('n', '<leader>fe', ':Telescope emoji<cr>', { desc = "Find emoji", silent = true })
+vim.keymap.set('n', '<leader>c', ':split $HOME/.config/nvim/init.lua<cr>', { desc = "Open nvim config", silent = true })
+vim.keymap.set('n', '<C-S-j>', '1<C-w>+', { desc = "Increase window height", silent = true })
+vim.keymap.set('n', '<C-S-k>', '1<C-w>-', { desc = "Decrease window height", silent = true })
+vim.keymap.set('n', '<C-S-h>', '1<C-w><', { desc = "Decrease window width", silent = true })
+vim.keymap.set('n', '<C-S-l>', '1<C-w>>', { desc = "Increase window width", silent = true })
+vim.keymap.set('n', '<leader>tt', ':lua RunUntilFirstFailingTest()<cr>', { desc = "Run tests until first failure", silent = true })
+vim.keymap.set('n', '<leader>ta', ':lua RunAllTests()<cr>', { desc = "Run all tests", silent = true })
+vim.keymap.set('n', '<leader>tv', ':lua RunUntilFirstFailingVerboseTest<cr>', { desc = "Run tests verbose until failure", silent = true })
+vim.keymap.set('n', '<leader>tm', ':lua RunMutationTests()<cr>', { desc = "Run mutation tests", silent = true })
 
--- remove search highlight with escape
-vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>:echo<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<Esc>', ':nohl<cr>:echo<cr>', { desc = "Clear search highlight", silent = true })
 
--- prevent register from being filled with empty strings or other things we never want to paste later
-vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "c", '"_c', { noremap = true, silent = true })
--- only puts the line into the clipboard if it's non-empty
-vim.api.nvim_set_keymap("n", "dd", "v:lua.check_line()", { expr = true, noremap = true })
+vim.keymap.set("n", "x", '"_x', { desc = "Delete character without yanking", silent = true })
+vim.keymap.set("n", "c", '"_c', { desc = "Change without yanking", silent = true })
+vim.keymap.set("n", "dd", "v:lua.check_line()", { desc = "Delete line (smart)", expr = true })
 
--- Chinese
-vim.api.nvim_set_keymap('n', '<leader>z', '0:lua OpenWiktionary()<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>z', '0:lua OpenWiktionary()<CR>', { desc = "Open Wiktionary for current word", silent = true })
 
--- Version control
--- Show who committed the current line
-vim.api.nvim_set_keymap('n', '<leader>vb', ':Gitsigns blame_line<CR>',
-    { noremap = true, silent = true })
--- Color the background green for lines that have changed
-vim.api.nvim_set_keymap('n', '<leader>vh', ':Gitsigns toggle_linehl<CR>',
-    { noremap = true, silent = true })
--- Start the main Git interface
-vim.api.nvim_set_keymap('n', '<leader>vv', ':Neogit<CR>',
-    { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>vb', ':Gitsigns blame_line<CR>', { desc = "Git blame current line", silent = true })
+vim.keymap.set('n', '<leader>vh', ':Gitsigns toggle_linehl<CR>', { desc = "Toggle git line highlighting", silent = true })
+vim.keymap.set('n', '<leader>vv', ':Neogit<CR>', { desc = "Open Neogit", silent = true })
 
 
 -- In insert mode, Ctrl+<letter> will insert the "closest" Greek letter
@@ -74,18 +61,15 @@ local greek_letters = {
 
 -- Assign the Greek letter keymaps
 for k, v in pairs(greek_letters) do
-    vim.api.nvim_set_keymap('i', '<C-' .. k .. '>', v, { noremap = true, silent = true })
+    vim.keymap.set('i', '<C-' .. k .. '>', v, { desc = "Insert Greek letter " .. v, silent = true })
 end
 
--- paste the default register's contents while in insert mode
--- Mnemonic: Ctrl+' is Ctrl+" without the shift
-vim.api.nvim_set_keymap('i', '<C-\'>', '<C-r>"', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-\'>', '<C-r>"', { desc = "Paste from default register in insert mode", silent = true })
 
--- close all notifications
 vim.keymap.set({ 'n', 'v' }, '<leader>k', function()
     local notify = require("notify")
     notify.dismiss()
-end, { noremap = true, silent = true })
+end, { desc = "Dismiss all notifications", silent = true })
 
 vim.keymap.set('n', '<leader>r', '<cmd>Lazy reload<CR>', { desc = 'Reload config' })
 

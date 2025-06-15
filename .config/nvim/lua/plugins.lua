@@ -1,17 +1,16 @@
 -- load plugins
 require("lazy").setup {
-    -- { 'jimrybarski/bioinformatics.nvim' },
-    { 'bioinformatics',             dir = '/home/jim/bioinformatics.nvim' },
-    -- highlight undo/redo text
-    { 'tzachar/highlight-undo.nvim' },
+    { 'jimrybarski/bioinformatics.nvim' },
+    -- { 'bioinformatics', dir = '/home/jim/bioinformatics.nvim', event = 'VeryLazy' },
+    { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
     -- keep some space below the cursor even at the end of the buffer
     {
         'Aasim-A/scrollEOF.nvim',
         event = { 'CursorMoved', 'WinScrolled' },
         opts = {},
     },
-    { "xiyaowong/telescope-emoji.nvim" },
-    { "norcalli/nvim-colorizer.lua" },
+    { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
+    { "norcalli/nvim-colorizer.lua", ft = { 'css', 'javascript', 'html' } },
     -- none-ls, telescope and others depend on plenary
     { "nvim-lua/plenary.nvim" },
     { "nvimtools/none-ls.nvim" },
@@ -26,32 +25,33 @@ require("lazy").setup {
     { "max397574/cmp-greek" },
     { "chrisgrieser/cmp-nerdfont" },
     { "ray-x/cmp-treesitter" },
-    { "rcarriga/nvim-notify" },
-    { "notomo/vusted" },
+    { "rcarriga/nvim-notify", event = 'VeryLazy' },
+    { "notomo/vusted", ft = 'lua' },
     { "hrsh7th/cmp-nvim-lsp" },
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
     { "hrsh7th/nvim-cmp" },
     { "windwp/nvim-autopairs" },
-    { 'mfussenegger/nvim-dap' },
+    { 'mfussenegger/nvim-dap', event = 'VeryLazy' },
     {
         "chrisgrieser/nvim-origami",
         event = "BufReadPost", -- later or on keypress would prevent saving folds
         opts = true            -- needed even when using default config
     },
-    { "lukas-reineke/indent-blankline.nvim" },
+    { "lukas-reineke/indent-blankline.nvim", event = 'BufReadPost' },
     {
         "kylechui/nvim-surround",
-        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        version = "*",
+        event = 'VeryLazy'
     },
-    { 'smoka7/hop.nvim' },
-    { "akinsho/toggleterm.nvim" },
+    { 'smoka7/hop.nvim', event = 'VeryLazy' },
+    { "akinsho/toggleterm.nvim", event = 'VeryLazy' },
     { "nvim-lualine/lualine.nvim" },
     { "lewis6991/gitsigns.nvim" },
     -- nice color map
     { "ellisonleao/gruvbox.nvim" },
     -- commands to comment/uncomment code
-    { "numToStr/Comment.nvim" },
+    { "numToStr/Comment.nvim", event = 'VeryLazy' },
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -81,7 +81,7 @@ require("lazy").setup {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" }
     },
-    { "RRethy/vim-illuminate" },
+    { "RRethy/vim-illuminate", event = 'BufReadPost' },
     {
         "NeogitOrg/neogit",
         dependencies = {
@@ -89,7 +89,8 @@ require("lazy").setup {
             "sindrets/diffview.nvim",
             "nvim-telescope/telescope.nvim",
         }, config = true },
-    { "lunarvim/bigfile.nvim" }, {
+    { "lunarvim/bigfile.nvim", event = 'BufReadPre' },
+    {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     dependencies = {
@@ -103,6 +104,7 @@ require("lazy").setup {
     {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
+        event = 'BufReadPost',
         opts = {}
     },
     {
@@ -183,7 +185,7 @@ require("lazy").setup {
                             {
                                 type = 'tags_todo',
                                 org_agenda_overriding_header = 'Project TODOs',
-                                org_agenda_files = { '~/notes/project.org' },
+                                org_agenda_files = { '~/notes/projects.org' },
                                 org_agenda_sorting_strategy = { 'todo-state-up', 'priority-down' }
                             },
                         }
