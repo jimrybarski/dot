@@ -59,5 +59,3 @@ function OpenWiktionary()
     -- Command to open Firefox with the URL
     vim.fn.system({"firefox", url})
 end
-
-

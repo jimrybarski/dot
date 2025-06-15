@@ -236,6 +236,14 @@ require("lazy").setup {
                     ---Toggles a fixed org-roam node-view buffer for a selected node.
                     toggle_roam_buffer_fixed = "<prefix>b",
                 },
+                capture = {
+                    templates = {
+                        d = {
+                            template = "%?",
+                            target = "%<%Y-%m-%d>.org",
+                        },
+                    },
+                },
             })
         end
     },

@@ -19,3 +19,8 @@ function syncpao ()
     end
     popd > /dev/null
 end
+
+
+function tldr()
+    /home/jim/.cargo/bin/tldr $argv[1] --color=always | bat
+end

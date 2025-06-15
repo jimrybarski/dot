@@ -107,37 +107,14 @@ vim.keymap.set('n', '<leader>oaw', '<cmd>Org agenda w<CR>', { desc = 'Work agend
 vim.keymap.set('n', '<leader>oap', '<cmd>Org agenda p<CR>', { desc = 'Project agenda' })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'orgagenda',
-  callback = function(args)
-    local bufnr = args.buf
+    pattern = 'orgagenda',
+    callback = function(args)
+        local bufnr = args.buf
 
-    vim.keymap.set('n', 'q', '<cmd>close<CR>', {
-      buffer = bufnr,
-      silent = true,
-      desc = 'Close agenda split',
-    })
-  end,
+        vim.keymap.set('n', 'q', '<cmd>close<CR>', {
+            buffer = bufnr,
+            silent = true,
+            desc = 'Close agenda split',
+        })
+    end,
 })
-
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = 'orgagenda',
---   callback = function(args)
---     local bufnr = args.buf
---
---     vim.keymap.set('n', '<CR>', function()
---       local api = require('orgmode.api.agenda')
---       local headline = api.get_headline_at_cursor()
---       if headline then
---         -- Open the file at the correct line
---         vim.cmd('edit ' .. vim.fn.fnameescape(headline.file.filename))
---         vim.api.nvim_win_set_cursor(0, { headline:get_range().start_line, 0 })
---       else
---         vim.notify('No headline under cursor', vim.log.levels.WARN)
---       end
---     end, {
---       buffer = bufnr,
---       silent = true,
---       desc = 'Jump to org headline from agenda',
---     })
---   end,
--- })
