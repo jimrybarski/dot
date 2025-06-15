@@ -46,7 +46,6 @@ vim.opt.colorcolumn = "120"
 
 -- autoindent in codebases
 vim.opt.smartindent = false  -- leave autoindentation up to treesitter
-vim.opt.shiftwidth = 4
 
 -- wrapped text starts at the same level of indentation as the first line
 vim.opt.breakindent = true
