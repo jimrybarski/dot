@@ -3,14 +3,47 @@
     name = Jim Rybarski
 
 [core]
+    # Path to global gitignore file
     excludesFile = $HOME/.config/global-gitignore
+    # Default editor for commit messages and interactive operations
     editor = nvim
+    # Convert CRLF to LF on commit, leave LF as-is on checkout (recommended for Unix)
+    autocrlf = input
+    # Warn if converting line endings would be irreversible
+    safecrlf = true
+
+[pull]
+    # Rebase local commits on top of remote changes instead of creating merge commits
+    # Results in cleaner, linear commit history
+    rebase = true
 
 [push]
+    # Automatically set up remote tracking when pushing a new branch
     autoSetupRemote = true
+    # Only push current branch to upstream branch with same name (safest option)
+    default = simple
 
+[color]
+    # Enable colored output when terminal supports it
+    ui = auto
 [color "diff"]
+    # Color for removed lines in diffs
     old = yellow
+    # Color for added lines in diffs
     new = cyan
+[color "status"]
+    # Color for files added to staging area
+    added = blue
+    # Color for modified files
+    changed = yellow
+    # Color for untracked files
+    untracked = red
+[merge]
+    # Use nvim for resolving merge conflicts
+    tool = nvim
+[rerere]
+    # Remember and reuse previous conflict resolutions (reuse recorded resolution)
+    enabled = true
 [init]
-	defaultBranch = main
+    # Default branch name for new repositories
+    defaultBranch = main
