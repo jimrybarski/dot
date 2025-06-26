@@ -72,5 +72,16 @@ cmp.setup({
         {name = 'calc'}
     }),
     preselect = cmp.PreselectMode.None,
-    completion = {keyword_length = 1}
+    completion = {keyword_length = 1},
+    enabled = function()
+        local buftype = vim.api.nvim_buf_get_option(0, 'buftype')
+        local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+        
+        -- Disable completion in org-roam selection dialog
+        if string.match(vim.api.nvim_buf_get_name(0), 'org%-roam%-select') then
+            return false
+        end
+        
+        return true
+    end
 })
