@@ -1,3 +1,8 @@
+-- vim.keymap.set('n', '<leader>n', function()
+--     Snacks = require("snacks")
+--     Snacks.notify("Hello, world!", { level = "warn", timeout = 8000, title = "" })
+-- end, { desc = 'Test notification' })
+
 -- Dumps the text of a table's keys and values to a popup notification
 function dbg(thing) vim.notify(vim.inspect(thing)) end
 
