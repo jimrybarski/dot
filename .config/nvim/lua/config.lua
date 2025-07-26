@@ -16,6 +16,12 @@ require("gruvbox").setup({
 })
 vim.cmd("colorscheme gruvbox")
 
+-- set the colors of the vertical indentation lines 
+-- color of the current scope where the cursor is
+vim.api.nvim_set_hl(0, 'IblScope', { fg = '#7C6856' })
+-- color of inactive scopes 
+vim.api.nvim_set_hl(0, 'IblIndent', { fg = '#5A4B3E' })
+
 require("illuminate").configure({
     -- providers: provider used to get references in the buffer, ordered by priority
     providers = { 'lsp', 'treesitter', 'regex' },
@@ -24,7 +30,7 @@ require("illuminate").configure({
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = { 'dirbuf', 'dirvish', 'fugitive' },
     -- under_cursor: whether or not to illuminate under the cursor
-    under_cursor = true,
+    under_cursor = false,
     -- large_file_cutoff: number of lines at which to use large_file_config
     -- The `under_cursor` option is disabled when this cutoff is hit
     large_file_cutoff = 20000,
@@ -37,6 +43,10 @@ require("illuminate").configure({
     -- case_insensitive_regex: sets regex case sensitivity
     case_insensitive_regex = false
 })
+vim.api.nvim_set_hl(0, 'IlluminatedWordText', { bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { bold = true, underline = true })
+
 require("hop").setup()
 -- Highlight hex color codes (e.g. #0072B2) with the actual color
 require('colorizer').setup({
@@ -64,10 +74,10 @@ require("gitsigns").setup({
     current_line_blame = true,
     current_line_blame_opts = {
         hl_mode = 'combine',
-        virt_text = true,
-        virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
-        delay = 1000,
-        ignore_whitespace = false,
+        virt_text = false,
+        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+        delay = 10000,
+        ignore_whitespace = true,
         virt_text_priority = 10
     },
     current_line_blame_formatter = '<author_time:%Y-%m-%d> - <summary>',
@@ -86,11 +96,6 @@ require("gitsigns").setup({
 })
 -- We show the git blame message for the current line. This sets the color of that virtual text.
 vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#9B643D', italic = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordText', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IblScope', { fg = '#7C6856' })
-vim.api.nvim_set_hl(0, 'IblIndent', { fg = '#5A4B3E' })
 
 
 require('highlight-undo').setup({
@@ -115,60 +120,153 @@ require('highlight-undo').setup({
     },
     highlight_for_count = true,
 })
---
--- require('scrollEOF').setup({
---     -- The pattern used for the internal autocmd to determine
---     -- where to run scrollEOF. See https://neovim.io/doc/user/autocmd.html#autocmd-pattern
---     pattern = '*',
---     -- Whether or not scrollEOF should be enabled in insert mode
---     insert_mode = true,
---     -- List of filetypes to disable scrollEOF for.
---     disabled_filetypes = {},
---     -- List of modes to disable scrollEOF for. see https://neovim.io/doc/user/builtin.html#mode()
---     disabled_modes = {},
--- })
---
--- function ends_with(str, suffix)
---     return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
--- end
---
--- require('nvim-treesitter.configs').setup({
---     textobjects = {
---         select = {
---             enable = true,
---
---             -- Automatically jump forward to textobj, similar to targets.vim
---             lookahead = true,
---             move = {
---                 enable = true,
---                 set_jumps = true,
---                 goto_previous_start = { ["]]"] = "@function.outer" },
---                 goto_next_start = { ["[["] = "@function.outer" },
---             },
---             keymaps = {
---                 ["af"] = "@function.outer",
---                 ["if"] = "@function.inner",
---                 ["ac"] = "@class.outer",
---                 ["ic"] = "@class.inner",
---                 ["as"] = "@scope",
---             },
---             selection_modes = {
---                 ['@parameter.outer'] = 'v', -- charwise
---                 ['@function.outer'] = 'V',  -- linewise
---                 ['@class.outer'] = '<c-v>'  -- blockwise
---             },
---             include_surrounding_whitespace = function(opts)
---                 local mode = vim.api.nvim_get_mode()
---                 if ends_with(opts.query_string, "outer") and mode.mode ~= "v" then
---                     return true
---                 else
---                     return false
---                 end
---             end
---         }
---     }
--- })
---
+
+require('scrollEOF').setup({
+    -- The pattern used for the internal autocmd to determine
+    -- where to run scrollEOF. See https://neovim.io/doc/user/autocmd.html#autocmd-pattern
+    pattern = '*',
+    -- Whether or not scrollEOF should be enabled in insert mode
+    insert_mode = true,
+    -- List of filetypes to disable scrollEOF for.
+    disabled_filetypes = {},
+    -- List of modes to disable scrollEOF for. see https://neovim.io/doc/user/builtin.html#mode()
+    disabled_modes = {},
+})
+require('lualine').setup({
+    options = {
+        icons_enabled = false,
+        theme = 'auto',
+        -- component_separators = {left = '', right = ''},
+        -- section_separators = {left = '', right = ''},
+        section_separators = { left = '', right = '' },
+        component_separators = { left = '', right = '' },
+        disabled_filetypes = {statusline = {}, winbar = {}},
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {statusline = 1000, tabline = 1000, winbar = 1000}
+    },
+    sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {'filename'},
+        lualine_x = {},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+    },
+    tabline = {},
+    winbar = {},
+    inactive_winbar = {},
+    extensions = {}
+})
+
+require("nvim-surround").setup()
+require("nvim-autopairs").setup({
+    check_ts = true, -- use treesitter
+    fast_wrap = {},
+    disable_filetype = { "TelescopePrompt", "vim" },
+})
+
+-- Handle Python's triple quotes correctly
+local rule = require('nvim-autopairs.rule')
+local npairs = require('nvim-autopairs')
+npairs.add_rules {
+    rule('"""', '"""', 'python')
+        :with_move(function(opts)
+            return opts.char == '"'
+        end)
+        :with_pair(function(opts)
+            local prev_char = opts.line:sub(opts.col - 1, opts.col - 1)
+            return prev_char ~= '"'
+        end)
+        :with_del(function(opts)
+            return opts.col >= 3 and opts.line:sub(opts.col - 2, opts.col) == '"""'
+        end)
+}
+
+-- function needed by nvim-treesitter-textobjects
+function ends_with(str, suffix)
+    return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
+end
+require('nvim-treesitter.configs').setup({
+    textobjects = {
+        swap = {
+            enable = true,
+            swap_next = {
+                ["gp"] = "@parameter.inner",
+            },
+            swap_previous = {
+                ["gP"] = "@parameter.inner",
+            },
+        },
+        select = {
+            enable = true,
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
+            move = {
+                enable = true,
+                set_jumps = true,
+                goto_previous_start = { 
+                    ["[f"] = "@function.outer",
+                    ["[c"] = "@class.outer",
+                    ["[p"] = "@parameter.outer",
+                    ["[l"] = "@loop.outer",
+                    ["[/"] = "@comment.outer",
+                },
+                goto_next_start = { 
+                    ["]f"] = "@function.outer", 
+                    ["]c"] = "@class.outer",
+                    ["]p"] = "@parameter.outer",
+                    ["]l"] = "@loop.outer",
+                    ["]/"] = "@comment.outer",
+                },
+            },
+            keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+                ['ap'] = '@parameter.outer',
+                ['ip'] = '@parameter.inner',
+                ["al"] = "@loop.outer",
+                ["il"] = "@loop.inner",
+                ["a/"] = "@comment.outer",
+                ["i/"] = "@comment.outer", -- no inner for comment
+            },
+            selection_modes = {
+                ['@parameter.outer'] = 'v', -- charwise
+                ['@function.outer'] = 'V',  -- linewise
+                ['@class.outer'] = '<c-v>'  -- blockwise
+            },
+            include_surrounding_whitespace = function(opts)
+                local mode = vim.api.nvim_get_mode()
+                if ends_with(opts.query_string, "outer") and mode.mode ~= "v" then
+                    return true
+                else
+                    return false
+                end
+            end
+        }
+    }
+})
+-- configure linters and formatters
+null_ls = require("null-ls")
+null_ls.setup({
+    sources = {
+        null_ls.builtins.diagnostics.pylint,
+        null_ls.builtins.diagnostics.fish,
+        null_ls.builtins.formatting.isort,
+    }
+})
+
 -- local actions = require("telescope.actions")
 --
 -- require("telescope").setup({
@@ -205,15 +303,6 @@ require('highlight-undo').setup({
 -- pcall(require("telescope").load_extension, "fzf")
 -- pcall(require("telescope").load_extension, "emoji")
 --
--- -- configure linters and formatters
--- null_ls = require("null-ls")
--- null_ls.setup({
---     sources = {
---         null_ls.builtins.diagnostics.pylint,
---         null_ls.builtins.diagnostics.fish,
---         null_ls.builtins.formatting.isort,
---     }
--- })
 --
 -- require("toggleterm").setup({
 --     size = function(term)
@@ -238,31 +327,7 @@ require('highlight-undo').setup({
 --     close_on_exit = true    -- close the terminal window when the process exits
 -- })
 --
--- require("nvim-surround").setup()
 --
--- -- require("nvim-autopairs").setup({
--- --     check_ts = true, -- use treesitter
--- --     fast_wrap = {},
--- --     disable_filetype = { "TelescopePrompt", "vim" },
--- -- })
---
---
--- -- Handle Python's triple quotes correctly
--- -- local rule = require('nvim-autopairs.rule')
--- -- local npairs = require('nvim-autopairs')
--- -- npairs.add_rules {
--- --     rule('"""', '"""', 'python')
--- --         :with_move(function(opts)
--- --             return opts.char == '"'
--- --         end)
--- --         :with_pair(function(opts)
--- --             local prev_char = opts.line:sub(opts.col - 1, opts.col - 1)
--- --             return prev_char ~= '"'
--- --         end)
--- --         :with_del(function(opts)
--- --             return opts.col >= 3 and opts.line:sub(opts.col - 2, opts.col) == '"""'
--- --         end)
--- -- }
 --
 --
 -- -- require("ibl").setup({
@@ -276,41 +341,6 @@ require('highlight-undo').setup({
 -- --         -- this seems to be flaky, and I'm not really sure how it helps
 -- --         enabled = false
 -- --     }
--- -- })
--- -- require('lualine').setup({
--- --     options = {
--- --         icons_enabled = false,
--- --         theme = 'auto',
--- --         -- component_separators = {left = '', right = ''},
--- --         -- section_separators = {left = '', right = ''},
--- --         section_separators = { left = '', right = '' },
--- --         component_separators = { left = '', right = '' },
--- --         disabled_filetypes = {statusline = {}, winbar = {}},
--- --         ignore_focus = {},
--- --         always_divide_middle = true,
--- --         globalstatus = false,
--- --         refresh = {statusline = 1000, tabline = 1000, winbar = 1000}
--- --     },
--- --     sections = {
--- --         lualine_a = {'mode'},
--- --         lualine_b = {'branch', 'diff', 'diagnostics'},
--- --         lualine_c = {'filename'},
--- --         lualine_x = {},
--- --         lualine_y = {'progress'},
--- --         lualine_z = {'location'}
--- --     },
--- --     inactive_sections = {
--- --         lualine_a = {},
--- --         lualine_b = {},
--- --         lualine_c = {'filename'},
--- --         lualine_x = {'location'},
--- --         lualine_y = {},
--- --         lualine_z = {}
--- --     },
--- --     tabline = {},
--- --     winbar = {},
--- --     inactive_winbar = {},
--- --     extensions = {}
 -- -- })
 --
 -- require("nvim-surround").setup({
@@ -376,16 +406,6 @@ require('highlight-undo').setup({
 --     ---Function to call after (un)comment
 --     post_hook = nil
 -- })
---
--- require("bigfile").setup {
---     filesize = 2,    -- size of the file in MiB, the plugin round file sizes to the closest MiB
---     pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
---     features = {     -- features to disable
---         "indent_blankline", "illuminate", "lsp", "treesitter", "syntax",
---         "matchparen", "vimopts", "filetype"
---     }
--- }
---
 --
 -- require('diffview').setup()
 --

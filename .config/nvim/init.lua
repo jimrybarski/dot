@@ -1,6 +1,14 @@
+-- Detect work environment and set appropriate paths
+local function is_work_environment()
+    local stat = vim.uv.fs_stat("/opt/local")
+    return stat and stat.type == "directory"
+end
+
 -- Install the "Lazy" plugin manager if it's not already installed.
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+local is_work = is_work_environment()
+local data_dir = is_work and "/opt/local/share/nvim" or vim.fn.stdpath("data")
+local lazypath = data_dir .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git", "clone", "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath
@@ -16,7 +24,7 @@ local function load_lua_files(directory)
         local module = file:match('.*/lua/(.*)%.lua$'):gsub('/', '.')
         require(module)
     end
-    
+
     -- Load subdirectories
     local dirs = vim.fn.glob(vim.fn.stdpath('config') .. '/lua/' .. directory .. '/*/', false, true)
     for _, dir in ipairs(dirs) do
@@ -35,7 +43,7 @@ require('config')
 -- require('completion')
 -- require('functions')
 load_lua_files('keymaps')
--- require('lsp')
+require('lsp')
 -- require('autocommands')
 -- require('pinyin')
 -- require('science')

@@ -1,7 +1,6 @@
 -- Functions to help me type pinyin. When the cursor is over a vowel, typing <leader>p will cycle the vowel through
 -- the various tone markers (or in the case of "u", it will also go through "ü" and its tones).
 
-
 function cycle_pinyin_tones()
     local vowels = {
         ['a'] = 'à',

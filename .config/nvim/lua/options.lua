@@ -39,7 +39,7 @@ vim.opt.expandtab = true
 vim.g.completeopt = "menu,menuone,preview,noselect"
 
 -- keep the cursor in the center of the screen (if there is space)
-vim.o.scrolloff = 10
+vim.o.scrolloff = 6
 
 -- highlight the 120th column
 vim.opt.colorcolumn = "120"
@@ -59,8 +59,18 @@ vim.g.loaded_gzip = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
 
-vim.g.python3_host_prog = vim.fn.expand("$HOME/.local/pylspenv/bin/python3")
+local function is_work_environment()
+    local stat = vim.loop.fs_stat("/opt/local")
+    return stat and stat.type == "directory"
+end
+local local_dir = is_work_environment() and "/opt/local" or vim.fn.expand("$HOME/.local")
+vim.g.python3_host_prog = local_dir .. "/pylspenv/bin/python3"
 
 vim.o.modeline = false -- prevent warning with files containing the text "vim:"
 
 vim.opt.clipboard = "unnamedplus"
+
+-- Ensure :e opens files in current buffer, not new splits
+vim.opt.switchbuf = "useopen"
+
+vim.o.winborder = 'rounded'

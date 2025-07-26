@@ -1,11 +1,18 @@
 -- load plugins
 require("lazy").setup {
-    { 'tzachar/highlight-undo.nvim',    event = 'VeryLazy' },
-    { "RRethy/vim-illuminate", event = 'BufReadPost' },
+    -- After undoing something, the changed text is briefly highlighted
+    { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
+    -- Emphasize all occurrences of the word under the cursor
+    { "RRethy/vim-illuminate",       event = 'BufReadPost' },
     -- Color scheme
     { "ellisonleao/gruvbox.nvim" },
     -- Jump to any character on the screen
-    { 'smoka7/hop.nvim',          event = 'VeryLazy' },
+    { 'smoka7/hop.nvim',             event = 'VeryLazy' },
+    -- Utility library. Currently, we're using the following features:
+    -- 1) bigfile: disables expensive processes when editing very large files
+    -- 2) indent: shows vertical lines that match each indentation scope
+    -- 3) input: a popup that can capture input from the user
+    -- 4) notifier: popup notification messages
     {
         "folke/snacks.nvim",
         priority = 1000,
@@ -37,77 +44,98 @@ require("lazy").setup {
             },
         },
     },
-    { "norcalli/nvim-colorizer.lua",    ft = { 'css', 'javascript', 'html' } },
+    -- sets the background color of valid HTML colors to the actual color
+    { "norcalli/nvim-colorizer.lua", ft = { 'css', 'javascript', 'html' } },
+    -- utility functions that many other plugins use
     { "nvim-lua/plenary.nvim" },
+    -- puts colored symbols in the sign gutter to mark where modifications to the file have occurred
     { "lewis6991/gitsigns.nvim" },
+    -- testing framework
+    { "notomo/vusted",               ft = 'lua' },
+    -- prevents the cursor from getting all the way to the bottom of the screen
+    -- if you're on the last line, some virtual empty lines will be added to create a bit of a margin
+    -- this is purely aesthetic
+    {
+        'Aasim-A/scrollEOF.nvim',
+        event = { 'CursorMoved', 'WinScrolled' },
+        opts = {},
+    },
+    -- Improved status line with cleaner and more useful information
+    { "nvim-lualine/lualine.nvim" },
+    -- Highlights certain keywords and places an icon in the sign column
+    -- Keywords: TODO, HACK, WARN, PERF, NOTE, TEST, WARNING, XXX, OPTIM, PERFORMANCE, OPTIMIZE, INFO, TESTING, PASSED, FAILED
+    {
+        "folke/todo-comments.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        event = 'BufReadPost',
+        opts = {}
+    },
+    -- Adds the "surround" motion, letting you put quotes or brackets or whatever around a text object
+    {
+        "kylechui/nvim-surround",
+        version = "*",
+        event = 'VeryLazy'
+    },
+    { "windwp/nvim-autopairs" },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+            local configs = require("nvim-treesitter.configs")
+            configs.setup({
+                highlight = { enable = true },
+                ensure_installed = {
+                    "awk", "bash", "bibtex", "css", "diff", "dockerfile",
+                    "fish", "gitcommit", "git_config", "gitignore",
+                    "git_rebase", "gpg", "html", "javascript", "json", "json5",
+                    "lua", "luadoc", "make", "markdown",
+                    "markdown_inline", "passwd", "python", "r",
+                    "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
+                    "vim", "vimdoc", "yaml"
+                },
+                ignore_install = { "org" },
+                additional_vim_regex_highlighting = false,
+                auto_install = true,
+                sync_install = false,
+                modules = {},
+            })
+        end,
+        install = {
+            silent = true
+        },
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        dependencies = { "nvim-treesitter/nvim-treesitter" }
+    },
+    { "nvimtools/none-ls.nvim" },
+    { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
+    { 'nvim-tree/nvim-web-devicons',    event = 'VeryLazy' },
+    { "hrsh7th/nvim-cmp" },
+    { "hrsh7th/cmp-nvim-lsp" },
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "InsertEnter",
+        opts = {
+            handler_opts = {
+                border = "rounded"
+            }
+        },
+    },
 }
 --     { 'jimrybarski/bioinformatics.nvim' },
 --     -- { 'bioinformatics', dir = '/home/jim/bioinformatics.nvim', event = 'VeryLazy' },
 --     -- keep some space below the cursor even at the end of the buffer
---     {
---         'Aasim-A/scrollEOF.nvim',
---         event = { 'CursorMoved', 'WinScrolled' },
---         opts = {},
---     },
---     { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
---     -- none-ls, telescope and others depend on plenary
---     { "nvimtools/none-ls.nvim" },
---     -- { "folke/trouble.nvim",
---     --     dependencies = { "nvim-tree/nvim-web-devicons" },
---     -- },
---     { 'nvim-tree/nvim-web-devicons' },
---     { "neovim/nvim-lspconfig" },
 --     { "L3MON4D3/LuaSnip" },
 --     { "saadparwaiz1/cmp_luasnip" },
 --     { "hrsh7th/cmp-calc" },
 --     { "max397574/cmp-greek" },
 --     { "chrisgrieser/cmp-nerdfont" },
 --     { "ray-x/cmp-treesitter" },
---     { "notomo/vusted",                  ft = 'lua' },
---     { "hrsh7th/cmp-nvim-lsp" },
 --     { "hrsh7th/cmp-buffer" },
 --     { "hrsh7th/cmp-path" },
---     { "hrsh7th/nvim-cmp" },
---     -- { "windwp/nvim-autopairs" },
 --     -- { 'mfussenegger/nvim-dap',          event = 'VeryLazy' },
---     {
---         "kylechui/nvim-surround",
---         version = "*",
---         event = 'VeryLazy'
---     },
 --     { "akinsho/toggleterm.nvim",  event = 'VeryLazy' },
---     { "nvim-lualine/lualine.nvim" },
---     -- nice color map
---     -- commands to comment/uncomment code
---     {
---         "nvim-treesitter/nvim-treesitter",
---         build = ":TSUpdate",
---         config = function()
---             local configs = require("nvim-treesitter.configs")
---             configs.setup({
---                 highlight = { enable = true },
---                 ensure_installed = {
---                     "awk", "bash", "bibtex", "css", "diff", "dockerfile",
---                     "fish", "gitcommit", "git_config", "gitignore",
---                     "git_rebase", "gpg", "html", "javascript", "json", "json5",
---                     "lua", "luadoc", "make", "markdown",
---                     "markdown_inline", "passwd", "python", "r",
---                     "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
---                     "vim", "vimdoc", "yaml"
---                 },
---                 ignore_install = { "org" },
---                 additional_vim_regex_highlighting = false,
---                 auto_install = true,
---             })
---         end,
---         install = {
---             silent = true
---         },
---     },
---     {
---         "nvim-treesitter/nvim-treesitter-textobjects",
---         dependencies = { "nvim-treesitter/nvim-treesitter" }
---     },
 --     {
 --         "NeogitOrg/neogit",
 --         dependencies = {
@@ -125,12 +153,6 @@ require("lazy").setup {
 --             cond = vim.fn.executable("cmake") == 1
 --         },
 --         },
---     },
---     {
---         "folke/todo-comments.nvim",
---         dependencies = { "nvim-lua/plenary.nvim" },
---         event = 'BufReadPost',
---         opts = {}
 --     },
 --     {
 --         'nvim-orgmode/orgmode',

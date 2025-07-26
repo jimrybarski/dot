@@ -6,14 +6,6 @@
 -- Dumps the text of a table's keys and values to a popup notification
 function dbg(thing) vim.notify(vim.inspect(thing)) end
 
-function _G.check_line()
-    if vim.fn.getline(".") == "" then
-        return '"_dd'
-    else
-        return 'dd'
-    end
-end
-
 -- check for file existence
 function exists(path)
     local stat = vim.loop.fs_stat(path)
