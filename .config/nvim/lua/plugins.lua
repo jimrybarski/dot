@@ -76,6 +76,7 @@ require("lazy").setup {
         version = "*",
         event = 'VeryLazy'
     },
+    -- Automatically insert closing brackets/quotes
     { "windwp/nvim-autopairs" },
     {
         "nvim-treesitter/nvim-treesitter",
@@ -104,6 +105,7 @@ require("lazy").setup {
             silent = true
         },
     },
+    -- adds more programming-related text objects (functions, arguments, classes)
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" }

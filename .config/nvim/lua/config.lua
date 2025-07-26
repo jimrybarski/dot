@@ -16,10 +16,10 @@ require("gruvbox").setup({
 })
 vim.cmd("colorscheme gruvbox")
 
--- set the colors of the vertical indentation lines 
+-- set the colors of the vertical indentation lines
 -- color of the current scope where the cursor is
 vim.api.nvim_set_hl(0, 'IblScope', { fg = '#7C6856' })
--- color of inactive scopes 
+-- color of inactive scopes
 vim.api.nvim_set_hl(0, 'IblIndent', { fg = '#5A4B3E' })
 
 require("illuminate").configure({
@@ -140,25 +140,25 @@ require('lualine').setup({
         -- section_separators = {left = '', right = ''},
         section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
-        disabled_filetypes = {statusline = {}, winbar = {}},
+        disabled_filetypes = { statusline = {}, winbar = {} },
         ignore_focus = {},
         always_divide_middle = true,
         globalstatus = false,
-        refresh = {statusline = 1000, tabline = 1000, winbar = 1000}
+        refresh = { statusline = 1000, tabline = 1000, winbar = 1000 }
     },
     sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
-        lualine_c = {'filename'},
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
+        lualine_c = { 'filename' },
         lualine_x = {},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' }
     },
     inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = {'filename'},
-        lualine_x = {'location'},
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
         lualine_y = {},
         lualine_z = {}
     },
@@ -196,7 +196,13 @@ npairs.add_rules {
 function ends_with(str, suffix)
     return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
 end
+
 require('nvim-treesitter.configs').setup({
+    -- modules = {},
+    -- auto_install = true,
+    -- sync_install = true,
+    -- ensure_installed = {},
+    -- ignore_install = {},
     textobjects = {
         swap = {
             enable = true,
@@ -207,28 +213,28 @@ require('nvim-treesitter.configs').setup({
                 ["gP"] = "@parameter.inner",
             },
         },
+        move = {
+            enable = true,
+            set_jumps = true,
+            goto_previous_start = {
+                ["[f"] = "@function.outer",
+                ["[c"] = "@class.outer",
+                ["[p"] = "@parameter.outer",
+                ["[l"] = "@loop.outer",
+                ["[/"] = "@comment.outer",
+            },
+            goto_next_start = {
+                ["]f"] = "@function.outer",
+                ["]c"] = "@class.outer",
+                ["]p"] = "@parameter.outer",
+                ["]l"] = "@loop.outer",
+                ["]/"] = "@comment.outer",
+            },
+        },
         select = {
             enable = true,
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
-            move = {
-                enable = true,
-                set_jumps = true,
-                goto_previous_start = { 
-                    ["[f"] = "@function.outer",
-                    ["[c"] = "@class.outer",
-                    ["[p"] = "@parameter.outer",
-                    ["[l"] = "@loop.outer",
-                    ["[/"] = "@comment.outer",
-                },
-                goto_next_start = { 
-                    ["]f"] = "@function.outer", 
-                    ["]c"] = "@class.outer",
-                    ["]p"] = "@parameter.outer",
-                    ["]l"] = "@loop.outer",
-                    ["]/"] = "@comment.outer",
-                },
-            },
             keymaps = {
                 ["af"] = "@function.outer",
                 ["if"] = "@function.inner",
@@ -258,8 +264,9 @@ require('nvim-treesitter.configs').setup({
     }
 })
 -- configure linters and formatters
-null_ls = require("null-ls")
+local null_ls = require("null-ls")
 null_ls.setup({
+    diagnostics_format = "#{m} [#{c}] (#{s})",
     sources = {
         null_ls.builtins.diagnostics.pylint,
         null_ls.builtins.diagnostics.fish,
@@ -362,7 +369,7 @@ null_ls.setup({
 --     ---LHS of toggle mappings in NORMAL mode
 --     toggler = {
 --         ---Line-comment toggle keymap
-        -- line = 'gcc',
+-- line = 'gcc',
 --         ---Block-comment toggle keymap
 --         block = 'gbc'
 --     },
