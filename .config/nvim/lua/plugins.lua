@@ -6,7 +6,7 @@ end
 -- load plugins
 require("lazy").setup {
     -- Color scheme
-    { "ellisonleao/gruvbox.nvim" },
+    { "ellisonleao/gruvbox.nvim", event = 'VeryLazy'},
     -- After undoing something, the changed text is briefly highlighted
     { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
     -- Emphasize all occurrences of the word under the cursor
@@ -21,7 +21,7 @@ require("lazy").setup {
     {
         "folke/snacks.nvim",
         priority = 1000,
-        lazy = false,
+        lazy = true,
         opts = {
             bigfile = { enabled = true, notify = false },
             indent = { enabled = true,
@@ -50,13 +50,13 @@ require("lazy").setup {
         },
     },
     -- sets the background color of valid HTML colors to the actual color
-    { "norcalli/nvim-colorizer.lua", ft = { 'css', 'javascript', 'html' } },
+    { "norcalli/nvim-colorizer.lua", ft = { 'css', 'javascript', 'html' }, event = 'VeryLazy' },
     -- utility functions that many other plugins use
     { "nvim-lua/plenary.nvim" },
     -- puts colored symbols in the sign gutter to mark where modifications to the file have occurred
-    { "lewis6991/gitsigns.nvim" },
+    { "lewis6991/gitsigns.nvim", event = 'VeryLazy' },
     -- testing framework
-    { "notomo/vusted",               ft = 'lua' },
+    { "notomo/vusted",               ft = 'lua', event = 'VeryLazy'},
     -- prevents the cursor from getting all the way to the bottom of the screen
     -- if you're on the last line, some virtual empty lines will be added to create a bit of a margin
     -- this is purely aesthetic
@@ -66,7 +66,7 @@ require("lazy").setup {
         opts = {},
     },
     -- Improved status line with cleaner and more useful information
-    { "nvim-lualine/lualine.nvim" },
+    { "nvim-lualine/lualine.nvim", event = 'VeryLazy' },
     -- Highlights certain keywords and places an icon in the sign column
     -- Keywords: TODO, HACK, WARN, PERF, NOTE, TEST, WARNING, XXX, OPTIM, PERFORMANCE, OPTIMIZE, INFO, TESTING, PASSED, FAILED
     {
@@ -82,14 +82,16 @@ require("lazy").setup {
         event = 'VeryLazy'
     },
     -- Automatically insert closing brackets/quotes
-    { "windwp/nvim-autopairs" },
+    { "windwp/nvim-autopairs", event = 'VeryLazy' },
     -- adds more programming-related text objects (functions, arguments, classes)
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        dependencies = { "nvim-treesitter/nvim-treesitter" }
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        event = 'VeryLazy'
     },
     {
         "nvim-treesitter/nvim-treesitter",
+        event = 'VeryLazy',
         build = ":TSUpdate",
         config = function()
             local configs = require("nvim-treesitter.configs")
@@ -175,11 +177,11 @@ require("lazy").setup {
             silent = true
         },
     },
-    { "nvimtools/none-ls.nvim" },
+    { "nvimtools/none-ls.nvim", event = 'VeryLazy' },
     { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
     { 'nvim-tree/nvim-web-devicons',    event = 'VeryLazy' },
-    { "hrsh7th/nvim-cmp" },
-    { "hrsh7th/cmp-nvim-lsp" },
+    { "hrsh7th/nvim-cmp" , event = 'VeryLazy'},
+    { "hrsh7th/cmp-nvim-lsp" , event = 'VeryLazy'},
     {
         "ray-x/lsp_signature.nvim",
         event = "InsertEnter",
@@ -193,9 +195,10 @@ require("lazy").setup {
         "NeogitOrg/neogit",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            -- "sindrets/diffview.nvim",
+            "sindrets/diffview.nvim",
             "nvim-telescope/telescope.nvim",
-        }, config = true
+        }, config = true,
+        event = 'VeryLazy',
     },
 }
 --     { 'jimrybarski/bioinformatics.nvim' },
