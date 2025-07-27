@@ -21,7 +21,7 @@ require("lazy").setup {
     {
         "folke/snacks.nvim",
         priority = 1000,
-        lazy = true,
+        lazy = false,  -- must be false to be used during startup
         opts = {
             bigfile = { enabled = true, notify = false },
             indent = { enabled = true,
@@ -200,18 +200,18 @@ require("lazy").setup {
         }, config = true,
         event = 'VeryLazy',
     },
+    { "L3MON4D3/LuaSnip" },
+    { "hrsh7th/cmp-calc" },
+    { "max397574/cmp-greek" },
+    { "chrisgrieser/cmp-nerdfont" },
+    { "ray-x/cmp-treesitter" },
+    { "hrsh7th/cmp-buffer" },
+    { "hrsh7th/cmp-path" },
+    { "saadparwaiz1/cmp_luasnip" },
 }
 --     { 'jimrybarski/bioinformatics.nvim' },
 --     -- { 'bioinformatics', dir = '/home/jim/bioinformatics.nvim', event = 'VeryLazy' },
 --     -- keep some space below the cursor even at the end of the buffer
---     { "L3MON4D3/LuaSnip" },
---     { "saadparwaiz1/cmp_luasnip" },
---     { "hrsh7th/cmp-calc" },
---     { "max397574/cmp-greek" },
---     { "chrisgrieser/cmp-nerdfont" },
---     { "ray-x/cmp-treesitter" },
---     { "hrsh7th/cmp-buffer" },
---     { "hrsh7th/cmp-path" },
 --     -- { 'mfussenegger/nvim-dap',          event = 'VeryLazy' },
 --     { "akinsho/toggleterm.nvim",  event = 'VeryLazy' },
 --     {

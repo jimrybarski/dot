@@ -37,12 +37,13 @@ end
 
 -- The order of these imports is not arbitrary as there are dependencies between certain files. Change with caution.
 -- Sets universal neovim options.
+
 require('options')
 require('plugins')
 load_lua_files('configs')
 require('config')
--- require('snippets')
--- require('completion')
+require('snippets')
+require('completion')
 -- require('functions')
 load_lua_files('keymaps')
 require('lsp')
