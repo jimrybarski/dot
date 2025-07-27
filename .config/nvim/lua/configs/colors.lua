@@ -88,3 +88,14 @@ require('colorizer').setup({
     'html',
     'lua',
 })
+
+-- Neogit diff colors - blue for additions, red for deletions
+-- Active (focused) additions: bright blue
+vim.api.nvim_set_hl(0, 'NeogitDiffAddHighlight', { bg = '#1e3a8a', fg = '#FFFFFF' })  -- bright blue background
+-- Inactive additions: pale blue  
+vim.api.nvim_set_hl(0, 'NeogitDiffAdd', { bg = '#5b678d', fg = '#FFFFFF' })  -- pale blue background
+
+-- Active (focused) deletions: bright red
+vim.api.nvim_set_hl(0, 'NeogitDiffDeleteHighlight', { bg = '#dc2626', fg = '#ffffff' })  -- bright red background
+-- Inactive deletions: pale red
+vim.api.nvim_set_hl(0, 'NeogitDiffDelete', { bg = '#d57a7a', fg = '#111111' })  -- pale red background
