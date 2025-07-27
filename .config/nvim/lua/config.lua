@@ -1,126 +1,3 @@
--- Set the colorscheme to a nice color palette
-require("gruvbox").setup({
-    undercurl = true,
-    underline = true,
-    bold = true,
-    italic = { strings = true, comments = true },
-    strikethrough = true,
-    invert_selection = false,
-    invert_signs = false,
-    invert_tabline = false,
-    invert_intend_guides = false,
-    inverse = true,    -- invert background for search, diffs, statuslines and errors
-    contrast = "soft", -- can be "hard", "soft" or empty string
-    dim_inactive = false,
-    transparent_mode = false
-})
-vim.cmd("colorscheme gruvbox")
-
--- set the colors of the vertical indentation lines
--- color of the current scope where the cursor is
-vim.api.nvim_set_hl(0, 'IblScope', { fg = '#7C6856' })
--- color of inactive scopes
-vim.api.nvim_set_hl(0, 'IblIndent', { fg = '#5A4B3E' })
-
-require("illuminate").configure({
-    -- providers: provider used to get references in the buffer, ordered by priority
-    providers = { 'lsp', 'treesitter', 'regex' },
-    -- delay: delay in milliseconds
-    delay = 0,
-    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-    filetypes_denylist = { 'dirbuf', 'dirvish', 'fugitive' },
-    -- under_cursor: whether or not to illuminate under the cursor
-    under_cursor = false,
-    -- large_file_cutoff: number of lines at which to use large_file_config
-    -- The `under_cursor` option is disabled when this cutoff is hit
-    large_file_cutoff = 20000,
-    -- min_count_to_highlight: minimum number of matches required to perform highlighting
-    min_count_to_highlight = 1,
-    -- should_enable: a callback that overrides all other settings to
-    -- enable/disable illumination. This will be called a lot so don't do
-    -- anything expensive in it.
-    should_enable = function(bufnr) return true end,
-    -- case_insensitive_regex: sets regex case sensitivity
-    case_insensitive_regex = false
-})
-vim.api.nvim_set_hl(0, 'IlluminatedWordText', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { bold = true, underline = true })
-
-require("hop").setup()
--- Highlight hex color codes (e.g. #0072B2) with the actual color
-require('colorizer').setup({
-    'css',
-    'javascript',
-    'html',
-})
-
-require("gitsigns").setup({
-    signs = {
-        add = { text = '█' }, -- │
-        change = { text = '~' }, -- │
-        delete = { text = '█' },
-        topdelete = { text = '█' },
-        changedelete = { text = '█' },
-        untracked = { text = '┆' }
-    },
-    signcolumn = true,
-    numhl = true,
-    word_diff = false,
-    linehl = false,
-    watch_gitdir = { follow_files = true },
-    auto_attach = true,
-    attach_to_untracked = true,
-    current_line_blame = true,
-    current_line_blame_opts = {
-        hl_mode = 'combine',
-        virt_text = false,
-        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        delay = 10000,
-        ignore_whitespace = true,
-        virt_text_priority = 10
-    },
-    current_line_blame_formatter = '<author_time:%Y-%m-%d> - <summary>',
-    sign_priority = 6,
-    update_debounce = 100,
-    status_formatter = nil,  -- Use default
-    max_file_length = 40000, -- Disable if file is longer than this (in lines)
-    preview_config = {
-        -- Options passed to nvim_open_win
-        border = 'single',
-        style = 'minimal',
-        relative = 'cursor',
-        row = 0,
-        col = 1
-    },
-})
--- We show the git blame message for the current line. This sets the color of that virtual text.
-vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#9B643D', italic = true })
-
-
-require('highlight-undo').setup({
-    duration = 300,
-    undo = {
-        hlgroup = 'HighlightUndo',
-        mode = 'n',
-        lhs = 'u',
-        map = 'undo',
-        opts = {}
-    },
-    redo = {
-        hlgroup = 'HighlightUndo',
-        mode = 'n',
-        lhs = '<C-r>',
-        map = 'redo',
-        opts = {}
-    },
-    keymaps = {
-        paste = { disabled = true },
-        Paste = { disabled = true },
-    },
-    highlight_for_count = true,
-})
-
 require('scrollEOF').setup({
     -- The pattern used for the internal autocmd to determine
     -- where to run scrollEOF. See https://neovim.io/doc/user/autocmd.html#autocmd-pattern
@@ -168,13 +45,23 @@ require('lualine').setup({
     extensions = {}
 })
 
-require("nvim-surround").setup()
+require("nvim-surround").setup({
+    -- don't add a space between the bracket and the text object, which is the default for some reason
+    surrounds = {
+        ['('] = { add = { '(', ')' } },
+        ['['] = { add = { '[', ']' } },
+        ['{'] = { add = { '{', '}' } },
+        ['<'] = { add = { '<', '>' } },
+    }
+})
+
+-- automatically insert closing brackets/quotes
 require("nvim-autopairs").setup({
     check_ts = true, -- use treesitter
     fast_wrap = {},
     disable_filetype = { "TelescopePrompt", "vim" },
+    ignored_next_char = "[%w%.]" -- will ignore alphanumeric and `.` symbol
 })
-
 -- Handle Python's triple quotes correctly
 local rule = require('nvim-autopairs.rule')
 local npairs = require('nvim-autopairs')
@@ -197,72 +84,6 @@ function ends_with(str, suffix)
     return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
 end
 
-require('nvim-treesitter.configs').setup({
-    -- modules = {},
-    -- auto_install = true,
-    -- sync_install = true,
-    -- ensure_installed = {},
-    -- ignore_install = {},
-    textobjects = {
-        swap = {
-            enable = true,
-            swap_next = {
-                ["gp"] = "@parameter.inner",
-            },
-            swap_previous = {
-                ["gP"] = "@parameter.inner",
-            },
-        },
-        move = {
-            enable = true,
-            set_jumps = true,
-            goto_previous_start = {
-                ["[f"] = "@function.outer",
-                ["[c"] = "@class.outer",
-                ["[p"] = "@parameter.outer",
-                ["[l"] = "@loop.outer",
-                ["[/"] = "@comment.outer",
-            },
-            goto_next_start = {
-                ["]f"] = "@function.outer",
-                ["]c"] = "@class.outer",
-                ["]p"] = "@parameter.outer",
-                ["]l"] = "@loop.outer",
-                ["]/"] = "@comment.outer",
-            },
-        },
-        select = {
-            enable = true,
-            -- Automatically jump forward to textobj, similar to targets.vim
-            lookahead = true,
-            keymaps = {
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-                ['ap'] = '@parameter.outer',
-                ['ip'] = '@parameter.inner',
-                ["al"] = "@loop.outer",
-                ["il"] = "@loop.inner",
-                ["a/"] = "@comment.outer",
-                ["i/"] = "@comment.outer", -- no inner for comment
-            },
-            selection_modes = {
-                ['@parameter.outer'] = 'v', -- charwise
-                ['@function.outer'] = 'V',  -- linewise
-                ['@class.outer'] = '<c-v>'  -- blockwise
-            },
-            include_surrounding_whitespace = function(opts)
-                local mode = vim.api.nvim_get_mode()
-                if ends_with(opts.query_string, "outer") and mode.mode ~= "v" then
-                    return true
-                else
-                    return false
-                end
-            end
-        }
-    }
-})
 -- configure linters and formatters
 local null_ls = require("null-ls")
 null_ls.setup({
@@ -350,14 +171,6 @@ null_ls.setup({
 -- --     }
 -- -- })
 --
--- require("nvim-surround").setup({
---     surrounds = {
---         ['('] = { add = { '(', ')' } },
---         ['['] = { add = { '[', ']' } },
---         ['{'] = { add = { '{', '}' } },
---         ['<'] = { add = { '<', '>' } },
---     }
--- })
 --
 -- require('Comment').setup({
 --     ---Add a space b/w comment and the line

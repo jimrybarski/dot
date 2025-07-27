@@ -1,11 +1,11 @@
 -- load plugins
 require("lazy").setup {
+    -- Color scheme
+    { "ellisonleao/gruvbox.nvim" },
     -- After undoing something, the changed text is briefly highlighted
     { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
     -- Emphasize all occurrences of the word under the cursor
     { "RRethy/vim-illuminate",       event = 'BufReadPost' },
-    -- Color scheme
-    { "ellisonleao/gruvbox.nvim" },
     -- Jump to any character on the screen
     { 'smoka7/hop.nvim',             event = 'VeryLazy' },
     -- Utility library. Currently, we're using the following features:
@@ -78,6 +78,11 @@ require("lazy").setup {
     },
     -- Automatically insert closing brackets/quotes
     { "windwp/nvim-autopairs" },
+    -- adds more programming-related text objects (functions, arguments, classes)
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        dependencies = { "nvim-treesitter/nvim-treesitter" }
+    },
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
@@ -99,16 +104,71 @@ require("lazy").setup {
                 auto_install = true,
                 sync_install = false,
                 modules = {},
+                textobjects = {
+                    swap = {
+                        enable = true,
+                        swap_next = {
+                            ["gp"] = "@parameter.inner",
+                        },
+                        swap_previous = {
+                            ["gP"] = "@parameter.inner",
+                        },
+                    },
+                    move = {
+                        enable = true,
+                        set_jumps = true,
+                        goto_previous_start = {
+                            ["[f"] = "@function.outer",
+                            ["[c"] = "@class.outer",
+                            ["[p"] = "@parameter.outer",
+                            ["[l"] = "@loop.outer",
+                            ["[/"] = "@comment.outer",
+                        },
+                        goto_next_start = {
+                            ["]f"] = "@function.outer",
+                            ["]c"] = "@class.outer",
+                            ["]p"] = "@parameter.outer",
+                            ["]l"] = "@loop.outer",
+                            ["]/"] = "@comment.outer",
+                        },
+                    },
+                    select = {
+                        enable = true,
+                        -- Automatically jump forward to textobj, similar to targets.vim
+                        lookahead = true,
+                        keymaps = {
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                            ["ac"] = "@class.outer",
+                            ["ic"] = "@class.inner",
+                            ['ap'] = '@parameter.outer',
+                            ['ip'] = '@parameter.inner',
+                            ["al"] = "@loop.outer",
+                            ["il"] = "@loop.inner",
+                            ["a/"] = "@comment.outer",
+                            ["i/"] = "@comment.outer", -- no inner for comment
+                        },
+                        selection_modes = {
+                            ['@parameter.outer'] = 'v', -- charwise
+                            ['@function.outer'] = 'V',  -- linewise
+                            ['@class.outer'] = '<c-v>'  -- blockwise
+                        },
+                        include_surrounding_whitespace = function(opts)
+                            local mode = vim.api.nvim_get_mode()
+                            if ends_with(opts.query_string, "outer") and mode.mode ~= "v" then
+                                return true
+                            else
+                                return false
+                            end
+                        end
+                    }
+                }
+
             })
         end,
         install = {
             silent = true
         },
-    },
-    -- adds more programming-related text objects (functions, arguments, classes)
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        dependencies = { "nvim-treesitter/nvim-treesitter" }
     },
     { "nvimtools/none-ls.nvim" },
     { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
