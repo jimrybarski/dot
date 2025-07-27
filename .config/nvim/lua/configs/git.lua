@@ -14,12 +14,12 @@ require("gitsigns").setup({
     watch_gitdir = { follow_files = true },
     auto_attach = true,
     attach_to_untracked = true,
-    current_line_blame = true,
+    current_line_blame = false,  -- currently disabled since <leader>vb also shows blame and this is distracting
     current_line_blame_opts = {
         hl_mode = 'combine',
         virt_text = true,
         virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        delay = 1000,
+        delay = 3000,
         ignore_whitespace = true,
         virt_text_priority = 10
     },
@@ -38,4 +38,12 @@ require("gitsigns").setup({
     },
 })
 -- We show the git blame message for the current line. This sets the color of that virtual text.
+-- CURRENTLY DISABLED.
 vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#9B643D', italic = true })
+
+-- 
+-- require('diffview').setup()
+
+-- Git TUI
+require('neogit').setup()
+

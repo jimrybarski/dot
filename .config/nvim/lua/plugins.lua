@@ -1,3 +1,8 @@
+-- function needed by nvim-treesitter-textobjects
+local function ends_with(str, suffix)
+    return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
+end
+
 -- load plugins
 require("lazy").setup {
     -- Color scheme
@@ -184,6 +189,14 @@ require("lazy").setup {
             }
         },
     },
+    {
+        "NeogitOrg/neogit",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            -- "sindrets/diffview.nvim",
+            "nvim-telescope/telescope.nvim",
+        }, config = true
+    },
 }
 --     { 'jimrybarski/bioinformatics.nvim' },
 --     -- { 'bioinformatics', dir = '/home/jim/bioinformatics.nvim', event = 'VeryLazy' },
@@ -198,13 +211,6 @@ require("lazy").setup {
 --     { "hrsh7th/cmp-path" },
 --     -- { 'mfussenegger/nvim-dap',          event = 'VeryLazy' },
 --     { "akinsho/toggleterm.nvim",  event = 'VeryLazy' },
---     {
---         "NeogitOrg/neogit",
---         dependencies = {
---             "nvim-lua/plenary.nvim",
---             "sindrets/diffview.nvim",
---             "nvim-telescope/telescope.nvim",
---         }, config = true },
 --     {
 --         "nvim-telescope/telescope.nvim",
 --         branch = "0.1.x",

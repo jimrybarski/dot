@@ -19,7 +19,8 @@ vim.opt.rtp:prepend(lazypath)
 -- Recursively load configuration files
 local function load_lua_files(directory)
     -- Load .lua files in current directory
-    local files = vim.fn.glob(vim.fn.stdpath('config') .. '/lua/' .. directory .. '/*.lua', false, true)
+    local glob_pattern = vim.fn.stdpath('config') .. '/lua/' .. directory .. '/*.lua'
+    local files = vim.fn.glob(glob_pattern, false, true)
     for _, file in ipairs(files) do
         local module = file:match('.*/lua/(.*)%.lua$'):gsub('/', '.')
         require(module)
@@ -38,6 +39,7 @@ end
 -- Sets universal neovim options.
 require('options')
 require('plugins')
+load_lua_files('configs')
 require('config')
 -- require('snippets')
 -- require('completion')

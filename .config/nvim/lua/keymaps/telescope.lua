@@ -2,5 +2,3 @@
 -- vim.keymap.set('n', '<leader>ff', ":Telescope find_files<cr>", { desc = "Find files", silent = true })
 -- vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<cr>', { desc = "Find keymaps", silent = true })
 -- vim.keymap.set('n', '<leader>fe', ':Telescope emoji<cr>', { desc = "Find emoji", silent = true })
--- vim.keymap.set('n', '<leader>c', ':split $HOME/.config/nvim/init.lua<cr>', { desc = "Open nvim config", silent = true })
--- vim.keymap.set('n', '<leader>vv', ':Neogit<CR>', { desc = "Open Neogit", silent = true })
