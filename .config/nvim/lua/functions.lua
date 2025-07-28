@@ -1,14 +1,6 @@
--- vim.keymap.set('n', '<leader>n', function()
---     Snacks = require("snacks")
---     Snacks.notify("Hello, world!", { level = "warn", timeout = 8000, title = "" })
--- end, { desc = 'Test notification' })
-
--- Dumps the text of a table's keys and values to a popup notification
-function dbg(thing) vim.notify(vim.inspect(thing)) end
-
 -- check for file existence
 function exists(path)
-    local stat = vim.loop.fs_stat(path)
+    local stat = vim.uv.fs_stat(path)
     return stat and true or false
 end
 

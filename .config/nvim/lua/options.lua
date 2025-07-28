@@ -36,7 +36,7 @@ vim.opt.expandtab = true
 -- preview: show extra information about a selection
 -- noinsert: don't insert text until a selection is made
 -- noselect: don't select a match automatically
-vim.g.completeopt = "menu,menuone,preview,noselect"
+vim.opt.completeopt = "menu,menuone,preview,noselect"
 
 -- keep the cursor in the center of the screen (if there is space)
 vim.o.scrolloff = 6
@@ -59,11 +59,8 @@ vim.g.loaded_gzip = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
 
-local function is_work_environment()
-    local stat = vim.loop.fs_stat("/opt/local")
-    return stat and stat.type == "directory"
-end
-local local_dir = is_work_environment() and "/opt/local" or vim.fn.expand("$HOME/.local")
+local utils = require('utils')
+local local_dir = utils.get_local_dir()
 vim.g.python3_host_prog = local_dir .. "/pylspenv/bin/python3"
 
 vim.o.modeline = false -- prevent warning with files containing the text "vim:"

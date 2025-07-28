@@ -7,12 +7,6 @@ cmp.setup({
             luasnip.lsp_expand(args.body)
         end,
     },
-    completion = {
-        -- menu: show completion menu even if there's only one match
-        -- menuone: doesn't automatically select the first match even if there's only one
-        -- noselect: don't select the first match
-        completeopt = 'menu,menuone,noselect',
-    },
     preselect = cmp.PreselectMode.None,
     window = {
         completion = cmp.config.window.bordered(),

@@ -72,7 +72,7 @@ require("lazy").setup {
     {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
-        event = 'BufReadPost',
+        event = 'VeryLazy',
         opts = {}
     },
     -- Adds the "surround" motion, letting you put quotes or brackets or whatever around a text object
@@ -212,14 +212,17 @@ require("lazy").setup {
         branch = "0.1.x",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            {
-                "jimrybarski/telescope-fzf-native.nvim",
-                build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
-                cond = vim.fn.executable("cmake") == 1
-            },
         },
     },
-    { 'bioinformatics',                  dir = vim.fn.expand("$HOME/bioinformatics.nvim") },
+    (function()
+        local local_path = vim.fn.expand("$HOME/bioinformatics.nvim")
+        local stat = vim.uv.fs_stat(local_path)
+        if stat and stat.type == "directory" then
+            return { 'bioinformatics', dir = local_path }
+        else
+            return { 'jimrybarski/bioinformatics.nvim' }
+        end
+    end)(),
     { 'mfussenegger/nvim-dap',           event = 'VeryLazy' },
     { 'rcarriga/nvim-dap-ui',            dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' }, event = 'VeryLazy' },
     { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy' },

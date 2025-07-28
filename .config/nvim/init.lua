@@ -1,12 +1,6 @@
--- Detect work environment and set appropriate paths
-local function is_work_environment()
-    local stat = vim.uv.fs_stat("/opt/local")
-    return stat and stat.type == "directory"
-end
-
 -- Install the "Lazy" plugin manager if it's not already installed.
-local is_work = is_work_environment()
-local data_dir = is_work and "/opt/local/share/nvim" or vim.fn.stdpath("data")
+local utils = require('utils')
+local data_dir = utils.is_work_environment() and "/opt/local/share/nvim" or vim.fn.stdpath("data")
 local lazypath = data_dir .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
@@ -43,9 +37,9 @@ require('plugins')
 load_lua_files('configs')
 require('snippets')
 require('completion')
--- require('functions')
+require('functions')
 load_lua_files('keymaps')
 require('lsp')
--- require('autocommands')
--- require('pinyin')
--- require('science')
+require('autocommands')
+require('pinyin')
+require('science')
