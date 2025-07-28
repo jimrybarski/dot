@@ -41,7 +41,6 @@ end
 require('options')
 require('plugins')
 load_lua_files('configs')
-require('config')
 require('snippets')
 require('completion')
 -- require('functions')

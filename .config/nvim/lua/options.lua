@@ -73,4 +73,8 @@ vim.opt.clipboard = "unnamedplus"
 -- Ensure :e opens files in current buffer, not new splits
 vim.opt.switchbuf = "useopen"
 
+-- Popups should have rounded borders by default
 vim.o.winborder = 'rounded'
+
+-- Persists a terminal even after its been hidden
+vim.o.hidden = true

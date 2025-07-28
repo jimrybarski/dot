@@ -6,7 +6,7 @@ end
 -- load plugins
 require("lazy").setup {
     -- Color scheme
-    { "ellisonleao/gruvbox.nvim", event = 'VeryLazy'},
+    { "ellisonleao/gruvbox.nvim",    event = 'VeryLazy' },
     -- After undoing something, the changed text is briefly highlighted
     { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
     -- Emphasize all occurrences of the word under the cursor
@@ -21,7 +21,7 @@ require("lazy").setup {
     {
         "folke/snacks.nvim",
         priority = 1000,
-        lazy = false,  -- must be false to be used during startup
+        lazy = false, -- must be false to be used during startup
         opts = {
             bigfile = { enabled = true, notify = false },
             indent = { enabled = true,
@@ -54,9 +54,9 @@ require("lazy").setup {
     -- utility functions that many other plugins use
     { "nvim-lua/plenary.nvim" },
     -- puts colored symbols in the sign gutter to mark where modifications to the file have occurred
-    { "lewis6991/gitsigns.nvim", event = 'VeryLazy' },
+    { "lewis6991/gitsigns.nvim",     event = 'VeryLazy' },
     -- testing framework
-    { "notomo/vusted",               ft = 'lua', event = 'VeryLazy'},
+    { "notomo/vusted",               ft = 'lua',                           event = 'VeryLazy' },
     -- prevents the cursor from getting all the way to the bottom of the screen
     -- if you're on the last line, some virtual empty lines will be added to create a bit of a margin
     -- this is purely aesthetic
@@ -82,7 +82,7 @@ require("lazy").setup {
         event = 'VeryLazy'
     },
     -- Automatically insert closing brackets/quotes
-    { "windwp/nvim-autopairs", event = 'VeryLazy' },
+    { "windwp/nvim-autopairs",     event = 'VeryLazy' },
     -- adds more programming-related text objects (functions, arguments, classes)
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
@@ -177,11 +177,10 @@ require("lazy").setup {
             silent = true
         },
     },
-    { "nvimtools/none-ls.nvim", event = 'VeryLazy' },
-    { "xiyaowong/telescope-emoji.nvim", event = 'VeryLazy' },
-    { 'nvim-tree/nvim-web-devicons',    event = 'VeryLazy' },
-    { "hrsh7th/nvim-cmp" , event = 'VeryLazy'},
-    { "hrsh7th/cmp-nvim-lsp" , event = 'VeryLazy'},
+    { "nvimtools/none-ls.nvim",      event = 'VeryLazy' },
+    { 'nvim-tree/nvim-web-devicons', event = 'VeryLazy' },
+    { "hrsh7th/nvim-cmp",            event = 'VeryLazy' },
+    { "hrsh7th/cmp-nvim-lsp",        event = 'VeryLazy' },
     {
         "ray-x/lsp_signature.nvim",
         event = "InsertEnter",
@@ -208,159 +207,21 @@ require("lazy").setup {
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
     { "saadparwaiz1/cmp_luasnip" },
+    {
+        "nvim-telescope/telescope.nvim",
+        branch = "0.1.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            {
+                "jimrybarski/telescope-fzf-native.nvim",
+                build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+                cond = vim.fn.executable("cmake") == 1
+            },
+        },
+    },
+    { 'bioinformatics',                  dir = vim.fn.expand("$HOME/bioinformatics.nvim") },
+    { 'mfussenegger/nvim-dap',           event = 'VeryLazy' },
+    { 'rcarriga/nvim-dap-ui',            dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' }, event = 'VeryLazy' },
+    { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy' },
+    { 'mfussenegger/nvim-dap-python',    dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy', ft = 'python' },
 }
---     { 'jimrybarski/bioinformatics.nvim' },
---     -- { 'bioinformatics', dir = '/home/jim/bioinformatics.nvim', event = 'VeryLazy' },
---     -- keep some space below the cursor even at the end of the buffer
---     -- { 'mfussenegger/nvim-dap',          event = 'VeryLazy' },
---     { "akinsho/toggleterm.nvim",  event = 'VeryLazy' },
---     {
---         "nvim-telescope/telescope.nvim",
---         branch = "0.1.x",
---         dependencies = {
---             "nvim-lua/plenary.nvim", {
---             "nvim-telescope/telescope-fzf-native.nvim",
---             build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
---             cond = vim.fn.executable("cmake") == 1
---         },
---         },
---     },
---     {
---         'nvim-orgmode/orgmode',
---         event = 'VeryLazy',
---         ft = { 'org' },
---         config = function()
---             require('orgmode').setup({
---                 -- See: https://github.com/nvim-orgmode/orgmode/blob/master/docs/configuration.org
---                 org_agenda_files = '~/notes/**/*',
---                 org_todo_keywords = { 'TODO(t)', 'NOW(n)', '|', 'DONE(d)' },
---                 org_todo_keyword_faces = {
---                     TODO = ':foreground yellow',
---                     NOW = ':background black :foreground blue :underline on',
---                     DONE = ':foreground gray',
---                 },
---                 org_todo_repeat_to_state = "TODO",
---                 org_startup_folded = 'showeverything',
---                 org_log_into_drawer = "LOGBOOK",
---                 org_agenda_skip_scheduled_if_done = true,
---                 org_agenda_skip_deadline_if_done = true,
---                 mappings = {
---                     prefix = '<localleader>',
---                 },
---                 win_border = "double",
---             })
---         end,
---     },
---     {
---         "chipsenkbeil/org-roam.nvim",
---         tag = "0.1.1",
---         dependencies = {
---             {
---                 "nvim-orgmode/orgmode",
---             },
---         },
---         config = function()
---             require("org-roam").setup({
---                 directory = "~/notes",
---                 bindings = {
---                     prefix = "<localleader>n",
---                     add_alias = "<prefix>aa",
---                     ---Adds an origin to the node under cursor.
---                     add_origin = "<prefix>oa",
---                     ---Opens org-roam capture window.
---                     capture = "<prefix>c",
---                     ---Completes the node under cursor.
---                     complete_at_point = "<prefix>.",
---                     ---Finds node and moves to it.
---                     find_node = "<prefix>f",
---                     ---Goes to the next node sequentially based on origin of the node under cursor.
---                     ---If more than one node has the node under cursor as its origin, a selection
---                     ---dialog is displayed to choose the node.
---                     goto_next_node = "<prefix>n",
---                     ---Goes to the previous node sequentially based on origin of the node under cursor.
---                     goto_prev_node = "<prefix>p",
---                     ---Inserts node at cursor position.
---                     insert_node = "<prefix>i",
---                     ---Inserts node at cursor position without opening capture buffer.
---                     insert_node_immediate = "<prefix>m",
---                     ---Opens the quickfix menu for backlinks to the current node under cursor.
---                     quickfix_backlinks = "<prefix>q",
---                     ---Removes an alias from the node under cursor.
---                     remove_alias = "<prefix>ar",
---                     ---Removes the origin from the node under cursor.
---                     remove_origin = "<prefix>or",
---                     ---Toggles the org-roam node-view buffer for the node under cursor.
---                     toggle_roam_buffer = "<prefix>l",
---                     ---Toggles a fixed org-roam node-view buffer for a selected node.
---                     toggle_roam_buffer_fixed = "<prefix>b",
---                 },
---                 capture = {
---                     templates = {
---                         d = {
---                             template = "%?",
---                             target = "%<%Y-%m-%d>.org",
---                         },
---                         -- Learning subjects from TODO.md
---                         r = {
---                             description = "Rust learning note",
---                             template = "#+title: %?\n#+filetags: :rust:\n\n",
---                             target = "rust/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         b = {
---                             description = "Biology/Bioinformatics note",
---                             template = "#+title: %?\n#+filetags: :biology:\n\n",
---                             target = "biology/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         c = {
---                             description = "Chinese language note",
---                             template = "#+title: %?\n#+filetags: :chinese:\n\n",
---                             target = "chinese/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         s = {
---                             description = "Spanish language note",
---                             template = "#+title: %?\n#+filetags: :spanish:\n\n",
---                             target = "spanish/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         e = {
---                             description = "Electronics note",
---                             template = "#+title: %?\n#+filetags: :electronics:\n\n",
---                             target = "electronics/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         m = {
---                             description = "Statistics/ML note",
---                             template = "#+title: %?\n#+filetags: :statistics:ml:\n\n",
---                             target = "ml-stats/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         p = {
---                             description = "Paper/Publication note",
---                             template =
---                             "#+title: %?\n#+filetags: :paper:\n#+bibliography: ~/notes/bibliography.bib\n\n* Summary\n\n* Key Findings\n\n* References\n",
---                             target = "papers/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                         t = {
---                             description = "Meeting notes",
---                             template =
---                             "#+title: Meeting: %?\n#+filetags: :meeting:\n#+date: %<%Y-%m-%d>\n\n* Attendees\n\n* Discussion\n\n* Action Items\n",
---                             target = "meetings/%<%Y%m%d%H%M%S>-${slug}.org",
---                         },
---                     },
---                 },
---             })
---         end
---     },
---     {
---         "nvim-orgmode/telescope-orgmode.nvim",
---         event = "VeryLazy",
---         dependencies = {
---             "nvim-orgmode/orgmode",
---             "nvim-telescope/telescope.nvim",
---         },
---         config = function()
---             require("telescope").load_extension("orgmode")
---
---             vim.keymap.set("n", "<leader>or", require("telescope").extensions.orgmode.refile_heading)
---             vim.keymap.set("n", "<leader>of", require("telescope").extensions.orgmode.search_headings)
---             vim.keymap.set("n", "<leader>oi", require("telescope").extensions.orgmode.insert_link)
---         end,
---     }
--- }
