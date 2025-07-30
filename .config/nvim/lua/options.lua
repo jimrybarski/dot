@@ -16,7 +16,7 @@ vim.opt.cursorline = true
 -- Use larger color palette
 vim.opt.termguicolors = true
 -- Milliseconds to wait to trigger CursorHold
-vim.o.updatetime = 500
+vim.opt.updatetime = 500
 -- Set the number of spaces that a tab character represents. 
 -- When you press the tab key, it will insert spaces equal to this number.
 vim.opt.tabstop = 4
@@ -39,7 +39,7 @@ vim.opt.expandtab = true
 vim.opt.completeopt = "menu,menuone,preview,noselect"
 
 -- keep the cursor in the center of the screen (if there is space)
-vim.o.scrolloff = 6
+vim.opt.scrolloff = 6
 
 -- highlight the 120th column
 vim.opt.colorcolumn = "120"
@@ -63,7 +63,7 @@ local utils = require('utils')
 local local_dir = utils.get_local_dir()
 vim.g.python3_host_prog = local_dir .. "/pylspenv/bin/python3"
 
-vim.o.modeline = false -- prevent warning with files containing the text "vim:"
+vim.opt.modeline = false -- prevent warning with files containing the text "vim:"
 
 vim.opt.clipboard = "unnamedplus"
 
@@ -71,7 +71,10 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.switchbuf = "useopen"
 
 -- Popups should have rounded borders by default
-vim.o.winborder = 'rounded'
+vim.opt.winborder = 'rounded'
 
 -- Persists a terminal even after its been hidden
-vim.o.hidden = true
+vim.opt.hidden = true
+
+-- Ensure we don't use Fish for vim.fn.system/systemlist
+vim.opt.shell = "/bin/sh"
