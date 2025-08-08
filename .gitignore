@@ -1,3 +1,4 @@
 # this file is auto-generated and has hardcoded paths to my home dir, which doesn't work on servers
 .config/fish/fish_variables
 .claude
+CLAUDE.local.md

@@ -25,7 +25,7 @@ font pango:Victor Mono Nerd Font 16
 exec --no-startup-id dex --autostart --environment i3
 
 # variable refresh rate for g-sync compatible monitor
-exec --no-startup-id picom --vsync
+exec --no-startup-id picom --vsync --no-fading-openclose
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
