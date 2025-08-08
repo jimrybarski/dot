@@ -1,4 +1,6 @@
 .cache
+.claude
+CLAUDE.local.md
 *.cover
 cover/
 .coverage
