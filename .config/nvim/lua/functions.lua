@@ -44,7 +44,7 @@ function OpenWiktionary()
     -- Get the word under the cursor
     local word = vim.fn.expand("<cword>")
     -- Create the URL
-    local url = "https://en.wiktionary.org/wiki/" .. word .. "#Glyph_origin"
+    local url = "https://translate.kagi.com/?from=zh_cn&to=en_us&text=" .. word
     -- Command to open Firefox with the URL
     vim.fn.system({"firefox", url})
 end

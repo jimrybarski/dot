@@ -49,7 +49,7 @@ require('dap-python').setup('python')
 -- Rust configuration using lldb
 dap.adapters.lldb = {
     type = 'executable',
-    command = '/usr/bin/lldb-vscode',
+    command = '/usr/bin/lldb',
     name = 'lldb'
 }
 
