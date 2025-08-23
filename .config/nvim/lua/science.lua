@@ -67,7 +67,6 @@ function put_rc_in_register_visual()
     local revcomp = bio.reverse_complement(seq)
     vim.fn.setreg('+', revcomp, "l")
 end
--- TODO: search for substring in larger strings
 
 vim.keymap.set('n', '<leader>ba', set_query_current_word, { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>ba', set_query_visual, { noremap = true, silent = true })
