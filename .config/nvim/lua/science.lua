@@ -8,7 +8,7 @@ end
 function set_subject_visual_and_align()
     local seq = bio.get_visual_selection()
     bio.set_pairwise_subject(seq)
-    local alignment = bio.pairwise_align()
+    local alignment = bio.pairwise_align({use_0_based_coords = true})
     bio.display_text(alignment)
 end
 
@@ -25,7 +25,7 @@ end
 function set_subject_current_word_and_align()
     local seq = vim.fn.expand("<cword>")
     bio.set_pairwise_subject(seq)
-    local alignment = bio.pairwise_align()
+    local alignment = bio.pairwise_align({use_0_based_coords = true})
     bio.display_text(alignment)
 end
 
