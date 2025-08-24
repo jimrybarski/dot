@@ -4,7 +4,7 @@
 
 [core]
     # Path to global gitignore file
-    excludesFile = $HOME/.config/global-gitignore
+    excludesFile = ~/.config/global-gitignore
     # Default editor for commit messages and interactive operations
     editor = nvim
     # Convert CRLF to LF on commit, leave LF as-is on checkout (recommended for Unix)
