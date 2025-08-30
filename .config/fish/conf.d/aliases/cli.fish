@@ -24,6 +24,7 @@ alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
 # programming
 alias cbr='cargo test && cargo build --release && cargo clippy'
 alias crr='cargo run --release'
+alias vt='v Cargo.toml'
 alias eba=". env/bin/activate.fish"
 alias gitc="env GIT_EDITOR='nvim +startinsert' git commit"
 alias gitcs="env GIT_EDITOR='nvim +startinsert' git commit -S"
