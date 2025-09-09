@@ -98,5 +98,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end, opts)
         vim.keymap.set('n', 'gu', ':Telescope lsp_references<cr>', opts)
         vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, opts)
+        vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, opts)
     end
 })
