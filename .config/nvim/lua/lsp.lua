@@ -1,7 +1,7 @@
 local utils = require('utils')
 local local_dir = utils.get_local_dir()
 local pylsp_dir = local_dir .. "/pylspenv/bin"
-local rust_analyzer_dir = utils.is_work_environment() and "/opt/local/.cargo/bin" or vim.fn.expand("$HOME/.cargo/bin")
+local rust_analyzer_dir = utils.is_work_environment() and "/opt/local/cargo/bin" or vim.fn.expand("$HOME/.cargo/bin")
 
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
 local capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
