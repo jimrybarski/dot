@@ -54,11 +54,6 @@ vim.opt.breakindent = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- transparently edit compressed files
-vim.g.loaded_gzip = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_zipPlugin = 1
-
 local utils = require('utils')
 local local_dir = utils.get_local_dir()
 vim.g.python3_host_prog = local_dir .. "/pylspenv/bin/python3"
