@@ -87,9 +87,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
         local opts = { buffer = ev.buf }
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
-        vim.keymap.set('i', '<C-k>', require('lsp_signature').toggle_float_win, opts)
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.hover, opts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.rename, opts)
+
+
         vim.keymap.set('n', 'g[', function()
             vim.diagnostic.jump({ count = 1, float = false })
         end, opts)
@@ -99,5 +100,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', 'gu', ':Telescope lsp_references<cr>', opts)
         vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, opts)
         vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, opts)
+        vim.keymap.set('n', 'ge', vim.diagnostic.open_float)
     end
 })
