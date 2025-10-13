@@ -235,4 +235,22 @@ require("lazy").setup {
     { 'rcarriga/nvim-dap-ui',            dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' }, event = 'VeryLazy' },
     { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy' },
     { 'mfussenegger/nvim-dap-python',    dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy', ft = 'python' },
+    {
+        "greggh/claude-code.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        config = function()
+            require("claude-code").setup()
+        end
+    },
+    {
+        "jiaoshijie/undotree", event = 'VeryLazy',
+        opts = {
+            window = {
+                winblend = 0,  -- make the diff window's background totally opaque (it's partially transparent by default)
+                border = "rounded",
+            },
+        }
+    },
 }
