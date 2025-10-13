@@ -87,6 +87,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
         local opts = { buffer = ev.buf }
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gD', function()
+            -- Use Hop to jump to a character, then go to definition
+            require('hop').hint_char1()
+            vim.defer_fn(function()
+                vim.lsp.buf.definition()
+            end, 100)
+        end, opts)
         vim.keymap.set('n', '<C-k>', vim.lsp.buf.hover, opts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.rename, opts)
 
