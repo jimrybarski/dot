@@ -3,7 +3,7 @@ require("nvim-autopairs").setup({
     check_ts = true, -- use treesitter
     fast_wrap = {},
     disable_filetype = { "TelescopePrompt", "vim" },
-    ignored_next_char = "[%w%.]" -- will ignore alphanumeric and `.` symbol
+    ignored_next_char = "[^%s]" -- only autopair when there are no characters to the right of the cursor
 })
 -- Handle Python's triple quotes correctly
 local rule = require('nvim-autopairs.rule')
