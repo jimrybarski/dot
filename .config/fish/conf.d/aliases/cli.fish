@@ -10,6 +10,10 @@ alias cfv='v $HOME/.config/nvim/init.lua --cmd "cd $HOME/.config/nvim"'
 alias cft='v $HOME/.config/tmux/tmux.conf'
 alias cftr='v $HOME/.config/tmuxinator/'
 
+# config directories
+alias cdv='cd $HOME/.config/nvim'
+alias cdf='cd $HOME/.config/fish'
+
 # shortened
 alias cl='cal -3'
 alias cly='cal -y'

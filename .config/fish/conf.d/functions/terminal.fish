@@ -1,3 +1,8 @@
+# Does the equivalent of Bash's `sudo !!`
+function ugh
+    eval command sudo $history[1]
+end
+
 # Displays the 16 (or 8) colors available to us, as text colors and background colors
 function print_colors ()
     printf "|039| \033[39mWhite \033[m    |049| \033[49mClear \033[m    |037| \033[37mLight gray \033[m     |047| \033[30m\033[47mLight gray \033[m\n"
@@ -10,17 +15,7 @@ function print_colors ()
     printf "|036| \033[36mCyan \033[m     |046| \033[30m\033[46mCyan \033[m     |096| \033[96mLight cyan \033[m     |106| \033[30m\033[106mLight cyan \033[m\n"
 end
 
-function syncpao () 
-    # uploads images 
-    pushd $HOME > /dev/null
-    for filename in (fd '\d+\.(png|jpg|jpeg)' -d 1); 
-        scp $filename freebox:/usr/jails/rybarski.com/var/www/html/srs/$SRS_DIR/images/
-        rm $filename
-    end
-    popd > /dev/null
-end
-
-
-function tldr ()
-    /home/jim/.cargo/bin/tldr $argv[1] --color=always | bat
+# Explain a command's usage
+function man ()
+    tldr $argv[1] --color=always | bat
 end
