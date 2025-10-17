@@ -41,8 +41,8 @@ vim.opt.completeopt = "menu,menuone,preview,noselect"
 -- keep the cursor in the center of the screen (if there is space)
 vim.opt.scrolloff = 6
 
--- highlight the 120th column
-vim.opt.colorcolumn = "120"
+-- highlight the 121st column, since my maximum line length is 120 and this then represents the margin
+vim.opt.colorcolumn = "121"
 
 -- autoindent in codebases
 vim.opt.smartindent = false  -- leave autoindentation up to treesitter
