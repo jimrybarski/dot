@@ -11,8 +11,8 @@ alias cft='v $HOME/.config/tmux/tmux.conf'
 alias cftr='v $HOME/.config/tmuxinator/'
 
 # config directories
-alias cdv='cd $HOME/.config/nvim'
-alias cdf='cd $HOME/.config/fish'
+alias cdv='cd $HOME/dot/.config/nvim'
+alias cdf='cd $HOME/dot/.config/fish'
 
 # shortened
 alias cl='cal -3'
