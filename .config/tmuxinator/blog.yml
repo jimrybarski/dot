@@ -1,0 +1,17 @@
+name: main
+
+root: 
+
+windows:
+  - write:
+      root: ~/blog/posts
+      layout: even-horizontal
+      panes:
+        - posts:
+            - nvim -c 'lua vim.defer_fn(function() require("telescope.builtin").find_files() end, 100)'
+  - zola:
+      root: ~/blog
+      layout: even-horizontal
+      panes:
+        - serve:
+            - zola serve
