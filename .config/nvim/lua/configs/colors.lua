@@ -62,7 +62,7 @@ require("illuminate").configure({
     -- delay: delay in milliseconds
     delay = 0,
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-    filetypes_denylist = { 'dirbuf', 'dirvish', 'fugitive' },
+    filetypes_denylist = { 'dirbuf', 'dirvish', 'fugitive', 'markdown', 'text' },
     -- under_cursor: whether or not to illuminate under the cursor
     under_cursor = false,
     -- large_file_cutoff: number of lines at which to use large_file_config
