@@ -107,8 +107,7 @@ require("lazy").setup {
                     "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
                     "vim", "vimdoc", "yaml"
                 },
-                ignore_install = { "org" },
-                additional_vim_regex_highlighting = false,
+                additional_vim_regex_highlighting = { 'org' },
                 auto_install = true,
                 sync_install = false,
                 modules = {},
@@ -248,9 +247,117 @@ require("lazy").setup {
         "jiaoshijie/undotree", event = 'VeryLazy',
         opts = {
             window = {
-                winblend = 0,  -- make the diff window's background totally opaque (it's partially transparent by default)
+                winblend = 0, -- make the diff window's background totally opaque (it's partially transparent by default)
                 border = "rounded",
             },
         }
+    },
+    {
+        "nvim-orgmode/orgmode",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        event = "VeryLazy",
+        config = function()
+            require('orgmode').setup({
+                org_agenda_files = '~/notes/**/*',
+                org_default_notes_file = '~/notes/refile.org',
+                org_hide_emphasis_markers = true,
+                org_startup_folded = 'showeverything',
+                org_blank_before_new_entry = {
+                    heading = false,
+                    plain_list_item = false,
+                },
+                mappings = {
+                    org_return_uses_meta_return = true,
+                    org = {
+                        org_open_at_point = '<CR>',
+                    }
+                }
+            })
+        end,
+    },
+    {
+        "chipsenkbeil/org-roam.nvim",
+        dependencies = {
+            "nvim-orgmode/orgmode",
+        },
+        config = function()
+            require("org-roam").setup({
+                directory = "~/notes",
+                templates = {
+                    m = {
+                        description = "meeting",
+                        template = "%<%Y-%m-%d>\n\n* %?",
+                        target = "meetings/%<%Y-%m-%d>-%[slug].org",
+                    },
+                    i = {
+                        description = "info",
+                        template = "* %?",
+                        target = "info/%[slug].org",
+                    },
+                },
+                bindings = {
+                    ---Adjusts the prefix for every keybinding. Can be used in keybindings with <prefix>.
+                    prefix = ",",
+                    ---Adds an alias to the node under cursor.
+                    add_alias = "<prefix>aa",
+
+                    ---Adds an origin to the node under cursor.
+                    add_origin = "<prefix>oa",
+
+                    ---Opens org-roam capture window.
+                    capture = "<prefix>c",
+
+                    ---Completes the node under cursor.
+                    complete_at_point = "<prefix>.",
+
+                    ---Finds node and moves to it.
+                    find_node = "<prefix>f",
+
+                    ---Goes to the next node sequentially based on origin of the node under cursor.
+                    ---
+                    ---If more than one node has the node under cursor as its origin, a selection
+                    ---dialog is displayed to choose the node.
+                    goto_next_node = "<prefix>n",
+
+                    ---Goes to the previous node sequentially based on origin of the node under cursor.
+                    goto_prev_node = "<prefix>p",
+
+                    ---Inserts node at cursor position.
+                    insert_node = "<prefix>i",
+
+                    ---Inserts node at cursor position without opening capture buffer.
+                    insert_node_immediate = "<prefix>m",
+
+                    ---Opens the quickfix menu for backlinks to the current node under cursor.
+                    quickfix_backlinks = "<prefix>q",
+
+                    ---Removes an alias from the node under cursor.
+                    remove_alias = "<prefix>ar",
+
+                    ---Removes the origin from the node under cursor.
+                    remove_origin = "<prefix>or",
+
+                    ---Toggles the org-roam node-view buffer for the node under cursor.
+                    toggle_roam_buffer = "<prefix>l",
+
+                    ---Toggles a fixed org-roam node-view buffer for a selected node.
+                    toggle_roam_buffer_fixed = "<prefix>b",
+                },
+            })
+        end
+    },
+    { 'akinsho/org-bullets.nvim', config = function()
+        require('org-bullets').setup({
+            concealcursor = true,
+            symbols = {
+                headlines = {
+                    { "●", "MyBulletL1" },
+                    { "-", "MyBulletL2" },
+                    { "○", "MyBulletL3" },
+                    { "◌", "MyBulletL4" },
+                },
+            },
+        })
+    end
     },
 }

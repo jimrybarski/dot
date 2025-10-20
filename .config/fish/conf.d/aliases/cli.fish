@@ -14,6 +14,9 @@ alias cftr='v $HOME/.config/tmuxinator/'
 alias cdv='cd $HOME/dot/.config/nvim'
 alias cdf='cd $HOME/dot/.config/fish'
 
+# tmuxinator 
+alias blog='tmuxinator blog'
+
 # shortened
 alias cl='cal -3'
 alias cly='cal -y'
