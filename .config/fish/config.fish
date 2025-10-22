@@ -3,9 +3,9 @@ if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
     exec startx
 end
 
-source $HOME/.config/fish/conf.d/prompt.fish
+source $XDG_CONFIG_HOME/fish/conf.d/prompt.fish
 
-for file in ~/.config/fish/conf.d/*/*.fish
+for file in $XDG_CONFIG_HOME/fish/conf.d/*/*.fish
     source $file
 end
 
