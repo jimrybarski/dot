@@ -102,20 +102,20 @@ vim.api.nvim_set_hl(0, 'NeogitDiffDelete', { bg = '#d57a7a', fg = '#111111' })  
 
 -- Org-mode bullet colors for different heading levels
 vim.api.nvim_set_hl(0, 'MyBulletL1', { fg = '#CCCCCC' })
-vim.api.nvim_set_hl(0, 'MyBulletL2', { fg = '#B8BB26' })
-vim.api.nvim_set_hl(0, 'MyBulletL3', { fg = '#FABD2F' })
+vim.api.nvim_set_hl(0, 'MyBulletL2', { fg = '#FABD2F' })
+vim.api.nvim_set_hl(0, 'MyBulletL3', { fg = '#B8BB26' })
 vim.api.nvim_set_hl(0, 'MyBulletL4', { fg = '#83A598' })
 vim.api.nvim_set_hl(0, 'MyBulletL5', { fg = '#CCCCCC' })
-vim.api.nvim_set_hl(0, 'MyBulletL6', { fg = '#B8BB26' })
-vim.api.nvim_set_hl(0, 'MyBulletL7', { fg = '#FABD2F' })
+vim.api.nvim_set_hl(0, 'MyBulletL6', { fg = '#FABD2F' })
+vim.api.nvim_set_hl(0, 'MyBulletL7', { fg = '#B8BB26' })
 vim.api.nvim_set_hl(0, 'MyBulletL8', { fg = '#83A598' })
 
 -- Org-mode headline text colors for different heading levels
-vim.api.nvim_set_hl(0, '@org.headline.level1', { fg = '#CCCCCC', bold = true })  -- green
-vim.api.nvim_set_hl(0, '@org.headline.level2', { fg = '#B8BB26', bold = true })  -- red
-vim.api.nvim_set_hl(0, '@org.headline.level3', { fg = '#FABD2F', bold = true })  -- yellow
-vim.api.nvim_set_hl(0, '@org.headline.level4', { fg = '#83A598', bold = true })  -- blue
-vim.api.nvim_set_hl(0, '@org.headline.level5', { fg = '#CCCCCC', bold = true })  -- blue
-vim.api.nvim_set_hl(0, '@org.headline.level6', { fg = '#B8BB26', bold = true })  -- blue
-vim.api.nvim_set_hl(0, '@org.headline.level7', { fg = '#FABD2F', bold = true })  -- blue
-vim.api.nvim_set_hl(0, '@org.headline.level8', { fg = '#83A598', bold = true })  -- blue
+vim.api.nvim_set_hl(0, '@org.headline.level1', { fg = '#CCCCCC', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level2', { fg = '#FABD2F', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level3', { fg = '#B8BB26', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level4', { fg = '#83A598', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level5', { fg = '#CCCCCC', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level6', { fg = '#FABD2F', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level7', { fg = '#B8BB26', bold = true })
+vim.api.nvim_set_hl(0, '@org.headline.level8', { fg = '#83A598', bold = true })
