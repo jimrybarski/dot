@@ -236,15 +236,6 @@ require("lazy").setup {
     { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy' },
     { 'mfussenegger/nvim-dap-python',    dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy', ft = 'python' },
     {
-        "greggh/claude-code.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-        config = function()
-            require("claude-code").setup()
-        end
-    },
-    {
         "jiaoshijie/undotree", event = 'VeryLazy',
         opts = {
             window = {
