@@ -190,8 +190,9 @@ require("lazy").setup {
             },
             doc_lines = 0,                           -- don't show function documentation in popup window
             floating_window_above_cur_line = false,  -- show popup below the cursor
-            floating_window_off_y = 3,               -- move the popup a few lines down. The true offset appears to be random but
-            -- a value of 3 seems to prevent it from covering up the cursor
+            floating_window_off_y = 3,               -- move the popup a few lines down
+            wrap = true,                             -- helps with signature covering cursor
+            max_height = 5,                          -- might not work
             hint_enable = false,                     -- disable virtual text signature help
             toggle_key_flip_floatwin_setting = true, -- not sure what this does
         },
