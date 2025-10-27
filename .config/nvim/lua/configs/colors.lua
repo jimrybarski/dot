@@ -77,9 +77,9 @@ require("illuminate").configure({
     -- case_insensitive_regex: sets regex case sensitivity
     case_insensitive_regex = false
 })
-vim.api.nvim_set_hl(0, 'IlluminatedWordText', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { bold = true, underline = true })
-vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'IlluminatedWordText', { fg = "#FFFF7A", bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { fg = "#FFFF7A", bold = true, underline = true })
+vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { fg = "#FFFF7A", bold = true, underline = true })
 
 -- Highlight hex color codes (e.g. #0072B2) with the actual color
 require('colorizer').setup({
