@@ -1,5 +1,6 @@
 # system management
 alias upgrade='sudo pacman -Syu; /usr/bin/setxkbmap -option caps:escape'
+alias game='pkill -9 picom'
 
 # config files
 alias cff='v $HOME/.config/fish/config.fish --cmd "cd $HOME/.config/fish"'
@@ -18,6 +19,7 @@ alias cdf='cd $HOME/dot/.config/fish'
 alias blog='tmuxinator blog'
 
 # shortened
+alias todo='v $HOME/notes/info/todo.org'
 alias cl='cal -3'
 alias cly='cal -y'
 alias copy='xsel --clipboard'
@@ -25,7 +27,7 @@ alias ll="eza -alh"
 alias ls="eza -a"
 alias v="nvim"
 alias sf="ssh freebox"
-alias diceware="shuf $HOME/code/diceware/wordlists/en_US/wordlist.txt | head -n 6"
+alias diceware="shuf $HOME/.local/diceware/wordlists/en_US/wordlist.txt | head -n 6"
 alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
 
 # programming
