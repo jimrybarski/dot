@@ -14,7 +14,7 @@ vim.lsp.config['lua_ls'] = {
                 version = 'LuaJIT',
             },
             diagnostics = {
-                globals = { 'vim' },
+               globals = { 'vim' },
             },
             workspace = {
                 library = vim.api.nvim_get_runtime_file("", true),
@@ -85,6 +85,11 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if not client then
+            return
+        end
+
         local opts = { buffer = ev.buf }
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
         vim.keymap.set('n', 'gD', function()
@@ -96,7 +101,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end, opts)
         vim.keymap.set('n', '<C-k>', vim.lsp.buf.hover, opts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.rename, opts)
-
 
         vim.keymap.set('n', 'g[', function()
             vim.diagnostic.jump({ count = 1, float = false })

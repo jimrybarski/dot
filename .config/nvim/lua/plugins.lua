@@ -182,22 +182,6 @@ require("lazy").setup {
     { "hrsh7th/nvim-cmp",            event = 'VeryLazy' },
     { "hrsh7th/cmp-nvim-lsp",        event = 'VeryLazy' },
     {
-        "ray-x/lsp_signature.nvim",
-        event = "InsertEnter",
-        opts = {
-            handler_opts = {
-                border = "rounded"
-            },
-            doc_lines = 0,                           -- don't show function documentation in popup window
-            floating_window_above_cur_line = false,  -- show popup below the cursor
-            floating_window_off_y = 3,               -- move the popup a few lines down
-            wrap = true,                             -- helps with signature covering cursor
-            max_height = 5,                          -- might not work
-            hint_enable = false,                     -- disable virtual text signature help
-            toggle_key_flip_floatwin_setting = true, -- not sure what this does
-        },
-    },
-    {
         "NeogitOrg/neogit",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -351,5 +335,19 @@ require("lazy").setup {
             },
         })
     end
+    },
+    -- Enhanced signature help popup
+    {
+        'sighelp',
+        dir = vim.fn.expand('~/sighelp'),
+        event = 'InsertEnter',
+        config = function()
+            require('sighelp').setup({
+                border = 'none',
+                highlight_group = 'Search',
+                popup_background = 'Visual',
+                wrap = true,
+            })
+        end
     },
 }
