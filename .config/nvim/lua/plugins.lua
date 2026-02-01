@@ -88,11 +88,12 @@ require("lazy").setup {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         lazy = false,   -- Load immediately to ensure proper initialization
-        config = false, -- Config is handled by treesitter main plugin
+        config = false,
     },
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false, -- Load immediately to ensure textobjects work
+        branch = "master",
         build = ":TSUpdate",
         config = function()
             local configs = require("nvim-treesitter.configs")
@@ -338,8 +339,7 @@ require("lazy").setup {
     },
     -- Enhanced signature help popup
     {
-        'sighelp',
-        dir = vim.fn.expand('~/sighelp'),
+        'jimrybarski/sighelp',
         event = 'InsertEnter',
         config = function()
             require('sighelp').setup({
