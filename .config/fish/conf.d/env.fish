@@ -13,9 +13,9 @@ set -x LC_PAPER "en_US.UTF-8"
 set -x LC_TELEPHONE "en_US.UTF-8"
 set -x LC_TIME "en_US.UTF-8"
 
-if test -d /opt/dot
+if test -d /opt/local/dot
     # work config
-    set -x XDG_CONFIG_HOME /opt/dot/.config
+    set -x XDG_CONFIG_HOME /opt/local/dot/.config
     set -x XDG_DATA_HOME /opt/local/data
     set -x XDG_STATE_HOME /opt/local/state
     set -x XDG_CACHE_HOME /opt/local/cache
@@ -26,7 +26,7 @@ else
     set -x LIBCLANG_PATH "/home/jim/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-18.1.2_20240912/esp-clang/lib"
 end
 
-if test -d /opt/dot
+if test -d /opt/local/dot
     set -U fish_user_paths /opt/local/cargo/bin /opt/local/bin /usr/local/go/bin /opt/local/.luarocks/bin /opt/local/npm-global/bin $fish_user_paths
 else
     set -U fish_user_paths $HOME/.local/sra/bin $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin $HOME/scripts $HOME/.rustup/toolchains/esp/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin $HOME/.luarocks/bin $HOME/.local/npm-global/bin $fish_user_paths
