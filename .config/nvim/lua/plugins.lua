@@ -85,17 +85,35 @@ require("lazy").setup {
     { "windwp/nvim-autopairs",     event = 'VeryLazy' },
     -- adds more programming-related text objects (functions, arguments, classes)
     {
+        "matthuska/tree-sitter-nextflow",
+        ft = "nextflow",
+    },
+    {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
-        lazy = false,   -- Load immediately to ensure proper initialization
+        lazy = false, -- Load immediately to ensure proper initialization
         config = false,
     },
     {
         "nvim-treesitter/nvim-treesitter",
-        lazy = false, -- Load immediately to ensure textobjects work
+        lazy = false,
         branch = "master",
         build = ":TSUpdate",
         config = function()
+            -- Register the custom nextflow grammar
+            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+            parser_config.nextflow = {
+                install_info = {
+                    url = "https://github.com/matthuska/tree-sitter-nextflow",
+                    files = { "src/parser.c" },
+                    branch = "main",
+                },
+                filetype = "nextflow",
+            }
+
+            -- Associate .nf files with the nextflow filetype
+            vim.filetype.add({ extension = { nf = "nextflow" } })
+
             local configs = require("nvim-treesitter.configs")
             configs.setup({
                 highlight = { enable = true },
@@ -106,7 +124,8 @@ require("lazy").setup {
                     "lua", "luadoc", "make", "markdown",
                     "markdown_inline", "passwd", "python", "r",
                     "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
-                    "vim", "vimdoc", "yaml"
+                    "vim", "vimdoc", "yaml",
+                    "nextflow", -- custom grammar, registered above
                 },
                 additional_vim_regex_highlighting = { 'org' },
                 auto_install = true,
@@ -142,7 +161,6 @@ require("lazy").setup {
                     },
                     select = {
                         enable = true,
-                        -- Automatically jump forward to textobj, similar to targets.vim
                         lookahead = true,
                         keymaps = {
                             ["af"] = "@function.outer",
@@ -154,12 +172,12 @@ require("lazy").setup {
                             ["al"] = "@loop.outer",
                             ["il"] = "@loop.inner",
                             ["a/"] = "@comment.outer",
-                            ["i/"] = "@comment.outer", -- no inner for comment
+                            ["i/"] = "@comment.outer",
                         },
                         selection_modes = {
-                            ['@parameter.outer'] = 'v', -- charwise
-                            ['@function.outer'] = 'V',  -- linewise
-                            ['@class.outer'] = '<c-v>'  -- blockwise
+                            ['@parameter.outer'] = 'v',
+                            ['@function.outer'] = 'V',
+                            ['@class.outer'] = '<c-v>'
                         },
                         include_surrounding_whitespace = function(opts)
                             local mode = vim.api.nvim_get_mode()
@@ -171,8 +189,16 @@ require("lazy").setup {
                         end
                     }
                 }
-
             })
+            local queries_path = vim.fn.stdpath("data") .. "/lazy/tree-sitter-nextflow/queries/"
+            for _, query_type in ipairs({ "highlights", "locals", "indents" }) do
+                local f = io.open(queries_path .. query_type .. ".scm")
+                if f then
+                    vim.treesitter.query.set("nextflow", query_type, f:read("*a"))
+                    f:close()
+                end
+            end
+            local f = io.open(vim.fn.stdpath("data") .. "/lazy/tree-sitter-nextflow/queries/highlights.scm")
         end,
         install = {
             silent = true

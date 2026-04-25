@@ -7,4 +7,4 @@ export XMODIFIERS=@im=fcitx
 /usr/bin/flameshot &
 /usr/bin/dunst &
 xmodmap ~/.config/xmodmap
-exec i3
+exec dbus-run-session i3

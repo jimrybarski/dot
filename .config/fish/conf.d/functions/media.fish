@@ -32,3 +32,7 @@ function pastemp3
     mp3 $url
     notify-send "Done downloading mp3: $url"
 end
+
+function ytupdate
+    $HOME/.local/ytdlenv/bin/pip install -U yt-dlp
+end

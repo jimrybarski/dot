@@ -62,3 +62,11 @@ autocmd("FileType", {
         end, { buffer = true })
     end
 })
+
+-- Activate the nextflow tree-sitter grammar to work around a probable race condition
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "nextflow",
+    callback = function()
+        vim.treesitter.start()
+    end,
+})

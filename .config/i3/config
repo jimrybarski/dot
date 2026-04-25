@@ -201,13 +201,13 @@ mode "resize" {
 gaps inner 4px
 gaps outer 0px
 
-assign [class="vlc"] 2
 assign [class="firefox"] 2
+assign [class="libreoffice"] 2
+assign [class="libreoffice-calc"] 2
 assign [class="steamwebhelper"] 3
 assign [class="steam"] 3
 assign [class="Steam"] 3
-assign [class="libreoffice"] 4
-assign [class="libreoffice-calc"] 4
+assign [class="vlc"] 4
 assign [class="thunar"] 4
 assign [class="Thunar"] 4
 assign [class="google-chrome"] 9
