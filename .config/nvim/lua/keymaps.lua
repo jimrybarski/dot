@@ -1,0 +1,92 @@
+-- HOP
+-- Move the cursor to any character on the screen
+vim.keymap.set("n", "\\", ":HopChar1<CR>", { desc = "Hop to character" })
+-- This lets you use hop as a motion, so you can do things like `d\x` which would delete from the cursor to the selected occurence of the character `x` 
+vim.keymap.set("o", "\\", ":HopChar1<CR>", { desc = "Hop to character (operator)" })
+
+-- GIT
+-- Highlight lines and words that have changed since the last commit
+vim.keymap.set('n', '<leader>vh', function()
+    local gitsigns = require('gitsigns')
+    gitsigns.toggle_word_diff()
+    gitsigns.toggle_linehl()
+end, { desc = 'Toggle git word diff and line highlights' })
+
+-- Show the blame message for the current line
+vim.keymap.set('n', '<leader>vb', ':Gitsigns blame_line<CR>', { desc = "Git blame current line", silent = true })
+-- Open the Git TUI
+vim.keymap.set('n', '<leader>vv', ':Neogit<CR>', { desc = "Open Neogit", silent = true })
+
+-- NOTIFICATIONS
+vim.keymap.set('n', '<leader>k', function()
+    local Snacks = require("snacks")
+    Snacks.notifier.hide()
+end, { desc = 'Dismiss all notifications' })
+
+-- REMAPS
+-- These just remap unergonomic actions to something more pleasant
+vim.keymap.set("n", "H", "^", { desc = "Go to first non-blank character" })
+vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = "Yank to system clipboard", silent = true })
+vim.keymap.set('i', '<C-p>', '<C-r>"', { desc = "Paste from default register in insert mode", silent = true })
+
+-- Move lines up/down
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = "Move line down", silent = true })
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = "Move line up", silent = true })
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = "Move selection down", silent = true })
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = "Move selection up", silent = true })
+
+-- SAFE DELETE
+-- Don't overwrite clipboard contents with empty lines
+function _G.check_line()
+    if vim.fn.getline(".") == "" then
+        return '"_dd'
+    else
+        return 'dd'
+    end
+end
+
+vim.keymap.set("n", "x", '"_x', { desc = "Delete character without yanking", silent = true })
+vim.keymap.set("n", "c", '"_c', { desc = "Change without yanking", silent = true })
+vim.keymap.set("n", "dd", "v:lua.check_line()", { desc = "Delete line (smart)", expr = true })
+
+
+-- TELESCOPE
+-- search for strings
+vim.keymap.set('n', '<leader>g', ':Telescope live_grep<cr>', { desc = "Live grep search", silent = true })
+-- search for files
+vim.keymap.set('n', '<leader>ff', ':Telescope find_files<cr>', { desc = "Find files", silent = true })
+-- search through a list of all active keymaps
+vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<cr>', { desc = "Find keymaps", silent = true })
+
+
+-- RESIZE WINDOWS
+vim.keymap.set('n', '<C-S-j>', '1<C-w>+', { desc = "Increase window height", silent = true })
+vim.keymap.set('n', '<C-S-k>', '1<C-w>-', { desc = "Decrease window height", silent = true })
+vim.keymap.set('n', '<C-S-h>', '1<C-w><', { desc = "Decrease window width", silent = true })
+vim.keymap.set('n', '<C-S-l>', '1<C-w>>', { desc = "Increase window width", silent = true })
+vim.keymap.set('n', '<C-q>', ':qa!<cr>', { desc = "Force quit Neovim", silent = true })
+
+
+local dap = require('dap')
+-- Mark lines to pause at during debugging
+vim.keymap.set('n', 'gb', dap.toggle_breakpoint, { desc = 'Toggle breakpoint'} )
+vim.keymap.set('n', 'gB', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, { desc = 'Set conditional breakpoint' })
+
+-- Advance the program state
+vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Start/continue debugger'})
+vim.keymap.set('n', '<F6>', dap.step_over, { desc = 'Step over'})
+vim.keymap.set('n', '<F7>', dap.step_into, { desc = 'Step into'})
+vim.keymap.set('n', '<F8>', dap.step_out, { desc = 'Step out'})
+vim.keymap.set('n', '<F9>', function() require('dap-view').toggle(true) end, { desc = 'Toggle DAP view' })
+
+-- SNIPPETS
+-- Select mode mappings so Tab/S-Tab jump tabstops when a placeholder is highlighted
+vim.keymap.set("s", "<Tab>", function()
+    local ls = require("luasnip")
+    if ls.jumpable(1) then ls.jump(1) end
+end, { silent = true, desc = "Jump to next snippet tabstop" })
+vim.keymap.set("s", "<S-Tab>", function()
+    local ls = require("luasnip")
+    if ls.jumpable(-1) then ls.jump(-1) end
+end, { silent = true, desc = "Jump to previous snippet tabstop" })

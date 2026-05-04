@@ -3,16 +3,7 @@ local function ends_with(str, suffix)
     return suffix == "" or string.sub(str, -string.len(suffix)) == suffix
 end
 
--- load plugins
-require("lazy").setup {
-    -- Color scheme
-    { "ellisonleao/gruvbox.nvim",    event = 'VeryLazy' },
-    -- After undoing something, the changed text is briefly highlighted
-    { 'tzachar/highlight-undo.nvim', event = 'VeryLazy' },
-    -- Emphasize all occurrences of the word under the cursor
-    { "RRethy/vim-illuminate",       event = 'BufReadPost' },
-    -- Jump to any character on the screen
-    { 'smoka7/hop.nvim',             event = 'VeryLazy' },
+require("lazy").setup({
     -- Utility library. Currently, we're using the following features:
     -- 1) bigfile: disables expensive processes when editing very large files
     -- 2) indent: shows vertical lines that match each indentation scope
@@ -49,165 +40,235 @@ require("lazy").setup {
             },
         },
     },
-    -- sets the background color of valid HTML colors to the actual color
-    { "norcalli/nvim-colorizer.lua", ft = { 'css', 'javascript', 'html' }, event = 'VeryLazy' },
-    -- utility functions that many other plugins use
-    { "nvim-lua/plenary.nvim" },
-    -- puts colored symbols in the sign gutter to mark where modifications to the file have occurred
-    { "lewis6991/gitsigns.nvim",     event = 'VeryLazy' },
-    -- testing framework
-    { "notomo/vusted",               ft = 'lua',                           event = 'VeryLazy' },
-    -- prevents the cursor from getting all the way to the bottom of the screen
-    -- if you're on the last line, some virtual empty lines will be added to create a bit of a margin
-    -- this is purely aesthetic
+    -- Color scheme (high priority so it loads before everything else)
     {
-        'Aasim-A/scrollEOF.nvim',
-        event = { 'CursorMoved', 'WinScrolled' },
-        opts = {},
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000,
+        config = function()
+            vim.o.background = "dark"
+            vim.cmd("colorscheme gruvbox")
+        end,
     },
-    -- Improved status line with cleaner and more useful information
-    { "nvim-lualine/lualine.nvim", event = 'VeryLazy' },
-    -- Highlights certain keywords and places an icon in the sign column
-    -- Keywords: TODO, HACK, WARN, PERF, NOTE, TEST, WARNING, XXX, OPTIM, PERFORMANCE, OPTIMIZE, INFO, TESTING, PASSED, FAILED
+    -- After undoing something, the changed text is briefly highlighted
+    {
+        "tzachar/highlight-undo.nvim",
+        event = "VeryLazy",
+        config = function() require("highlight-undo").setup({}) end,
+    },
+    -- Emphasize all occurrences of the word under the cursor
+    {
+        "RRethy/vim-illuminate",
+        event = "BufReadPost",
+        config = function() require("illuminate").configure({}) end,
+    },
+    -- Jump to any character on the screen
+    { "smoka7/hop.nvim", event = "VeryLazy" },
+    -- Sets the background color of valid CSS colors to the actual color
+    {
+        "catgoose/nvim-colorizer.lua",
+        ft = { "css", "javascript", "html" },
+        config = function() require("colorizer").setup() end,
+    },
+    -- A nice interface that allows fuzzy finding on lists
+    {
+        "nvim-telescope/telescope.nvim",
+        branch = "0.1.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+    },
+    -- Put markers in the sign column to indicate where edits have occurred since the last commit
+    { "lewis6991/gitsigns.nvim", event = "VeryLazy", opts = {} },
+    -- Virtual blank lines at EOF so the cursor stays scrolloff lines from the bottom
+    { "Aasim-A/scrollEOF.nvim", event = { "BufRead", "BufNewFile" }, opts = {} },
+    -- Nice-looking status bar
+    { "nvim-lualine/lualine.nvim", event = "VeryLazy", opts = {} },
+    -- Highlights TODO/HACK/WARN/NOTE/etc. keywords with icons
     {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
-        event = 'VeryLazy',
-        opts = {}
+        event = "VeryLazy",
+        opts = {},
     },
-    -- Adds the "surround" motion, letting you put quotes or brackets or whatever around a text object
+    -- Adds the "surround" motion for wrapping text objects in quotes/brackets/etc.
     {
         "kylechui/nvim-surround",
         version = "*",
-        event = 'VeryLazy'
+        event = "VeryLazy",
+        opts = {},
     },
-    -- Automatically insert closing brackets/quotes
-    { "windwp/nvim-autopairs",     event = 'VeryLazy' },
     -- adds more programming-related text objects (functions, arguments, classes)
-    {
-        "matthuska/tree-sitter-nextflow",
-        ft = "nextflow",
-    },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         lazy = false, -- Load immediately to ensure proper initialization
         config = false,
     },
+    -- Bioinformatics conveniences
+    { "jimrybarski/bioinformatics.nvim" },
+    -- Treesitter: syntax highlighting and parsing
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         branch = "master",
         build = ":TSUpdate",
+        config = function() require("treesitter") end,
+    },
+    -- Debugger
+    {
+        'mfussenegger/nvim-dap',
+        event = 'VeryLazy',
         config = function()
-            -- Register the custom nextflow grammar
-            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-            parser_config.nextflow = {
-                install_info = {
-                    url = "https://github.com/matthuska/tree-sitter-nextflow",
-                    files = { "src/parser.c" },
-                    branch = "main",
+            local dap = require('dap')
+            -- brew install codelldb  OR  download from https://github.com/vadimcn/codelldb/releases
+            -- extract the vsix (rename to .zip) to ~/.local/codelldb/
+            dap.adapters.codelldb = {
+                type = 'server',
+                port = '${port}',
+                executable = {
+                    command = vim.fn.expand('~/.local/codelldb/extension/adapter/codelldb'),
+                    args = { '--port', '${port}' },
                 },
-                filetype = "nextflow",
             }
-
-            -- Associate .nf files with the nextflow filetype
-            vim.filetype.add({ extension = { nf = "nextflow" } })
-
-            local configs = require("nvim-treesitter.configs")
-            configs.setup({
-                highlight = { enable = true },
-                ensure_installed = {
-                    "awk", "bash", "bibtex", "css", "diff", "dockerfile",
-                    "fish", "gitcommit", "git_config", "gitignore",
-                    "git_rebase", "gpg", "html", "javascript", "json", "json5",
-                    "lua", "luadoc", "make", "markdown",
-                    "markdown_inline", "passwd", "python", "r",
-                    "regex", "rust", "scss", "sql", "ssh_config", "toml", "tsv",
-                    "vim", "vimdoc", "yaml",
-                    "nextflow", -- custom grammar, registered above
+            dap.configurations.rust = {
+                {
+                    name = 'Debug binary',
+                    type = 'codelldb',
+                    request = 'launch',
+                    program = function()
+                        return vim.fn.input('Executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+                    end,
+                    cwd = '${workspaceFolder}',
+                    stopOnEntry = false,
                 },
-                additional_vim_regex_highlighting = { 'org' },
-                auto_install = true,
-                sync_install = false,
-                modules = {},
-                textobjects = {
-                    swap = {
-                        enable = true,
-                        swap_next = {
-                            ["gp"] = "@parameter.inner",
-                        },
-                        swap_previous = {
-                            ["gP"] = "@parameter.inner",
-                        },
-                    },
-                    move = {
-                        enable = true,
-                        set_jumps = true,
-                        goto_previous_start = {
-                            ["[f"] = "@function.outer",
-                            ["[c"] = "@class.outer",
-                            ["[p"] = "@parameter.outer",
-                            ["[l"] = "@loop.outer",
-                            ["[/"] = "@comment.outer",
-                        },
-                        goto_next_start = {
-                            ["]f"] = "@function.outer",
-                            ["]c"] = "@class.outer",
-                            ["]p"] = "@parameter.outer",
-                            ["]l"] = "@loop.outer",
-                            ["]/"] = "@comment.outer",
-                        },
-                    },
-                    select = {
-                        enable = true,
-                        lookahead = true,
-                        keymaps = {
-                            ["af"] = "@function.outer",
-                            ["if"] = "@function.inner",
-                            ["ac"] = "@class.outer",
-                            ["ic"] = "@class.inner",
-                            ['ap'] = '@parameter.outer',
-                            ['ip'] = '@parameter.inner',
-                            ["al"] = "@loop.outer",
-                            ["il"] = "@loop.inner",
-                            ["a/"] = "@comment.outer",
-                            ["i/"] = "@comment.outer",
-                        },
-                        selection_modes = {
-                            ['@parameter.outer'] = 'v',
-                            ['@function.outer'] = 'V',
-                            ['@class.outer'] = '<c-v>'
-                        },
-                        include_surrounding_whitespace = function(opts)
-                            local mode = vim.api.nvim_get_mode()
-                            if ends_with(opts.query_string, "outer") and mode.mode ~= "v" then
-                                return true
-                            else
-                                return false
-                            end
-                        end
-                    }
-                }
-            })
-            local queries_path = vim.fn.stdpath("data") .. "/lazy/tree-sitter-nextflow/queries/"
-            for _, query_type in ipairs({ "highlights", "locals", "indents" }) do
-                local f = io.open(queries_path .. query_type .. ".scm")
-                if f then
-                    vim.treesitter.query.set("nextflow", query_type, f:read("*a"))
-                    f:close()
-                end
-            end
-            local f = io.open(vim.fn.stdpath("data") .. "/lazy/tree-sitter-nextflow/queries/highlights.scm")
+            }
         end,
-        install = {
-            silent = true
+    },
+    -- Puts the values of variables inline as virtual text
+    { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' }, event = 'VeryLazy' },
+    -- Python debugger adapter
+    {
+        'mfussenegger/nvim-dap-python',
+        dependencies = { 'mfussenegger/nvim-dap' },
+        event = 'VeryLazy',
+        ft = 'python',
+        config = function()
+            -- python3 -m venv ~/.local/debugpy && ~/.local/debugpy/bin/pip install debugpy
+            require('dap-python').setup(vim.fn.expand('$HOME/.local/pylspenv/bin/python'))
+        end,
+    },
+    -- Interface for the debugger
+    {
+        'igorlfs/nvim-dap-view',
+        dependencies = { 'mfussenegger/nvim-dap' },
+        event = 'VeryLazy',
+        opts = {},
+    },
+    -- Snippet engine
+    {
+        "L3MON4D3/LuaSnip",
+        version = "v2.*",
+        build = "make install_jsregexp",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        config = function()
+            require("luasnip").config.set_config({
+                history = true,
+                updateevents = "TextChanged,TextChangedI",
+            })
+            require("luasnip.loaders.from_vscode").lazy_load()
+            require("snippets")
+        end,
+    },
+    -- nvim-cmp source compatibility shim (needed for cmp-greek)
+    { "Saghen/blink.compat", version = "*", opts = {} },
+    -- Greek character completions (e.g. type :delta: and pick δ from the completion popup)
+    { "max397574/cmp-greek" },
+    -- Autocomplete
+    {
+        "Saghen/blink.cmp",
+        version = "*",
+        dependencies = {
+            "L3MON4D3/LuaSnip",
+            "Saghen/blink.compat",
+            "max397574/cmp-greek",
+        },
+        opts = {
+            keymap = {
+                preset = "none",
+                -- C-y is used to select snippets because it's a mess having them auto-insert.
+                -- All other sources have their text automatically inserted
+                ["<C-y>"] = { "accept", "fallback" },
+                ["<C-j>"] = { "select_next", "fallback" },
+                ["<C-k>"] = { "select_prev", "fallback" },
+                ["<C-h>"] = { "scroll_documentation_up", "fallback" },
+                ["<C-l>"] = { "scroll_documentation_down", "fallback" },
+                -- Tab/S-Tab navigate snippet tabstops; fall back to literal tab otherwise
+                ["<Tab>"] = { "snippet_forward", "fallback" },
+                ["<S-Tab>"] = { "snippet_backward", "fallback" },
+                -- Esc exits snippet mode (if active), hides the menu, then exits insert mode
+                ["<Esc>"] = {
+                    function()
+                        require("luasnip").unlink_current()
+                        require("blink.cmp").hide()
+                    end,
+                    "fallback",
+                },
+            },
+            snippets = { preset = "luasnip" },
+            sources = {
+                default = { "lsp", "snippets", "buffer", "path", "greek" },
+                providers = {
+                    lsp      = { min_keyword_length = 1 },
+                    snippets = { min_keyword_length = 1 },
+                    buffer   = { min_keyword_length = 1 },
+                    path     = { min_keyword_length = 1, opts = { show_hidden_files_by_default = true } },
+                    greek = {
+                        name = "greek",
+                        module = "blink.compat.source",
+                        min_keyword_length = 1,
+                    },
+                },
+            },
+            completion = {
+                accept = {
+                    auto_brackets = { enabled = true },
+                },
+                menu = {
+                    auto_show = true,
+                    draw = {
+                        columns = {
+                            { "label", "label_description", gap = 1 },
+                            { "kind_icon", "kind", gap = 1 },
+                            { "source_name" },
+                        },
+                    },
+                },
+                list = {
+                    selection = {
+                        preselect = false,  -- don't auto-select; user navigates with C-j/C-k
+                        auto_insert = true, -- navigating to an item immediately inserts it
+                    },
+                },
+                documentation = {
+                    auto_show = true,
+                    auto_show_delay_ms = 0,
+                    window = { border = "rounded" },
+                },
+            },
         },
     },
-    { "nvimtools/none-ls.nvim",      event = 'VeryLazy' },
-    { 'nvim-tree/nvim-web-devicons', event = 'VeryLazy' },
-    { "hrsh7th/nvim-cmp",            event = 'VeryLazy' },
-    { "hrsh7th/cmp-nvim-lsp",        event = 'VeryLazy' },
+    -- Helpers for running tests and displaying results in the editor
+    {
+        'nvim-neotest/neotest',
+        dependencies = {
+            'nvim-neotest/nvim-nio',
+            'nvim-lua/plenary.nvim',
+            'nvim-neotest/neotest-python',
+            'rouge8/neotest-rust',
+        },
+        event = 'VeryLazy',
+        config = function() require('testing') end,
+    },
     {
         "NeogitOrg/neogit",
         dependencies = {
@@ -217,163 +278,7 @@ require("lazy").setup {
         }, config = true,
         event = 'VeryLazy',
     },
-    { "L3MON4D3/LuaSnip",
-        build = "make install_jsregexp" },
-    { "hrsh7th/cmp-calc" },
-    { "max397574/cmp-greek" },
-    { "chrisgrieser/cmp-nerdfont" },
-    { "ray-x/cmp-treesitter" },
-    { "hrsh7th/cmp-buffer" },
-    { "hrsh7th/cmp-path" },
-    { "saadparwaiz1/cmp_luasnip" },
-    {
-        "nvim-telescope/telescope.nvim",
-        branch = "0.1.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-    },
-    (function()
-        local local_path = vim.fn.expand("$HOME/bioinformatics.nvim")
-        local stat = vim.uv.fs_stat(local_path)
-        if stat and stat.type == "directory" then
-            return { 'bioinformatics', dir = local_path }
-        else
-            return { 'jimrybarski/bioinformatics.nvim' }
-        end
-    end)(),
-    { 'mfussenegger/nvim-dap',           event = 'VeryLazy' },
-    { 'rcarriga/nvim-dap-ui',            dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' }, event = 'VeryLazy' },
-    { 'theHamsta/nvim-dap-virtual-text', dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy' },
-    { 'mfussenegger/nvim-dap-python',    dependencies = { 'mfussenegger/nvim-dap' },                          event = 'VeryLazy', ft = 'python' },
-    {
-        "jiaoshijie/undotree", event = 'VeryLazy',
-        opts = {
-            window = {
-                winblend = 0, -- make the diff window's background totally opaque (it's partially transparent by default)
-                border = "rounded",
-            },
-        }
-    },
-    {
-        "nvim-orgmode/orgmode",
-        dependencies = { "nvim-treesitter/nvim-treesitter" },
-        event = "VeryLazy",
-        config = function()
-            require('orgmode').setup({
-                org_agenda_files = '~/notes/**/*',
-                org_default_notes_file = '~/notes/refile.org',
-                org_hide_emphasis_markers = true,
-                org_startup_folded = 'showeverything',
-                org_blank_before_new_entry = {
-                    heading = false,
-                    plain_list_item = false,
-                },
-                mappings = {
-                    org_return_uses_meta_return = true,
-                    org = {
-                        org_open_at_point = '<CR>',
-                    }
-                }
-            })
-        end,
-    },
-    {
-        "chipsenkbeil/org-roam.nvim",
-        dependencies = {
-            "nvim-orgmode/orgmode",
-        },
-        config = function()
-            require("org-roam").setup({
-                directory = "~/notes",
-                templates = {
-                    m = {
-                        description = "meeting",
-                        template = "%<%Y-%m-%d>\n\n* %?",
-                        target = "meetings/%<%Y-%m-%d>-%[slug].org",
-                    },
-                    i = {
-                        description = "info",
-                        template = "* %?",
-                        target = "info/%[slug].org",
-                    },
-                },
-                bindings = {
-                    ---Adjusts the prefix for every keybinding. Can be used in keybindings with <prefix>.
-                    prefix = ",",
-                    ---Adds an alias to the node under cursor.
-                    add_alias = "<prefix>aa",
-
-                    ---Adds an origin to the node under cursor.
-                    add_origin = "<prefix>oa",
-
-                    ---Opens org-roam capture window.
-                    capture = "<prefix>c",
-
-                    ---Completes the node under cursor.
-                    complete_at_point = "<prefix>.",
-
-                    ---Finds node and moves to it.
-                    find_node = "<prefix>f",
-
-                    ---Goes to the next node sequentially based on origin of the node under cursor.
-                    ---
-                    ---If more than one node has the node under cursor as its origin, a selection
-                    ---dialog is displayed to choose the node.
-                    goto_next_node = "<prefix>n",
-
-                    ---Goes to the previous node sequentially based on origin of the node under cursor.
-                    goto_prev_node = "<prefix>p",
-
-                    ---Inserts node at cursor position.
-                    insert_node = "<prefix>i",
-
-                    ---Inserts node at cursor position without opening capture buffer.
-                    insert_node_immediate = "<prefix>m",
-
-                    ---Opens the quickfix menu for backlinks to the current node under cursor.
-                    quickfix_backlinks = "<prefix>q",
-
-                    ---Removes an alias from the node under cursor.
-                    remove_alias = "<prefix>ar",
-
-                    ---Removes the origin from the node under cursor.
-                    remove_origin = "<prefix>or",
-
-                    ---Toggles the org-roam node-view buffer for the node under cursor.
-                    toggle_roam_buffer = "<prefix>l",
-
-                    ---Toggles a fixed org-roam node-view buffer for a selected node.
-                    toggle_roam_buffer_fixed = "<prefix>b",
-                },
-            })
-        end
-    },
-    { 'akinsho/org-bullets.nvim', config = function()
-        require('org-bullets').setup({
-            concealcursor = true,
-            symbols = {
-                headlines = {
-                    { "●", "MyBulletL1" },
-                    { "-", "MyBulletL2" },
-                    { "○", "MyBulletL3" },
-                    { "◌", "MyBulletL4" },
-                },
-            },
-        })
-    end
-    },
-    -- Enhanced signature help popup
-    {
-        'jimrybarski/sighelp',
-        event = 'InsertEnter',
-        config = function()
-            require('sighelp').setup({
-                border = 'none',
-                highlight_group = 'Search',
-                popup_background = 'Visual',
-                wrap = true,
-            })
-        end
-    },
-}
+}, {
+    -- Lazy.nvim options
+    ui = { border = "rounded" },
+})

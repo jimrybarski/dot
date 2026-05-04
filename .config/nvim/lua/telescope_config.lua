@@ -1,3 +1,17 @@
+local previewers_utils = require("telescope.previewers.utils")
+previewers_utils.ts_highlighter = function(bufnr, ft)
+    local lang = vim.treesitter.language.get_lang(ft)
+    if lang and vim.treesitter.language.add(lang) then
+        local ok = pcall(vim.treesitter.start, bufnr, lang)
+        if ok then return true end
+    end
+    -- fallback to vim regex syntax
+    if ft and ft ~= "" then
+        vim.bo[bufnr].syntax = ft
+    end
+    return false
+end
+
 require("telescope").setup({
     defaults = {
         vimgrep_arguments = {
@@ -13,6 +27,9 @@ require("telescope").setup({
         layout_config = { vertical = { width = 0.9, height = 0.9 } },
         file_ignore_patterns = { ".git" },
         hidden = true,
+        preview = {
+            treesitter = true,
+        },
     },
     pickers = {
         find_files = {
@@ -26,3 +43,4 @@ require("telescope").setup({
         },
     },
 })
+

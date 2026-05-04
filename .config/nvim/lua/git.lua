@@ -41,9 +41,5 @@ require("gitsigns").setup({
 -- CURRENTLY DISABLED.
 vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#9B643D', italic = true })
 
--- 
--- require('diffview').setup()
-
 -- Git TUI
 require('neogit').setup()
-
