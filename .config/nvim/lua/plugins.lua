@@ -235,6 +235,14 @@ require("lazy").setup({
                 },
                 menu = {
                     auto_show = true,
+                    -- Go above the cursor when signature help is also visible, below otherwise.
+                    -- blink re-evaluates this function on every CursorMovedI, so it tracks
+                    -- sig_active (set by the LSP callback in lsp.lua) with at most one-char lag.
+                    -- package.loaded avoids a premature require during blink's startup validation.
+                    direction_priority = function()
+                        local lsp = package.loaded['lsp']
+                        return (lsp and lsp.sig_active()) and { 'n', 's' } or { 's', 'n' }
+                    end,
                     draw = {
                         columns = {
                             { "label", "label_description", gap = 1 },

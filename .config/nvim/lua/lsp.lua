@@ -2,6 +2,7 @@
 -- Note: in Neovim 0.12, vim.lsp.buf.signature_help() uses buf_request_all directly
 -- and bypasses vim.lsp.handlers entirely, so we must also use buf_request_all.
 local sig_win = nil
+local sig_active = false  -- true only while LSP has confirmed sig help at the cursor
 local sig_ns = vim.api.nvim_create_namespace('user.lsp.signature_help')
 
 local function trigger_signature_help()
@@ -33,6 +34,7 @@ local function trigger_signature_help()
                     vim.api.nvim_win_close(sig_win, true)
                     sig_win = nil
                 end
+                sig_active = false
                 return
             end
 
@@ -48,12 +50,14 @@ local function trigger_signature_help()
                     vim.api.nvim_win_close(sig_win, true)
                     sig_win = nil
                 end
+                sig_active = false
                 return
             end
 
             -- Reuse the existing window to update content in-place (prevents strobe).
             -- open_floating_preview always closes+recreates unless _update_win is set.
-            local reuse = sig_win and vim.api.nvim_win_is_valid(sig_win) and sig_win or nil
+            local prev_had_sig = sig_win and vim.api.nvim_win_is_valid(sig_win)
+            local reuse = prev_had_sig and sig_win or nil
             local float_bufnr, float_win = vim.lsp.util.open_floating_preview(lines, 'markdown', {
                 border = 'rounded',
                 anchor_bias = 'below',
@@ -64,6 +68,7 @@ local function trigger_signature_help()
                 _update_win = reuse,
             })
             sig_win = float_win
+            sig_active = true
 
             if hl then
                 vim.api.nvim_buf_clear_namespace(float_bufnr, sig_ns, 0, -1)
@@ -239,3 +244,5 @@ vim.diagnostic.config({
 })
 
 vim.lsp.enable({ "basedpyright", "ruff", "rust_analyzer", "lua_ls", "sourcekit", "fish_lsp", "bash_ls" })
+
+return { sig_active = function() return sig_active end }
