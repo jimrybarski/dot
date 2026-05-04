@@ -119,7 +119,30 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 vim.lsp.buf.definition()
             end, 100)
         end, {})
-        vim.keymap.set({'i', 'n'}, '<C-k>', vim.lsp.buf.hover, { buffer = buf, desc = 'LSP: hover' })
+        -- In normal mode: show LSP hover if the server has content, otherwise show
+        -- the diagnostic float (useful for viewing neotest failure details).
+        vim.keymap.set('n', '<C-k>', function()
+            local params = vim.lsp.util.make_position_params(nil, 'utf-16')
+            vim.lsp.buf_request_all(0, 'textDocument/hover', params, function(results)
+                local has_content = false
+                for _, res in pairs(results) do
+                    if res.result and res.result.contents then
+                        local c = res.result.contents
+                        local text = type(c) == 'table' and (c.value or (c[1] and c[1].value)) or c
+                        if text and text ~= '' then
+                            has_content = true
+                            break
+                        end
+                    end
+                end
+                if has_content then
+                    vim.lsp.buf.hover()
+                else
+                    vim.diagnostic.open_float()
+                end
+            end)
+        end, { buffer = buf, desc = 'LSP: hover or diagnostic' })
+        vim.keymap.set('i', '<C-k>', vim.lsp.buf.hover, { buffer = buf, desc = 'LSP: hover' })
         vim.keymap.set('n', 'gr', vim.lsp.buf.rename, { buffer = buf, desc = 'LSP: rename' })
         vim.keymap.set('n', 'g[', function()
             vim.diagnostic.jump({ count = 1, float = false })

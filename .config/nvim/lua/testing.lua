@@ -7,8 +7,29 @@ neotest.setup({
         }),
         require('neotest-rust'),
     },
+    consumers = {
+        notify_on_run_error = function(client)
+            client.listeners.results = function(_, results, partial)
+                if partial then return end
+                -- If any failing test has actual error content, it's a real failure — don't notify.
+                for _, result in pairs(results) do
+                    if result.status == 'failed' and #(result.errors or {}) > 0 then
+                        return
+                    end
+                end
+                for _, result in pairs(results) do
+                    if result.status == 'failed' then
+                        vim.schedule(function()
+                            neotest.output.open({ enter = true })
+                        end)
+                        return
+                    end
+                end
+            end
+        end,
+    },
     diagnostic = { enabled = true },
-    status = { enabled = true, signs = true },
+    status = { enabled = true },
     output = { open_on_run = false },
 })
 
@@ -40,6 +61,15 @@ end, { desc = 'Test: jump to next failure' })
 vim.keymap.set('n', '<leader>ti', function()
     neotest.output.open({ enter = true })
 end, { desc = 'Test: show output' })
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'neotest-output',
+    callback = function(args)
+        vim.keymap.set('n', '<Esc>', function()
+            vim.api.nvim_win_close(0, true)
+        end, { buffer = args.buf, nowait = true })
+    end,
+})
 
 -- Clear all neotest diagnostics and signs in the current buffer
 vim.keymap.set('n', '<leader>tc', function()
