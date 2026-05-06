@@ -24,7 +24,10 @@ require("telescope").setup({
             "--smart-case",
             "--trim"
         },
-        layout_config = { vertical = { width = 0.9, height = 0.9 } },
+        layout_config = {
+            horizontal = { preview_width = 0.65 },
+            vertical = { width = 0.9, height = 0.9 },
+        },
         file_ignore_patterns = { ".git" },
         hidden = true,
         preview = {
@@ -34,6 +37,17 @@ require("telescope").setup({
     pickers = {
         find_files = {
             find_command = { 'fd', '--type', 'f', '--follow', '--hidden', '--exclude', '.git' }
+        },
+        live_grep = {
+            entry_maker = function(line)
+                local entry = require("telescope.make_entry").gen_from_vimgrep()(line)
+                if not entry then return nil end
+                entry.display = function(e)
+                    local filename = vim.fn.fnamemodify(e.filename, ":.")
+                    return filename, { { { 0, #filename }, "TelescopeResultsFile" } }
+                end
+                return entry
+            end,
         },
         lsp_references = {
             -- by default, telescope lets you type to filter the list of results further.
