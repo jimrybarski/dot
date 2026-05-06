@@ -106,6 +106,13 @@ require("lazy").setup({
     },
     -- Bioinformatics conveniences
     { "jimrybarski/bioinformatics.nvim" },
+    -- In-buffer markdown rendering (headers, code blocks, tables, etc.)
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        ft = { "markdown" },
+        opts = {},
+    },
     -- Treesitter: syntax highlighting and parsing
     {
         "nvim-treesitter/nvim-treesitter",

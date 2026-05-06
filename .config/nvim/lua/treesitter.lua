@@ -20,7 +20,7 @@ require("nvim-treesitter").setup({
         "awk", "bash", "bibtex", "css", "diff", "dockerfile",
         "fish", "gitcommit", "git_config", "gitignore", "git_rebase",
         "gpg", "html", "javascript", "json", "json5",
-        "make", "passwd", "python", "r", "regex", "rust", "scss",
+        "make", "markdown", "markdown_inline", "passwd", "python", "r", "regex", "rust", "scss",
         "sql", "ssh_config", "toml", "tsv", "vim",
         "yaml",
     },

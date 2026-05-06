@@ -151,7 +151,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
             vim.diagnostic.jump({ count = -1, float = false })
         end, { buffer = buf, desc = 'Go to previous diagnostic' })
         vim.keymap.set('n', 'gu', ':Telescope lsp_references<cr>', { buffer = buf, desc = 'LSP: show usages' })
-        vim.keymap.set('n', 'gl', vim.lsp.buf.format, { buffer = buf, desc = 'LSP: format code' })
+        vim.keymap.set('n', 'gl', function()
+            vim.lsp.buf.format({ async = false })
+            vim.lsp.buf.code_action({
+                context = { only = { "source.organizeImports" } },
+                apply = true,
+            })
+        end, { buffer = buf, desc = 'LSP: format code' })
         vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, { buffer = buf, desc = 'LSP: code action' })
         vim.keymap.set('n', 'gh', vim.diagnostic.open_float)
 
