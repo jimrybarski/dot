@@ -37,7 +37,8 @@ vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match,
 end, { force = true })
 
 require("nvim-treesitter").setup()
-require("nvim-treesitter-textobjects").init()
+local _to = require("nvim-treesitter-textobjects")
+if type(_to.init) == "function" then _to.init() end
 require("nvim-treesitter.configs").setup({
     ensure_installed = {
         "awk", "bash", "bibtex", "css", "diff", "dockerfile",
@@ -61,9 +62,15 @@ require("nvim-treesitter.configs").setup({
     },
 })
 
-local select = require("nvim-treesitter.textobjects.select")
-local move = require("nvim-treesitter.textobjects.move")
-local swap = require("nvim-treesitter.textobjects.swap")
+-- Module paths differ between linux and macOS apparently :eyeroll:
+local function req_to(name)
+    local ok, mod = pcall(require, "nvim-treesitter.textobjects." .. name)
+    if ok then return mod end
+    return require("nvim-treesitter-textobjects." .. name)
+end
+local select = req_to("select")
+local move = req_to("move")
+local swap = req_to("swap")
 
 local select_maps = {
     ["af"] = "@function.outer", ["if"] = "@function.inner",
