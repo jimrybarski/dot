@@ -2,8 +2,29 @@
 -- supertype, which Neovim 0.12's query validator rejects in the highlight queries.
 require("nvim-treesitter.parsers").get_parser_configs().python.install_info.revision = "710796b8b877a970297106e5bbc8e2afa47f86ec"
 
--- nvim-treesitter master passes bare TSNodes in directive match tables, but Neovim
--- 0.12 changed match values to TSNode[] lists. Override the broken handler.
+-- nvim-treesitter master expects bare TSNodes in match tables, but Neovim 0.12
+-- removed the {all=false} option and always returns TSNode[] arrays. Patch
+-- iter_prepared_matches to unwrap arrays before the rest of the module sees them.
+local _ts_query_mod = require("nvim-treesitter.query")
+local _orig_iter_prepared = _ts_query_mod.iter_prepared_matches
+_ts_query_mod.iter_prepared_matches = function(query, qnode, bufnr, start_row, end_row)
+    local _wrapped = setmetatable({}, { __index = query })
+    _wrapped.iter_matches = function(_, node, source, start, stop, opts)
+        local iter = query:iter_matches(node, source, start, stop, opts)
+        return function()
+            local pattern, match, metadata = iter()
+            if pattern == nil then return nil end
+            local unwrapped = {}
+            for id, nodes in pairs(match) do
+                unwrapped[id] = type(nodes) == "table" and nodes[1] or nodes
+            end
+            return pattern, unwrapped, metadata
+        end
+    end
+    return _orig_iter_prepared(_wrapped, qnode, bufnr, start_row, end_row)
+end
+
+-- Same issue in the set-lang-from-info-string! directive callback.
 local _lang_aliases = { ex = "elixir", pl = "perl", sh = "bash", uxn = "uxntal", ts = "typescript" }
 vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
     local node = match[pred[2]]
@@ -15,7 +36,9 @@ vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match,
         or _lang_aliases[alias] or alias
 end, { force = true })
 
-require("nvim-treesitter").setup({
+require("nvim-treesitter").setup()
+require("nvim-treesitter-textobjects").init()
+require("nvim-treesitter.configs").setup({
     ensure_installed = {
         "awk", "bash", "bibtex", "css", "diff", "dockerfile",
         "fish", "gitcommit", "git_config", "gitignore", "git_rebase",
@@ -25,23 +48,22 @@ require("nvim-treesitter").setup({
         "yaml",
     },
     highlight = { enable = true },
-})
-
-require("nvim-treesitter-textobjects").setup({
-    select = {
-        lookahead = true,
-        selection_modes = {
-            ['@parameter.outer'] = 'v',
-            ['@function.outer'] = 'V',
-            ['@class.outer'] = '<c-v>',
+    textobjects = {
+        select = {
+            lookahead = true,
+            selection_modes = {
+                ['@parameter.outer'] = 'v',
+                ['@function.outer'] = 'V',
+                ['@class.outer'] = '<c-v>',
+            },
         },
+        move = { set_jumps = true },
     },
-    move = { set_jumps = true },
 })
 
-local select = require("nvim-treesitter-textobjects.select")
-local move = require("nvim-treesitter-textobjects.move")
-local swap = require("nvim-treesitter-textobjects.swap")
+local select = require("nvim-treesitter.textobjects.select")
+local move = require("nvim-treesitter.textobjects.move")
+local swap = require("nvim-treesitter.textobjects.swap")
 
 local select_maps = {
     ["af"] = "@function.outer", ["if"] = "@function.inner",
