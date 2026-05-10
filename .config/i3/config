@@ -27,6 +27,8 @@ exec --no-startup-id dex --autostart --environment i3
 # variable refresh rate for g-sync compatible monitor
 exec --no-startup-id picom --vsync --no-fading-openclose
 
+# set wallpaper
+exec --no-startup-id feh --bg-scale "$HOME/Pictures/wallpaper/wallpaper.jpeg"
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -172,6 +174,11 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Ctrl+o exec shutdown now
+# exit i3 (logs you out of your X session)
+bindsym $mod+Ctrl+k exec i3-msg exit
+
+# Take a screenshot
+bindsym $mod+S exec flameshot gui --clipboard --path ~/Pictures
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
