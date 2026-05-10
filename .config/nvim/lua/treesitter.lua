@@ -26,14 +26,46 @@ end
 
 -- Same issue in the set-lang-from-info-string! directive callback.
 local _lang_aliases = { ex = "elixir", pl = "perl", sh = "bash", uxn = "uxntal", ts = "typescript" }
-vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
-    local node = match[pred[2]]
-    if not node then return end
+local function _unwrap(node)
     if type(node) == "table" and not node.range then node = node[1] end
+    return node
+end
+
+vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+    local node = _unwrap(match[pred[2]])
     if not node then return end
     local alias = vim.treesitter.get_node_text(node, bufnr):lower()
     metadata["injection.language"] = vim.filetype.match({ filename = "a." .. alias })
         or _lang_aliases[alias] or alias
+end, { force = true })
+
+-- Same TSNode[] unwrap for downcase! (bash heredoc injections) and set-lang-from-mimetype! (html).
+vim.treesitter.query.add_directive("downcase!", function(match, _, bufnr, pred, metadata)
+    local id = pred[2]
+    local node = _unwrap(match[id])
+    if not node then return end
+    local text = vim.treesitter.get_node_text(node, bufnr, { metadata = metadata[id] }) or ""
+    if not metadata[id] then metadata[id] = {} end
+    metadata[id].text = string.lower(text)
+end, { force = true })
+
+local _html_script_type_languages = {
+    ["importmap"] = "json",
+    ["module"] = "javascript",
+    ["application/ecmascript"] = "javascript",
+    ["text/ecmascript"] = "javascript",
+}
+vim.treesitter.query.add_directive("set-lang-from-mimetype!", function(match, _, bufnr, pred, metadata)
+    local node = _unwrap(match[pred[2]])
+    if not node then return end
+    local type_attr_value = vim.treesitter.get_node_text(node, bufnr)
+    local configured = _html_script_type_languages[type_attr_value]
+    if configured then
+        metadata["injection.language"] = configured
+    else
+        local parts = vim.split(type_attr_value, "/", {})
+        metadata["injection.language"] = parts[#parts]
+    end
 end, { force = true })
 
 require("nvim-treesitter").setup()
