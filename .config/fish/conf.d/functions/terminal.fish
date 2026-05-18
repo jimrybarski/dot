@@ -1,3 +1,37 @@
+# page files of many common types
+
+function s --description "Pager for various file types (BAM, gzip, plain text, etc.)"
+    # S is for Skim
+    if test (count $argv) -eq 0
+        echo "Usage: skim <file> [file...]"
+        return 1
+    end
+
+    for file in $argv
+        if not test -f $file
+            echo "skim: '$file': No such file" >&2
+            return 1
+        end
+
+        switch $file
+            case '*.bam'
+                samtools view -h $file | less
+            case '*.gz'
+                gzip -cd $file | less
+            case '*.bz2'
+                bzip2 -cd $file | less
+            case '*.zst'
+                zstd -cd $file | less
+            case '*.bcf'
+                bcftools view $file | less
+            case '*.vcf.gz'
+                bcftools view $file | less
+            case '*'
+                less $file
+        end
+    end
+end
+
 # Does the equivalent of Bash's `sudo !!`
 function ugh
     eval command sudo $history[1]

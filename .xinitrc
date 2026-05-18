@@ -4,7 +4,7 @@ export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 /usr/bin/fcitx &
-/usr/bin/flameshot &
+/usr/bin/flameshot --clipboard --path ~/Pictures &
 /usr/bin/dunst &
 xmodmap ~/.config/xmodmap
 exec dbus-run-session i3

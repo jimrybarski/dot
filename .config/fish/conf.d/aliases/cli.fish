@@ -30,6 +30,9 @@ alias sf="ssh freebox"
 alias diceware="shuf $HOME/.local/diceware/wordlists/en_US/wordlist.txt | head -n 6"
 alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
 
+# convenience
+alias skip="tail -n+2"
+
 # programming
 alias cbr='cargo test && cargo build --release && cargo clippy'
 alias crr='cargo run --release'
