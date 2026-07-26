@@ -19,7 +19,8 @@ alias cdf='cd $HOME/dot/.config/fish'
 alias blog='tmuxinator blog'
 
 # shortened
-alias todo='v $HOME/notes/info/todo.org'
+alias todo='v $HOME/notes/2026/20260725-225030.md'
+alias com='v $HOME/notes/2026/20260726-182412.md'
 alias cl='cal -3'
 alias cly='cal -y'
 alias copy='xsel --clipboard'
