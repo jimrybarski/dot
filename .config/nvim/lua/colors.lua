@@ -81,12 +81,19 @@ vim.api.nvim_set_hl(0, 'IlluminatedWordText', { fg = "#FFFF7A", bold = true, und
 vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { fg = "#FFFF7A", bold = true, underline = true })
 vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { fg = "#FFFF7A", bold = true, underline = true })
 
--- Highlight hex color codes (e.g. #0072B2) with the actual color
+-- Highlight hex color codes (e.g. #0072B2) with the actual color.
+--
+-- The filetypes must go under a `filetypes` key. A bare positional list was the
+-- old norcalli API; this fork only reads opts.filetypes, so a positional list is
+-- silently ignored and the default of { "*" } applies to every buffer -- which
+-- also colors bare words like "red", since names is on by default.
 require('colorizer').setup({
-    'css',
-    'javascript',
-    'html',
-    'lua',
+    filetypes = {
+        'css',
+        'javascript',
+        'html',
+        'lua',
+    },
 })
 
 -- Neogit diff colors - blue for additions, red for deletions

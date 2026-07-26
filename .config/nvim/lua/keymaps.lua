@@ -60,6 +60,34 @@ vim.keymap.set('n', '<leader>ff', ':Telescope find_files<cr>', { desc = "Find fi
 vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<cr>', { desc = "Find keymaps", silent = true })
 
 
+-- NOTES
+-- Creating notes and moving along the timeline (lua/notes.lua)
+vim.keymap.set('n', '<localleader>n', function() require('notes').new() end, { desc = "New note" })
+vim.keymap.set('n', '<localleader>l', function() require('notes').latest() end, { desc = "Open latest note" })
+vim.keymap.set('n', ']n', function() require('notes').newer() end, { desc = "Next (newer) note" })
+vim.keymap.set('n', '[n', function() require('notes').older() end, { desc = "Previous (older) note" })
+
+-- Browsing by frontmatter, since every note filename is just a timestamp
+-- vim.keymap.set('n', '<localleader>nt', function() require('notes').titles() end, { desc = "Find note by title" })
+-- vim.keymap.set('n', '<localleader>nb', function() require('notes').bookmarks() end, { desc = "Find bookmarked note" })
+vim.keymap.set('n', '<localleader>i', function() require('notes').insert_link() end, { desc = "Insert link to note" })
+-- Filenames are permanent timestamps, so "rename" means the frontmatter title
+vim.keymap.set('n', '<localleader>r', function() require('notes').retitle() end, { desc = "Retitle note" })
+
+vim.keymap.set('n', '<localleader>g', function() require('notes').grep() end, { desc = "Search note contents" })
+
+-- Search and navigation provided by telekasten
+vim.keymap.set('n', '<localleader>t', ':Telekasten show_tags<CR>', { desc = "Find notes by tag", silent = true })
+-- Jumps straight to [[<stamp>]] links; anything else falls through to telekasten
+-- vim.keymap.set('n', '<localleader>nf', function() require('notes').follow() end, { desc = "Follow link under cursor" })
+vim.keymap.set('n', '<localleader>b', ':Telekasten show_backlinks<CR>', { desc = "Show backlinks to this note", silent = true })
+
+-- AGENDA
+-- The agenda is a read-only view: <CR> jumps to the task, <Tab> folds a section,
+-- q or <Esc> closes it. Editing a task means editing the checkbox in the note.
+vim.keymap.set('n', '<localleader>aa', ':MarkdownAgenda<CR>', { desc = "Open agenda", silent = true })
+
+
 -- RESIZE WINDOWS
 vim.keymap.set('n', '<C-S-j>', '1<C-w>+', { desc = "Increase window height", silent = true })
 vim.keymap.set('n', '<C-S-k>', '1<C-w>-', { desc = "Decrease window height", silent = true })
