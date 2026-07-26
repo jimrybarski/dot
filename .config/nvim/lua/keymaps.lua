@@ -83,9 +83,18 @@ vim.keymap.set('n', '<localleader>t', ':Telekasten show_tags<CR>', { desc = "Fin
 vim.keymap.set('n', '<localleader>b', ':Telekasten show_backlinks<CR>', { desc = "Show backlinks to this note", silent = true })
 
 -- AGENDA
--- The agenda is a read-only view: <CR> jumps to the task, <Tab> folds a section,
--- q or <Esc> closes it. Editing a task means editing the checkbox in the note.
-vim.keymap.set('n', '<localleader>aa', ':MarkdownAgenda<CR>', { desc = "Open agenda", silent = true })
+-- markdown-agenda only reads: <CR> jumps to the task, <Tab> folds a section,
+-- q or <Esc> closes it. Everything that writes is lua/agenda.lua, and the same
+-- four actions are mapped inside the agenda window (autocommands.lua).
+vim.keymap.set('n', '<localleader>a', ':MarkdownAgenda<CR>', { desc = "Open agenda", silent = true })
+
+-- On a line that isn't a task yet, any of these makes it one first
+vim.keymap.set('n', '<localleader>x', function() require('agenda').here('done') end, { desc = "Toggle task done" })
+vim.keymap.set('n', '<localleader>p', function() require('agenda').here('progress') end, { desc = "Toggle task in progress" })
+-- Prompts take 2026-08-05, today, tomorrow, +3d, 2w, +1m or a weekday name;
+-- submitting it empty clears the date
+vim.keymap.set('n', '<localleader>s', function() require('agenda').here('scheduled') end, { desc = "Schedule task" })
+vim.keymap.set('n', '<localleader>d', function() require('agenda').here('deadline') end, { desc = "Set task deadline" })
 
 
 -- RESIZE WINDOWS

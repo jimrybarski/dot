@@ -37,6 +37,26 @@ autocmd("FileType", {
     end
 })
 
+-- The agenda window's own actions. These edit the note the task came from and
+-- redraw, so they're buffer-local to the float rather than living in keymaps.lua
+-- with the rest. `nowait` because the plugin's own maps use it, and `d` would
+-- otherwise sit waiting for a motion that a read-only buffer will never use.
+autocmd("FileType", {
+    pattern = "markdown-agenda",
+    callback = function(args)
+        local actions = { x = "done", p = "progress", s = "scheduled", d = "deadline" }
+        for key, kind in pairs(actions) do
+            vim.keymap.set("n", key, function() require("agenda").from_agenda(kind) end,
+                { buffer = args.buf, nowait = true, desc = "Agenda: " .. kind })
+        end
+
+        -- The agenda is a snapshot taken when it opened, so notes edited
+        -- elsewhere since then need a way to show up without closing it
+        vim.keymap.set("n", "r", "<Cmd>close<CR><Cmd>MarkdownAgenda<CR>",
+            { buffer = args.buf, nowait = true, silent = true, desc = "Agenda: rescan notes" })
+    end
+})
+
 -- The stamp -> title map backs the [[timestamp]] rendering, so it has to drop
 -- whenever a note's frontmatter could have changed. `*` spans path separators in
 -- autocmd patterns, so this covers every year directory.

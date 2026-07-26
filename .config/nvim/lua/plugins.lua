@@ -361,8 +361,9 @@ require("lazy").setup({
     --
     --     - [ ] Buy tofu @scheduled(2026-07-30) @deadline(2026-08-05)
     --
-    -- Dates are day-granularity only. The plugin never writes to a note, so
-    -- checking a task off means editing the checkbox by hand.
+    -- Dates are day-granularity only. The plugin never writes to a note; every
+    -- action that does is lua/agenda.lua, mapped both in notes and in this
+    -- window.
     {
         "Kamyil/markdown-agenda.nvim",
         cmd = "MarkdownAgenda",
@@ -373,6 +374,12 @@ require("lazy").setup({
             date_format = "%Y-%m-%d",
 
             border = "rounded",
+
+            -- The footer help line is hardcoded in the plugin and only ever
+            -- mentions its own three keys, so the editing ones go in the title.
+            -- It fits: min_width is 95 whenever the calendar sits on the right.
+            title = " Agenda   x done · p progress · s schedule · d deadline · r rescan ",
+
             calendar = {
                 enabled = true,
                 months_to_show = 3,
