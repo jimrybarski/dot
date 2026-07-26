@@ -7,11 +7,11 @@ local ts = require("nvim-treesitter")
 -- on every startup costs nothing. `:TSUpdate` (the lazy.nvim build step) is what
 -- moves them forward when the pinned revisions change.
 ts.install({
-    "awk", "bash", "bibtex", "css", "diff", "dockerfile",
+    "awk", "bash", "bibtex", "cmake", "cpp", "css", "diff", "dockerfile",
     "fish", "gitcommit", "git_config", "gitignore", "git_rebase",
     "gpg", "html", "javascript", "json", "json5",
     "make", "markdown", "markdown_inline", "passwd", "python", "r", "regex", "rust", "scss",
-    "sql", "ssh_config", "toml", "tsv", "vim",
+    "sql", "ssh_config", "toml", "tsv", "vim", "xml",
     "yaml",
 })
 
