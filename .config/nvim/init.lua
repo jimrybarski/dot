@@ -25,3 +25,4 @@ require("hop_config")
 -- Stay at the end
 require("keymaps")
 require("telescope_config")
+require("pinyin")
