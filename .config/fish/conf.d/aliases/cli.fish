@@ -1,8 +1,10 @@
 # system management
 alias upgrade='sudo pacman -Syu; /usr/bin/setxkbmap -option caps:escape'
 alias game='pkill -9 picom'
+alias syncpass='pushd $HOME/.password-store && git push && popd'
 
 # config files
+alias cfa='v $HOME/.config/fish/conf.d/aliases/cli.fish'
 alias cff='v $HOME/.config/fish/config.fish --cmd "cd $HOME/.config/fish"'
 alias cfi3='v $HOME/.config/i3/config'
 alias cfib='v $HOME/.config/i3blocks/config'
