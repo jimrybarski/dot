@@ -97,6 +97,15 @@ vim.keymap.set('n', '<localleader>s', function() require('agenda').here('schedul
 vim.keymap.set('n', '<localleader>d', function() require('agenda').here('deadline') end, { desc = "Set task deadline" })
 
 
+-- CALCULATOR
+-- A floating scratch pad where every line is a qalc expression, evaluated live
+-- into virtual text (lua/calculator.lua). q or <Esc> inside it close the float.
+-- :QalcAttach turns any existing buffer into one, and :QalcYank copies the
+-- result on the current line to a register.
+vim.keymap.set('n', '<leader>c', function() require('calculator').open() end,
+    { desc = "Open calculator" })
+
+
 -- RESIZE WINDOWS
 vim.keymap.set('n', '<C-S-j>', '1<C-w>+', { desc = "Increase window height", silent = true })
 vim.keymap.set('n', '<C-S-k>', '1<C-w>-', { desc = "Decrease window height", silent = true })

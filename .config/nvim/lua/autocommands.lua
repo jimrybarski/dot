@@ -73,3 +73,11 @@ autocmd('LspAttach', {
         end
     end,
 })
+
+-- The calculator float attaches the qalc language server itself
+-- (lua/calculator.lua); this covers .qalc files opened as ordinary buffers,
+-- which qalc.nvim already evaluates via its own *.qalc autocmd.
+autocmd({ "BufReadPost", "BufNewFile" }, {
+    pattern = "*.qalc",
+    callback = function(args) require("qalc_lsp").attach(args.buf) end
+})

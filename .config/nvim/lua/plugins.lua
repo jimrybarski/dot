@@ -355,6 +355,35 @@ require("lazy").setup({
             show_tags_theme = "ivy",
         },
     },
+    -- Calculator: each line is a qalc expression and its result appears as
+    -- virtual text at the end of the line, recomputed as you type. Units,
+    -- currency conversion and variable assignment all work, since it is just
+    -- the qalc CLI (already installed at /usr/bin/qalc) driven from the buffer.
+    -- The floating scratch pad on <leader>c is lua/calculator.lua; the commands
+    -- below are for attaching to a buffer that already exists.
+    {
+        "Apeiros-46B/qalc.nvim",
+        cmd = { "Qalc", "QalcAttach", "QalcYank" },
+        -- setup() registers the *.qalc autocmd, so opening such a file directly
+        -- has to load the plugin too; cmd alone would leave it inert there.
+        -- calculator.lua gets there by require('qalc'), which lazy also catches.
+        event = { "BufReadPre *.qalc", "BufNewFile *.qalc" },
+        opts = {
+            -- The plugin appends its own trailing space, so "=" renders as "= 4"
+            sign = "=",
+            highlights = { sign = "Comment", result = "@string" },
+            -- The buffer is a scratch pad, not code being linted: errors while
+            -- an expression is half-typed shouldn't paint the line red.
+            diagnostics = {
+                underline = false,
+                virtual_text = false,
+                signs = true,
+                update_in_insert = false,
+                severity_sort = true,
+            },
+        },
+        config = function(_, opts) require("qalc").setup(opts) end,
+    },
     -- Read-only agenda over checkbox tasks. Only lines matching `- [ ]` or `- [-]`
     -- AND carrying an @scheduled(...) or @deadline(...) annotation are collected;
     -- everything else, including `- [x]`, is ignored:
@@ -365,7 +394,7 @@ require("lazy").setup({
     -- action that does is lua/agenda.lua, mapped both in notes and in this
     -- window.
     {
-        "Kamyil/markdown-agenda.nvim",
+        "jimrybarski/markdown-agenda.nvim",
         cmd = "MarkdownAgenda",
         opts = {
             -- Globbed as `<directory>/**/*.md`, so every year directory is covered
