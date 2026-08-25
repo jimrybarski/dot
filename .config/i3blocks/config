@@ -10,6 +10,11 @@
 separator=true
 separator_block_width=35
 
+[weather]
+command=/home/jim/weather/target/release/weather
+interval=1200
+markup=pango
+
 [passwords]
 command=/home/jim/.local/bin/fish --no-config /home/jim/dot/scripts/passwords-stale.fish
 interval=10
