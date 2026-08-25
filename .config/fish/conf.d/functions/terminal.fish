@@ -1,3 +1,19 @@
+# calculator
+
+# function that does the qalc call + clipboard copy
+function calc
+    set -l result (qalc $argv)
+    echo $result
+    if type -q wl-copy
+        printf '%s' $result | wl-copy
+    else if type -q xclip
+        printf '%s' $result | xclip -selection clipboard
+    end
+end
+
+# typing "c" + space expands to: calc ""  with cursor already between the quotes
+abbr -a c --set-cursor 'calc "%"'
+
 # page files of many common types
 
 function s --description "Pager for various file types (BAM, gzip, plain text, etc.)"
