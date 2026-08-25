@@ -5,7 +5,6 @@ alias syncpass='pushd $HOME/.password-store && git push && popd'
 
 # config files
 alias cfa='v $HOME/.config/fish/conf.d/aliases/cli.fish'
-alias cff='v $HOME/.config/fish/config.fish --cmd "cd $HOME/.config/fish"'
 alias cfi3='v $HOME/.config/i3/config'
 alias cfib='v $HOME/.config/i3blocks/config'
 alias cfn='v $HOME/.config/ncmpcpp/config'
@@ -15,12 +14,14 @@ alias cftr='v $HOME/.config/tmuxinator/'
 
 # config directories
 alias cdv='cd $HOME/dot/.config/nvim'
-alias cdf='cd $HOME/dot/.config/fish'
+alias cdf='cd $HOME/dot/.config/fish/conf.d' # I almost always want this
+alias cdff='cd $HOME/dot/.config/fish' # Occasionally need this, so it's longer
 
 # tmuxinator 
 alias blog='tmuxinator blog'
 
 # shortened
+alias ag='claude' # AGent
 alias todo='v $HOME/notes/2026/20260725-225030.md'
 alias com='v $HOME/notes/2026/20260726-182412.md'
 alias cl='cal -3'
