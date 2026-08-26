@@ -12,7 +12,7 @@ separator_block_width=35
 
 [weather]
 command=/home/jim/weather/target/release/weather
-interval=1200
+interval=60
 markup=pango
 
 [passwords]
