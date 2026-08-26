@@ -1,0 +1,15 @@
+[Added Associations]
+application/pdf=org.gnome.Evince.desktop;com.github.xournalpp.xournalpp.desktop;firefox.desktop;
+video/webm=vlc.desktop;
+image/png=firefox.desktop;feh.desktop;
+image/jpeg=nsxiv.desktop;feh.desktop;okularApplication_kimgio.desktop;firefox.desktop;
+
+[Default Applications]
+video/webm=vlc.desktop
+application/uproject=com.epicgames.UnrealEngineEditor.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+text/html=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
