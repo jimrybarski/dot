@@ -28,7 +28,7 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id picom --vsync --no-fading-openclose
 
 # set wallpaper
-exec --no-startup-id feh --bg-scale "$HOME/Pictures/wallpaper/wallpaper.jpeg"
+exec --no-startup-id feh --bg-fill "$HOME/Pictures/wallpaper/wallhaven-ogyeol.jpg"
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -101,7 +101,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+Shift+s split h
+#bindsym $mod+Shift+h split h
 
 # split in vertical orientation
 bindsym $mod+Shift+v split v
@@ -141,6 +141,10 @@ bindsym $mod+Shift+t exec "thunar $HOME/Videos"; workspace number $ws4
 bindsym $mod+Ctrl+l exec i3lock --color=000000
 bindsym $mod+v exec fish -c pastevid
 bindsym $mod+m exec fish -c pastemp3
+# extend onto / detach from the TV once it has been switched on
+bindsym $mod+p exec --no-startup-id $HOME/dot/scripts/tv.fish toggle
+# send audio to the TV or back to the desk speakers
+bindsym $mod+Shift+p exec --no-startup-id $HOME/dot/scripts/audio-out.fish toggle
 
 # switch to workspace
 # we automatically set brightness to bright for the terminal and games since those tend to be very dark
@@ -178,7 +182,7 @@ bindsym $mod+Ctrl+o exec shutdown now
 bindsym $mod+Ctrl+k exec i3-msg exit
 
 # Take a screenshot
-bindsym $mod+S exec flameshot gui --clipboard --path ~/Pictures
+bindsym $mod+Shift+s exec flameshot gui --clipboard --path ~/Pictures
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -220,6 +224,18 @@ assign [class="Thunar"] 4
 assign [class="google-chrome"] 9
 
 for_window [class="Qalculate-gtk"] floating enable
+
+# TV is on workspace 8
+workspace $ws1 output DP-0
+workspace $ws2 output DP-0
+workspace $ws3 output DP-0
+workspace $ws4 output DP-0
+workspace $ws5 output DP-0
+workspace $ws6 output DP-0
+workspace $ws7 output DP-0
+workspace $ws8 output HDMI-0
+workspace $ws9 output DP-0
+workspace $ws10 output DP-0
 
 default_border normal 0
 client.focused #233d55 #233d55 #bbbbbb
