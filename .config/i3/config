@@ -141,6 +141,8 @@ bindsym $mod+Shift+t exec "thunar $HOME/Videos"; workspace number $ws4
 bindsym $mod+Ctrl+l exec i3lock --color=000000
 bindsym $mod+v exec fish -c pastevid
 bindsym $mod+m exec fish -c pastemp3
+# extend onto / detach from the TV once it has been switched on
+bindsym $mod+p exec --no-startup-id $HOME/dot/scripts/tv.fish toggle
 
 # switch to workspace
 # we automatically set brightness to bright for the terminal and games since those tend to be very dark
@@ -220,6 +222,18 @@ assign [class="Thunar"] 4
 assign [class="google-chrome"] 9
 
 for_window [class="Qalculate-gtk"] floating enable
+
+# TV is on workspace 8
+workspace $ws1 output DP-0
+workspace $ws2 output DP-0
+workspace $ws3 output DP-0
+workspace $ws4 output DP-0
+workspace $ws5 output DP-0
+workspace $ws6 output DP-0
+workspace $ws7 output DP-0
+workspace $ws8 output HDMI-0
+workspace $ws9 output DP-0
+workspace $ws10 output DP-0
 
 default_border normal 0
 client.focused #233d55 #233d55 #bbbbbb
