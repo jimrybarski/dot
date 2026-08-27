@@ -143,6 +143,8 @@ bindsym $mod+v exec fish -c pastevid
 bindsym $mod+m exec fish -c pastemp3
 # extend onto / detach from the TV once it has been switched on
 bindsym $mod+p exec --no-startup-id $HOME/dot/scripts/tv.fish toggle
+# send audio to the TV or back to the desk speakers
+bindsym $mod+Shift+p exec --no-startup-id $HOME/dot/scripts/audio-out.fish toggle
 
 # switch to workspace
 # we automatically set brightness to bright for the terminal and games since those tend to be very dark
