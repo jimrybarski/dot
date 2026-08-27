@@ -101,7 +101,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+Shift+s split h
+#bindsym $mod+Shift+h split h
 
 # split in vertical orientation
 bindsym $mod+Shift+v split v
@@ -178,7 +178,7 @@ bindsym $mod+Ctrl+o exec shutdown now
 bindsym $mod+Ctrl+k exec i3-msg exit
 
 # Take a screenshot
-bindsym $mod+S exec flameshot gui --clipboard --path ~/Pictures
+bindsym $mod+Shift+s exec flameshot gui --clipboard --path ~/Pictures
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
