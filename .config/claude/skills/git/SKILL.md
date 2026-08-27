@@ -13,7 +13,7 @@ Always, when working in (or creating) version-controlled codebases.
 
 ### Trunk-based development (recommended)
 
-Keep `main` always deployable. Work in short-lived feature branches that merge back once complete. 
+Keep `main` always deployable. Work on the `main` branch for small changes, and use feature branches whenever the change will be large, complex, or risky.
 
 ### Commit early, commit often
 
@@ -74,6 +74,8 @@ update auth.ts
 - `docs` — Documentation only
 - `chore` — Tooling, dependencies, config
 
+Do NOT sign Claude as a co-author.
+
 ### Keep concerns separate
 
 Don't combine formatting changes with behavior changes. Don't combine refactors with features. Each type of change should be a separate commit — and ideally a separate PR:
@@ -112,9 +114,7 @@ main (always deployable)
 ```
 
 - Branch from `main` (or the team's default branch)
-- Keep branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
 - Delete branches after merge
-- Prefer feature flags over long-lived branches for incomplete features
 
 ### Branch Naming
 
