@@ -13,9 +13,11 @@ alias cft='v $HOME/.config/tmux/tmux.conf'
 alias cftr='v $HOME/.config/tmuxinator/'
 
 # config directories
+alias cdd='cd $HOME/dot'
 alias cdv='cd $HOME/dot/.config/nvim'
 alias cdf='cd $HOME/dot/.config/fish/conf.d' # I almost always want this
 alias cdff='cd $HOME/dot/.config/fish' # Occasionally need this, so it's longer
+alias cds='cd $HOME/dot/.config/claude/skills/'
 
 # tmuxinator 
 alias blog='tmuxinator blog'
