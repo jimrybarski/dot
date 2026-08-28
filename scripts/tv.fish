@@ -37,6 +37,51 @@ for line in (xrandr --query)
     end
 end
 
+# An X screen has one vblank source, so with the ultrawide at 165Hz and the TV
+# at 60Hz only one of them can be in sync -- picom paces to the primary and the
+# TV tears. ForceFullCompositionPipeline hands that output its own composited,
+# vblank-locked scanout, which fixes it. (The TV's own Game Mode cannot: it
+# only skips the panel's post-processing, and the tear is already in the signal
+# by then.)
+#
+# It is applied per-output rather than to the whole screen because it costs
+# about a frame of latency and rules out variable refresh, and the ultrawide
+# neither tears nor wants to give up G-Sync.
+#
+# The token lives in the NVIDIA metamode, not in RandR, and every xrandr call
+# builds a fresh metamode -- so this has to run *after* xrandr, every time.
+# Rather than restate the geometry (and have it drift from the xrandr calls
+# below), it reads back the metamode xrandr just produced and rewrites only the
+# composition tokens in it.
+#
+# It clears the token off every display before setting it on the TV, because
+# detaching the TV does not simply drop the token: the driver moves it onto
+# whichever display is left. Without the clear, one $mod+p round trip leaves
+# the ultrawide permanently composited and G-Sync silently off.
+function tearfree -a tv
+    command -q nvidia-settings; or return 0
+
+    set -l current (nvidia-settings -q CurrentMetaMode -t 2>/dev/null \
+        | string replace -r '^.*? :: ' '')
+    test -n "$current"; or return 1
+    set -l wanted (string replace -ra ',\s*Force(Full)?CompositionPipeline=On' '' -- $current)
+
+    # Which DPY-n the TV is depends on the driver, so resolve it by connector.
+    # [^{] and [^}] keep the match inside that one display's token list. When
+    # the TV is detached it has no entry, nothing matches, and the clear stands.
+    set -l named (nvidia-settings -q dpys -t 2>/dev/null \
+        | string match -r "dpy:(\d+)\]\s+\($tv\)")
+    if test (count $named) -ge 2
+        set wanted (string replace -r "(DPY-$named[2]: [^{]*\{[^}]*)\}" \
+            '$1, ForceFullCompositionPipeline=On}' -- $wanted)
+    end
+
+    if test "$wanted" != "$current"
+        nvidia-settings --assign CurrentMetaMode="$wanted" >/dev/null 2>&1
+    end
+    return 0
+end
+
 set -l action $argv[1]
 test -z "$action"; and set action auto
 
@@ -66,9 +111,11 @@ switch $action
         end
         xrandr --output $main --primary --mode $main_mode --rate $main_rate \
                --output $tv --mode $tv_mode --rate $tv_rate --left-of $main
+        tearfree $tv
     case off
         xrandr --output $main --primary --mode $main_mode --rate $main_rate \
                --output $tv --off
+        tearfree $tv
     case '*'
         echo "usage: tv.fish [auto|on|off|toggle]" >&2
         exit 2
