@@ -25,6 +25,12 @@ command=/home/jim/.local/bin/fish --no-config /home/jim/dot/scripts/dotfiles-sta
 interval=10
 color=#D55E00
 
+# Shows the SRS cards awaiting TTS audio and triggers generation on the GPU.
+# Hidden when the queue is empty. See ~/helper/docs/srs.md.
+[tts]
+command=/home/jim/helper/desktop/bin/tts-block.sh
+interval=60
+
 [disk]
 command=df -h | grep '/$' | awk '{print $4 "iB"}'
 interval=30
