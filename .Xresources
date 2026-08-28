@@ -1,0 +1,23 @@
+! X resources, merged by .xinitrc before i3 starts.
+!
+! Avoid apostrophes anywhere in this file, including comments: xrdb runs it
+! through cpp, which reads one as an unterminated character literal and warns.
+!
+! Without an explicit DPI, X derives one from the *combined* virtual screen --
+! it divides the total pixel width across every attached output by the total
+! physical width, and hands every toolkit that single number. Attaching the 4K
+! TV alongside the ultrawide pulls that average down to 67dpi, so Pango sizes
+! (the i3 bar and title font, Alacritty) shrink to about 60% of what they are
+! on the ultrawide alone, and every $mod+p toggle resizes them again. Pinning
+! the value decouples font size from which displays happen to be plugged in.
+!
+! 109 is the real density of the ultrawide (3440px over 800mm), which is where
+! the desktop actually gets used. The TV renders at the same logical density,
+! so its UI is physically smaller than it was at 1080p -- X11 has no per-output
+! DPI, and that workspace is mostly video, so it is the right trade here.
+Xft.dpi: 109
+
+! Cursor size falls back to screen_height_px / 48 when it is unset, so the TV
+! going 1080p -> 2160p silently grew the pointer from 30px to 45px. 24 is the
+! stock size and matches the native bitmaps in the themes, so it stays sharp.
+Xcursor.size: 24
