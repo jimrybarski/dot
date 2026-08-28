@@ -9,13 +9,20 @@
 #
 # The TV reports as disconnected while it is powered off, so `auto` does the
 # right thing at boot whether or not it happens to be on.
+#
+# The TV also needs ForceFullCompositionPipeline to stop tearing -- see
+# tearfree below.
 
 set -l main DP-0
 set -l main_mode 3440x1440
 set -l main_rate 164.90
 set -l tv HDMI-0
-set -l tv_mode 1920x1080
-set -l tv_rate 60
+set -l tv_mode 3840x2160
+# The panel also advertises 3840x2160 at 164.99, and it trains and stays RGB.
+# 120 is the better default anyway: this screen mostly plays video, and 24p and
+# 30p divide evenly into it, where 165 pulls them down unevenly and judders.
+# Switch the rate here if the TV ever becomes a screen for gaming instead.
+set -l tv_rate 119.88
 
 # plugged: the TV is powered on and handshaking
 # active:  it is already part of the desktop
