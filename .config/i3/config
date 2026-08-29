@@ -181,8 +181,15 @@ bindsym $mod+Ctrl+o exec shutdown now
 # exit i3 (logs you out of your X session)
 bindsym $mod+Ctrl+k exec i3-msg exit
 
-# Take a screenshot
-bindsym $mod+Shift+s exec flameshot gui --clipboard --path ~/Pictures
+# Take a screenshot of the ultrawide. Naming a screen skips flameshot's
+# monitor-selection dialog, which it otherwise shows whenever the TV is
+# attached; -e still opens the usual region editor on that capture.
+#
+# -n indexes Qt's screen list, which is ordered primary-first -- so 0 is
+# whichever output xrandr calls primary, not DP-0 by name. tv.fish passes
+# --primary DP-0 on every path, so 0 is DP-0 here; if that ever stops being
+# true, this silently starts screenshotting the TV.
+bindsym $mod+Shift+s exec flameshot screen -n 0 -e --clipboard --path ~/Pictures
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
