@@ -17,7 +17,7 @@ set -x XDG_CONFIG_HOME "$HOME/.config"
 set -x CLAUDE_CONFIG_DIR "$XDG_CONFIG_HOME/claude"
 set -x LIBCLANG_PATH "/home/jim/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-18.1.2_20240912/esp-clang/lib"
 
-set -U fish_user_paths $HOME/.local/sra/bin $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin $HOME/scripts $HOME/.rustup/toolchains/esp/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin $HOME/.luarocks/bin $HOME/.local/npm-global/bin $HOME/.bun/bin $fish_user_paths
+set -U fish_user_paths $HOME/.local/sra/bin $HOME/.cargo/bin $HOME/.local/bin /usr/local/go/bin $HOME/.rustup/toolchains/esp/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin $HOME/.luarocks/bin $HOME/.local/npm-global/bin $HOME/.bun/bin $HOME/dot/scripts $fish_user_paths
 
 # set my editor with fallback options in case I'm in a new environment
 set -l editors nvim vim vi nano
