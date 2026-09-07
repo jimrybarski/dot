@@ -18,11 +18,46 @@ set -l main_mode 3440x1440
 set -l main_rate 164.90
 set -l tv HDMI-0
 set -l tv_mode 3840x2160
-# The panel also advertises 3840x2160 at 164.99, and it trains and stays RGB.
-# 120 is the better default anyway: this screen mostly plays video, and 24p and
-# 30p divide evenly into it, where 165 pulls them down unevenly and judders.
-# Switch the rate here if the TV ever becomes a screen for gaming instead.
-set -l tv_rate 119.88
+
+# The rate is chosen at runtime rather than hardcoded, because the TV does not
+# serve one EDID -- it alternates between a basic and an extended block (see
+# audio-out.fish, which has the same problem from the audio side), and only the
+# extended one carries the HDMI Forum descriptor that advertises the high
+# refresh rates. Hardcode 119.88 and a boot on the basic block leaves that rate
+# off the list entirely, so xrandr fails and the TV never comes up at all.
+#
+# Of what is on offer, take the fastest rate that both 24 and 30 divide into
+# evenly -- so a multiple of 120. This screen mostly plays video, and any other
+# rate pulls 24p or 30p down on an uneven cadence and judders: 165Hz is offered
+# and trains fine as RGB, but it lands 24p on a 6:7:7:7 cadence. If nothing
+# qualifies, fall back to the fastest on offer and accept the pulldown -- on the
+# basic block that means 60Hz, which is right for 30p but still 3:2 for 24p.
+#
+# The rates are NTSC-fractional (119.88 is 120/1.001), so divisibility is
+# tested against the rounded nominal rate.
+function tv_rates -a output mode
+    xrandr --query | awk -v out=$output -v mode=$mode '
+        $1 == out && $2 == "connected" { inblock = 1; next }
+        # Any unindented line ends the block: the next connector, or the trailer.
+        /^[^ \t]/ { inblock = 0 }
+        inblock && $1 == mode {
+            # Strip the current (*) and preferred (+) markers. xrandr lists the
+            # current rate first rather than in order, so this is not sorted.
+            for (i = 2; i <= NF; i++) { gsub(/[*+]/, "", $i); print $i }
+        }
+    '
+end
+
+function best_rate -a output mode
+    tv_rates $output $mode | awk '
+        { nominal = int($1 + 0.5) }
+        nominal > fastest { fastest = nominal; fastest_rate = $1 }
+        nominal % 24 == 0 && nominal % 30 == 0 && nominal > clean {
+            clean = nominal; clean_rate = $1
+        }
+        END { print (clean ? clean_rate : fastest_rate) }
+    '
+end
 
 # plugged: the TV is powered on and handshaking
 # active:  it is already part of the desktop
@@ -107,6 +142,11 @@ switch $action
     case on
         if test $plugged -eq 0
             notify-send "TV not detected" "Turn the TV on and select the HDMI input, then try again."
+            exit 1
+        end
+        set -l tv_rate (best_rate $tv $tv_mode)
+        if test -z "$tv_rate"
+            notify-send "TV not usable" "The TV is not offering $tv_mode at any rate."
             exit 1
         end
         xrandr --output $main --primary --mode $main_mode --rate $main_rate \
