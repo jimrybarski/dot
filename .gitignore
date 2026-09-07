@@ -3,3 +3,5 @@
 .claude
 CLAUDE.local.md
 skills/workbook
+
+.config/nvim/lazy-lock.json
