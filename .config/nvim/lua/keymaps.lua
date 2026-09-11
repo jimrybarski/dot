@@ -63,9 +63,16 @@ vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<cr>', { desc = "Find keyma
 -- NOTES
 -- Creating notes and moving along the timeline (lua/notes.lua)
 vim.keymap.set('n', '<localleader>n', function() require('notes').new() end, { desc = "New note" })
-vim.keymap.set('n', '<localleader>l', function() require('notes').latest() end, { desc = "Open latest note" })
 vim.keymap.set('n', ']n', function() require('notes').newer() end, { desc = "Next (newer) note" })
 vim.keymap.set('n', '[n', function() require('notes').older() end, { desc = "Previous (older) note" })
+
+-- A daily note is a note tagged `daily`, titled with its date. <localleader>d
+-- writes today's if it doesn't exist yet, so it's always one keystroke. h and l
+-- walk the dailies the way they move the cursor -- left is back in time -- and
+-- since only days you actually wrote on have files, the gaps skip themselves.
+vim.keymap.set('n', '<localleader>d', function() require('notes').daily() end, { desc = "Open today's daily note" })
+vim.keymap.set('n', '<localleader>h', function() require('notes').previous_daily() end, { desc = "Previous (older) daily note" })
+vim.keymap.set('n', '<localleader>l', function() require('notes').next_daily() end, { desc = "Next (newer) daily note" })
 
 -- Browsing by frontmatter, since every note filename is just a timestamp
 -- vim.keymap.set('n', '<localleader>nt', function() require('notes').titles() end, { desc = "Find note by title" })
@@ -76,8 +83,10 @@ vim.keymap.set('n', '<localleader>r', function() require('notes').retitle() end,
 
 vim.keymap.set('n', '<localleader>g', function() require('notes').grep() end, { desc = "Search note contents" })
 
+-- Space-separated tags, ANDed; quote a tag for an exact rather than substring match
+vim.keymap.set('n', '<localleader>t', function() require('notes').tags() end, { desc = "Find notes by tag" })
+
 -- Search and navigation provided by telekasten
-vim.keymap.set('n', '<localleader>t', ':Telekasten show_tags<CR>', { desc = "Find notes by tag", silent = true })
 -- Jumps straight to [[<stamp>]] links; anything else falls through to telekasten
 -- vim.keymap.set('n', '<localleader>nf', function() require('notes').follow() end, { desc = "Follow link under cursor" })
 vim.keymap.set('n', '<localleader>b', ':Telekasten show_backlinks<CR>', { desc = "Show backlinks to this note", silent = true })
@@ -94,7 +103,8 @@ vim.keymap.set('n', '<localleader>p', function() require('agenda').here('progres
 -- Prompts take 2026-08-05, today, tomorrow, +3d, 2w, +1m or a weekday name;
 -- submitting it empty clears the date
 vim.keymap.set('n', '<localleader>s', function() require('agenda').here('scheduled') end, { desc = "Schedule task" })
-vim.keymap.set('n', '<localleader>d', function() require('agenda').here('deadline') end, { desc = "Set task deadline" })
+-- Not <localleader>d, which opens the daily note
+vim.keymap.set('n', '<localleader>y', function() require('agenda').here('deadline') end, { desc = "Set task deadline" })
 
 
 -- CALCULATOR

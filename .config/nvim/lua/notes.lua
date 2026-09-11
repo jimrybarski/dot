@@ -10,8 +10,8 @@
 --
 -- Telekasten handles search, tags, [[links]] and backlinks. This module covers
 -- what it can't: creating notes into year directories, walking the timeline,
--- and browsing by frontmatter (filenames are timestamps, so every filename-based
--- picker is useless here).
+-- daily notes, and browsing by frontmatter (filenames are timestamps, so every
+-- filename-based picker is useless here).
 
 local M = {}
 
@@ -34,44 +34,47 @@ local function open(path)
     vim.cmd.edit(vim.fn.fnameescape(path))
 end
 
--- Create a note in this year's directory and drop the cursor into the body.
+-- Write a note into this year's directory and drop the cursor into the body.
+--
+-- Every note is born here, which is the only reason the cache drop can be a
+-- single line: notes are written straight to disk rather than through a buffer,
+-- so the BufWritePost hook that normally invalidates it (autocommands.lua) never
+-- sees them. Miss the drop and a [[link]] to a note created this session renders
+-- as a bare timestamp until some unrelated write happens to rebuild the map.
+local function create(title, tags)
+    local dir = string.format("%s/%s", root, os.date("%Y"))
+    vim.fn.mkdir(dir, "p")
+    local path = string.format("%s/%s.md", dir, os.date("%Y%m%d-%H%M%S"))
+
+    vim.fn.writefile({
+        "---",
+        "title: " .. title,
+        "tags: [" .. table.concat(tags, ", ") .. "]",
+        "---",
+        "",
+        "",
+    }, path)
+
+    M.invalidate()
+    open(path)
+    vim.cmd("normal! G")
+end
+
 function M.new()
     vim.ui.input({ prompt = "Note title: " }, function(title)
         if not title or title == "" then return end
-
-        local dir = string.format("%s/%s", root, os.date("%Y"))
-        vim.fn.mkdir(dir, "p")
-        local path = string.format("%s/%s.md", dir, os.date("%Y%m%d-%H%M%S"))
-
-        vim.fn.writefile({
-            "---",
-            "title: " .. title,
-            "tags: []",
-            "---",
-            "",
-            "",
-        }, path)
-
-        open(path)
-        vim.cmd("normal! G")
+        create(title, {})
     end)
 end
 
-function M.latest()
-    local files = all_notes()
+-- Move `delta` entries along `files`, oldest first, starting from whatever is in
+-- the current buffer. `label` is the singular noun for the messages at the ends
+-- of the list. A buffer that isn't in `files` at all -- a scratch buffer, or an
+-- ordinary note when walking the dailies -- starts at the newest entry, which is
+-- the only useful answer when there's no position to move from.
+local function step_through(files, delta, label)
     if #files == 0 then
-        vim.notify("No notes yet", vim.log.levels.INFO)
-        return
-    end
-    open(files[#files])
-end
-
--- Move `delta` notes along the timeline from the note in the current buffer.
--- When the current buffer isn't a note, jump to the newest one instead.
-local function step(delta)
-    local files = all_notes()
-    if #files == 0 then
-        vim.notify("No notes yet", vim.log.levels.INFO)
+        vim.notify("No " .. label .. "s yet", vim.log.levels.INFO)
         return
     end
 
@@ -91,17 +94,17 @@ local function step(delta)
 
     local target = index + delta
     if target < 1 then
-        vim.notify("Oldest note", vim.log.levels.INFO)
+        vim.notify("Oldest " .. label, vim.log.levels.INFO)
     elseif target > #files then
-        vim.notify("Newest note", vim.log.levels.INFO)
+        vim.notify("Newest " .. label, vim.log.levels.INFO)
     else
         open(files[target])
     end
 end
 
-function M.older() step(-1) end
+function M.older() step_through(all_notes(), -1, "note") end
 
-function M.newer() step(1) end
+function M.newer() step_through(all_notes(), 1, "note") end
 
 -- Collect one frontmatter field across the whole vault, newest note first.
 local function scan(field)
@@ -235,6 +238,183 @@ function M.bookmarks()
         on_select = function(entry) open(entry.path) end,
     })
 end
+
+-- Tags are a flat inline list in the frontmatter: `tags: [ comedy, lists ]`.
+-- Only what's inside the brackets counts, so splitting on commas and trimming
+-- is the whole grammar. Quotes around a scalar are YAML's, not part of the tag.
+local function parse_tags(text)
+    local inner = text:match("^%s*%[(.*)%]%s*$")
+    if not inner then return {} end
+
+    local tags = {}
+    for field in inner:gmatch("[^,]+") do
+        local tag = vim.trim(field)
+        tag = (tag:gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1"))
+        if tag ~= "" then table.insert(tags, tag) end
+    end
+    return tags
+end
+
+-- Every tagged note, newest first, with its tags pre-lowered for matching.
+local function tagged_notes()
+    local titles = titles_by_stamp()
+
+    local notes = {}
+    for _, entry in ipairs(scan("tags")) do
+        local tags = parse_tags(entry.text)
+        if #tags > 0 then
+            local lowered = {}
+            for i, tag in ipairs(tags) do lowered[i] = tag:lower() end
+
+            local joined = table.concat(tags, ", ")
+            local title = titles[entry.stamp] or ""
+            table.insert(notes, {
+                path = entry.path,
+                tags = lowered,
+                display = string.format("%-36s  %-40s  %s-%s-%s", joined, title,
+                    entry.stamp:sub(1, 4), entry.stamp:sub(5, 6), entry.stamp:sub(7, 8)),
+                ordinal = joined .. " " .. title,
+            })
+        end
+    end
+    return notes
+end
+
+-- Split a query into terms. Whitespace separates them; a double-quoted term has
+-- to equal a tag outright, where a bare one only has to appear somewhere inside
+-- one. An unclosed quote is read as bare, so the results narrow as you type it
+-- rather than emptying out the moment the first quote lands.
+local function parse_query(prompt)
+    local terms = {}
+    local pos = 1
+    while true do
+        local _, stop, quoted = prompt:find('^%s*"([^"]*)"', pos)
+        if stop then
+            if quoted ~= "" then
+                table.insert(terms, { text = quoted:lower(), exact = true })
+            end
+        else
+            local word
+            _, stop, word = prompt:find("^%s*(%S+)", pos)
+            if not stop then return terms end
+            word = word:gsub('"', "")
+            if word ~= "" then
+                table.insert(terms, { text = word:lower(), exact = false })
+            end
+        end
+        pos = stop + 1
+    end
+end
+
+-- Terms are ANDed, but each one is free to match a different tag.
+local function matches(note, terms)
+    for _, term in ipairs(terms) do
+        local hit = false
+        for _, tag in ipairs(note.tags) do
+            if (term.exact and tag == term.text)
+                or (not term.exact and tag:find(term.text, 1, true)) then
+                hit = true
+                break
+            end
+        end
+        if not hit then return false end
+    end
+    return true
+end
+
+-- Browse notes by tag.
+--
+-- Not `:Telekasten show_tags`: that lists the tags themselves, so picking one is
+-- a second step and narrowing by two tags at once isn't possible at all. Here
+-- the prompt filters notes directly, every term having to match some tag.
+function M.tags()
+    local notes = tagged_notes()
+    if #notes == 0 then
+        vim.notify("No tagged notes", vim.log.levels.INFO)
+        return
+    end
+
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+
+    require("telescope.pickers").new({}, {
+        prompt_title = "Notes by tag",
+        finder = require("telescope.finders").new_dynamic({
+            fn = function(prompt)
+                local terms = parse_query(prompt or "")
+                local hits = {}
+                for _, note in ipairs(notes) do
+                    if matches(note, terms) then table.insert(hits, note) end
+                end
+                return hits
+            end,
+            entry_maker = function(note)
+                return {
+                    value = note,
+                    path = note.path,
+                    display = note.display,
+                    ordinal = note.ordinal,
+                }
+            end,
+        }),
+        -- The finder has already applied the query, and applying it twice is
+        -- wrong here: a fuzzy sorter scores against the whole display line, so
+        -- it would both drop legitimate matches and re-admit rows on a hit in
+        -- the title or the date. Empty scores everything equally, which leaves
+        -- the finder's newest-first order intact.
+        sorter = require("telescope.sorters").empty(),
+        previewer = require("telescope.config").values.file_previewer({}),
+        attach_mappings = function(bufnr)
+            actions.select_default:replace(function()
+                local selection = action_state.get_selected_entry()
+                actions.close(bufnr)
+                if selection then open(selection.value.path) end
+            end)
+            return true
+        end,
+    }):find()
+end
+
+-- A daily note is an ordinary note tagged `daily` and titled with its date, so
+-- it shows up in every picker here without special handling.
+--
+-- Nothing parses the body for the date, and no frontmatter field holds it
+-- either: filenames are creation timestamps, so the date is already the first
+-- eight characters of the basename. That makes the file list its own calendar --
+-- sorting it is chronological order, and days you didn't write on are simply
+-- absent, which is exactly the "skip the gaps" behaviour navigation wants.
+local function daily_notes()
+    local paths = {}
+    for _, entry in ipairs(scan("tags")) do
+        for _, tag in ipairs(parse_tags(entry.text)) do
+            if tag:lower() == "daily" then
+                table.insert(paths, entry.path)
+                break
+            end
+        end
+    end
+
+    -- scan() sorts newest first; the timeline reads the other way
+    table.sort(paths, function(a, b) return vim.fs.basename(a) < vim.fs.basename(b) end)
+    return paths
+end
+
+-- Open today's daily note, writing it first if this is the day's first visit.
+function M.daily()
+    local today = os.date("%Y%m%d")
+    for _, path in ipairs(daily_notes()) do
+        if vim.fs.basename(path):sub(1, 8) == today then
+            open(path)
+            return
+        end
+    end
+
+    create(os.date("%Y-%m-%d"), { "daily" })
+end
+
+function M.previous_daily() step_through(daily_notes(), -1, "daily note") end
+
+function M.next_daily() step_through(daily_notes(), 1, "daily note") end
 
 -- Links are [[destination|display]] -- the only order either plugin understands.
 -- Telekasten follows the destination, render-markdown conceals it, so the
