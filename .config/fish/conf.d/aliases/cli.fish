@@ -34,7 +34,7 @@ alias ls="eza -a"
 alias lsm="eza -a --sort mod"
 alias llm="eza -alh --sort mod"
 alias v="nvim"
-alias sf="ssh freebox"
+alias we="ssh web"
 alias diceware="shuf $HOME/.local/diceware/wordlists/en_US/wordlist.txt | head -n 6"
 alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
 
