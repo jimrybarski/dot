@@ -13,6 +13,10 @@ Always, when working in (or creating) version-controlled codebases.
 - Work on the `main` branch for small changes, and use feature branches whenever the change will be large, complex, or risky.
 - Each successful, semantically-coherent change gets its own commit. Don't accumulate large uncommitted changes.
 
+# Before starting work
+
+- Fetch the remote `main` branch and merge in those changes before beginning work.
+
 # Atomic commits
 
 Each commit does one logical thing:
