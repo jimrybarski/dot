@@ -10,6 +10,10 @@
 separator=true
 separator_block_width=35
 
+[theprophet]
+command=datediff now "2026-12-05 18:57" -f "%dd %0Hh %0Mm %0Ss"
+interval=1
+
 [weather]
 command=/home/jim/weather/target/release/weather
 interval=60
