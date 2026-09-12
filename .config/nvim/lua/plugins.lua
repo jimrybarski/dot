@@ -384,42 +384,6 @@ require("lazy").setup({
         },
         config = function(_, opts) require("qalc").setup(opts) end,
     },
-    -- Read-only agenda over checkbox tasks. Only lines matching `- [ ]` or `- [-]`
-    -- AND carrying an @scheduled(...) or @deadline(...) annotation are collected;
-    -- everything else, including `- [x]`, is ignored:
-    --
-    --     - [ ] Buy tofu @scheduled(2026-07-30) @deadline(2026-08-05)
-    --
-    -- Dates are day-granularity only. The plugin never writes to a note; every
-    -- action that does is lua/agenda.lua, mapped both in notes and in this
-    -- window.
-    {
-        "jimrybarski/markdown-agenda.nvim",
-        cmd = "MarkdownAgenda",
-        opts = {
-            -- Globbed as `<directory>/**/*.md`, so every year directory is covered
-            directory = "~/notes",
-            recursive = true,
-            date_format = "%Y-%m-%d",
-
-            border = "rounded",
-
-            -- The footer help line is hardcoded in the plugin and only ever
-            -- mentions its own three keys, so the editing ones go in the title.
-            -- It fits: min_width is 95 whenever the calendar sits on the right.
-            title = " Agenda   x done · p progress · s schedule · d deadline · r rescan ",
-
-            calendar = {
-                enabled = true,
-                months_to_show = 3,
-                position = "right",
-                week_start = "monday",
-            },
-
-            -- Keymaps live in keymaps.lua, so suppress the built-in <leader>na
-            keymaps = { open = false },
-        },
-    },
 }, {
     -- Lazy.nvim options
     ui = { border = "rounded" },
