@@ -400,16 +400,29 @@ local function daily_notes()
 end
 
 -- Open today's daily note, writing it first if this is the day's first visit.
+--
+-- A daily note is written top to bottom over the course of the day, so the end
+-- of the file is always where the next entry goes: `G$` parks the cursor on the
+-- last character of the last line, ready for `a`. create() already leaves the
+-- cursor on the last line, but only in column one, so both paths finish here.
 function M.daily()
     local today = os.date("%Y%m%d")
+
+    local existing
     for _, path in ipairs(daily_notes()) do
         if vim.fs.basename(path):sub(1, 8) == today then
-            open(path)
-            return
+            existing = path
+            break
         end
     end
 
-    create(os.date("%Y-%m-%d"), { "daily" })
+    if existing then
+        open(existing)
+    else
+        create(os.date("%Y-%m-%d"), { "daily" })
+    end
+
+    vim.cmd("normal! G$")
 end
 
 function M.previous_daily() step_through(daily_notes(), -1, "daily note") end
