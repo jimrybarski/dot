@@ -14,9 +14,8 @@ alias cftr='v $HOME/.config/tmuxinator/'
 
 # config directories
 alias cdd='cd $HOME/dot'
-alias cdv='cd $HOME/dot/.config/nvim'
-alias cdf='cd $HOME/dot/.config/fish/conf.d' # I almost always want this
-alias cdff='cd $HOME/dot/.config/fish' # Occasionally need this, so it's longer
+alias cdv='cd $HOME/dot/.config/nvim/lua'
+alias cdf='cd $HOME/dot/.config/fish/conf.d'
 alias cds='cd $HOME/dot/.config/claude/skills/'
 
 # tmuxinator 
@@ -24,7 +23,7 @@ alias blog='tmuxinator blog'
 
 # shortened
 alias ag='claude' # AGent
-alias todo='v $HOME/notes/2026/20260725-225030.md'
+alias todo='v -c "lua require[[notes]].daily()"' # open today's daily note
 alias com='v $HOME/notes/2026/20260726-182412.md'
 alias cl='cal -3'
 alias cly='cal -y'
@@ -36,7 +35,7 @@ alias llm="eza -alh --sort mod"
 alias v="nvim"
 alias we="ssh web"
 alias diceware="shuf $HOME/.local/diceware/wordlists/en_US/wordlist.txt | head -n 6"
-alias sciine="/home/jim/.local/asciinema-edit-env/bin/sciine"
+alias cinema="/home/jim/.local/asciinema-edit-env/bin/sciine"
 
 # convenience
 alias skip="tail -n+2"

@@ -13,7 +13,7 @@ set -x LC_PAPER "en_US.UTF-8"
 set -x LC_TELEPHONE "en_US.UTF-8"
 set -x LC_TIME "en_US.UTF-8"
 
-set -x XDG_CONFIG_HOME "$HOME/.config"
+set -x XDG_CONFIG_HOME "$HOME/dot/.config"
 set -x CLAUDE_CONFIG_DIR "$XDG_CONFIG_HOME/claude"
 set -x LIBCLANG_PATH "/home/jim/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-18.1.2_20240912/esp-clang/lib"
 
