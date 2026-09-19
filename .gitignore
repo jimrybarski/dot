@@ -1,7 +1,8 @@
 # this file is auto-generated and has hardcoded paths to my home dir, which doesn't work on servers
 .config/fish/fish_variables
+.config/claude/skills
 .claude
 CLAUDE.local.md
 skills/workbook
 
-.config/nvim/lazy-lock.json
+lazy-lock.json
